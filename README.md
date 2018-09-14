@@ -1,4 +1,4 @@
-# Awesome game
+# Lightseeker
 
 Awesome game by
 [gituser](https://github.com/gituser).
