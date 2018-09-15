@@ -21,7 +21,15 @@ var PreloaderScene = {
     this.load.setPreloadSprite(this.loadingBar);
 
     // TODO: load here the assets for the game
+    //images
     this.game.load.image('logo', 'images/phaser.png');
+    this.game.load.image('imagenmenu', 'assets/images/Village.jpg');
+    //fonts
+    this.game.load.bitmapFont('font', 'assets/fonts/bitmapFonts/font.png', 
+    'assets/fonts/bitmapFonts/font.fnt');
+    //sounds
+    this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
+
   },
 
   create: function () {
