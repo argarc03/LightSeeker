@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 var counter;
 var count = '0';
 
@@ -31,7 +33,8 @@ var playtexto;
     playtexto.events.onInputOver.add(remark, this);
     playtexto.events.onInputOut.add(desmark, this);
     playtexto.events.onInputUp.add(desclick,this);
-    playtexto.events.onInputDown.add(click,this);
+
+    playtexto.events.onInputDown.add(StartCombat,this);
 
   }
 
@@ -58,5 +61,9 @@ var click =  function () {
   counter.text = count;
 }
 
+
+var StartCombat = function () {
+  this.game.state.start('play');
+}
 
 module.exports = PlayScene;
