@@ -1,8 +1,10 @@
 'use strict';
 
-var PlayScene = require('./play_scene.js');
+var MainMenuScene = require('./mainmenu_scene.js');
 
 var CombatScene = require('./combat_scene.js');
+
+var EventScene = require('./event_scene.js');
 
 var BootScene = {
   preload: function () {
@@ -29,6 +31,7 @@ var PreloaderScene = {
     this.game.load.image('seeker', 'assets/images/seeker.png');
     this.game.load.image('enemy', 'assets/images/enemy.png');
     this.game.load.image('combatbackground', 'assets/images/combatbackground.png');
+    this.game.load.image('eventimage', 'assets/images/eventimage.jpg');
     //fonts
     this.game.load.bitmapFont('font', 'assets/fonts/bitmapFonts/font.png', 
     'assets/fonts/bitmapFonts/font.fnt');
@@ -38,7 +41,7 @@ var PreloaderScene = {
   },
 
   create: function () {
-    this.game.state.start('combat');
+    this.game.state.start('event');
   }
 };
 
@@ -47,8 +50,9 @@ window.onload = function () {
 
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
-  game.state.add('play', PlayScene);
+  game.state.add('mainmenu', MainMenuScene);
   game.state.add('combat', CombatScene);
+  game.state.add('event', EventScene);
 
   game.state.start('boot');
 };

@@ -1,13 +1,9 @@
 'use strict';
 
 
-
-var counter;
-var count = '0';
-
 var playtexto;
 
-  var PlayScene = {
+  var MainMenuScene = {
 
   create: function () {
     /*var logo = this.game.add.sprite(
@@ -28,8 +24,6 @@ var playtexto;
 
     playtexto.inputEnabled = true;
     
-    
-    counter = this.game.add.bitmapText(0,0, 'font',count,64);
     playtexto.events.onInputOver.add(remark, this);
     playtexto.events.onInputOut.add(desmark, this);
     playtexto.events.onInputUp.add(desclick,this);
@@ -57,13 +51,11 @@ var desclick =  function () {
 
 var click =  function () {
   playtexto.tint = 0xAAAAAA;
-  count++;
-  counter.text = count;
 }
 
 
 var StartCombat = function () {
-  this.game.state.start('play');
+  this.game.state.start('combat');
 }
 
-module.exports = PlayScene;
+module.exports = MainMenuScene;
