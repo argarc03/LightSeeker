@@ -1,5 +1,7 @@
 'use strict';
 
+//scene timer
+
 //seeker stats
 var seekerhp = 100; //health
 var seekerat = 2; //attack
@@ -10,6 +12,14 @@ var seekerhptext; //health
 var seekerattext; //attack
 var seekerdftext; //defense
 var seekersptext; //speed
+
+//Seeker Actions
+
+var seekerTimer={};
+
+//seekerTimer.AttackB;
+//seekerTimer.ObjectA;
+//seekerTimer.ObjectB;
 
 //enemy stats
 var enemyhp = 20; //health
@@ -28,6 +38,16 @@ var blocktext;
   var CombatScene = {
 
   create: function () {
+    
+    //timer creation
+    seekerTimer.AttackA ={};
+    seekerTimer.AttackA.isActive = true;
+    seekerTimer.AttackA.refresh = function(){
+      seekerTimer.AttackA.isActive = true;
+      console.log("No te entiendo.");
+    }
+    
+
     //render background
     var combatbackground = this.game.add.sprite(0,0, 'combatbackground');
     combatbackground.width = this.game.world.width;
@@ -42,6 +62,7 @@ var blocktext;
     seekerattext = this.game.add.bitmapText(60, 80, 'font',"ATK: "+seekerat,24);
     seekerdftext = this.game.add.bitmapText(60, 100, 'font',"DEF: "+seekerdf,24);
     seekersptext = this.game.add.bitmapText(60, 120, 'font',"SPEED: "+seekersp,24);
+
     //render enemy
     var enemy = this.game.add.sprite(this.game.world.height - 100,180, 'enemy');
     enemy.width = 200;
@@ -57,6 +78,7 @@ var blocktext;
 
     attacktext.inputEnabled = true;
     
+    //events attack a button
     attacktext.events.onInputOver.add(remark, this);
     attacktext.events.onInputOut.add(desmark, this);
     attacktext.events.onInputUp.add(desclick,this);
@@ -72,8 +94,12 @@ var blocktext;
     blocktext.events.onInputUp.add(desclickB,this);
     blocktext.events.onInputDown.add(clickB,this);
 
-  }
+  },
 
+  update: function() {
+    if(!seekerTimer.AttackA.isActive)
+    console.log(seekerTimer.AttackA.t.timer.duration);
+  }
 
   
 };
@@ -93,8 +119,15 @@ var desclick =  function () {
 
 var click =  function () {
   attacktext.tint = 0xAAAAAA;
-  enemyhp = enemyhp - seekerat;
-  enemyhptext.text = "HP: " + enemyhp;
+  
+  if(seekerTimer.AttackA.isActive)
+  {
+    enemyhp = enemyhp - seekerat;
+    enemyhptext.text = "HP: " + enemyhp;
+    seekerTimer.AttackA.isActive = false;
+    seekerTimer.AttackA.t = this.game.time.events.add(Phaser.Timer.SECOND/seekersp,seekerTimer.AttackA.refresh, this);
+    console.log("Ojala funcionases, puto.");
+  }
 }
 
 var remarkB =  function () {
