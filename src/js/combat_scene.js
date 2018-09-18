@@ -97,8 +97,12 @@ var blocktext;
   },
 
   update: function() {
-    if(!seekerTimer.AttackA.isActive)
-    console.log(seekerTimer.AttackA.t.timer.duration);
+    if(!seekerTimer.AttackA.isActive){
+      //para sumar tiempo a un evento(despues hay que ordenarlos para que la duracion se refleje bien)
+      //seekerTimer.AttackA.t.tick=seekerTimer.AttackA.t.tick+Phaser.Timer.SECOND;
+      //this.game.time.events.order();
+      console.log(seekerTimer.AttackA.t.timer.duration);
+    }
   }
 
   

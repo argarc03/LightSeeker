@@ -41,7 +41,7 @@ var PreloaderScene = {
   },
 
   create: function () {
-    this.game.state.start('event');
+    this.game.state.start('combat');
   }
 };
 
