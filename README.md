@@ -7,7 +7,7 @@ Initial scaffolding generated with [generator-gamejam](https://github.com/belen-
 ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
 
-![Image of combat schema](https://github.com/argarc03/LightSeeker/tree/master/src/temporal%20images/esquemacombate.jpg)
+![Image of combat schema](https://github.com/argarc03/LightSeeker/tree/master/src/temporal%20images/esquemacombate.png)
 
 
 
