@@ -5,7 +5,7 @@ Lightseeker by
 
 Initial scaffolding generated with [generator-gamejam](https://github.com/belen-albeza/generator-gamejam/).
 
-![Image of combat schema](https://github.com/argarc03/LightSeeker/tree/master/src/temporal images/esquemacombate.jpg)
+![Image of combat schema](https://github.com/argarc03/LightSeeker/tree/master/src/temporal%20images/esquemacombate.jpg)
 
 
 
