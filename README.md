@@ -6,11 +6,11 @@ By Turing's Songs Studios ([Arturo García Cárdenas](https://github.com/argarc0
 
 Sólo hay una luz en el mundo, una que cubre una ínfima región en un mundo contenido por paredes de piedra, pero como toda luz existe con la única condición de estar continuamente consumiendo.
 En Lightseeker encarnarás a un __Buscador de Luz__, el elegido por el __Gran Cristal__ de tu pueblo para ser el que traiga las __Gemas de Luz__ que lo mantendrán encendido. Recorrerás sinuosas cavernas repletas de peligros y sorpresas, tendrás que recurrir a tu astucia y habilidad para poder volver sano y salvo o descubrir que hay más allá de los túneles.
-![village](https://user-images.githubusercontent.com/33768598/45785254-e0923180-bc6b-11e8-9d89-46aadacd90a9.jpg)
+<p align="center"><img src="https://user-images.githubusercontent.com/33768598/45785254-e0923180-bc6b-11e8-9d89-46aadacd90a9.jpg" width="800" height="400"></p>
 
 ## Mecánicas
 Una vez salgas del pueblo y se cierre la __Gran Puerta__ no hay vuelta atrás, cada día tendrás que elegir como afrontar cada desafío que aparezca.
-![esquemaevento](https://user-images.githubusercontent.com/33768598/45785240-d3754280-bc6b-11e8-93ad-7af6ebbeb003.jpg)
+![esquemaevento](https://user-images.githubusercontent.com/33768598/45785240-d3754280-bc6b-11e8-93ad-7af6ebbeb003.jpg){:class="img-responsive"}
 Tu manera de superar los problemas marcarán el transcurso de tu historia.
 
 [Esquema del mapa]
