@@ -46,11 +46,14 @@ var blocktext;
     
     //render seeker
     
-    var seeker = this.game.add.sprite(0,-10,'seeker');
+    var seeker = this.game.add.sprite(0,-10,'seekerAnimations');
+    
 
-    var idle = seeker.animations.add('idle');
+    var idle = seeker.animations.add('idle', [0,1,2,3,4,5,6,7,8,9],true);
 
-    seeker.animations.play('idle',10 ,true);
+    var attack = seeker.animations.add('attack',[17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],true);
+
+    seeker.animations.play('attack',10,true);
 
     enemyhptext = this.game.add.bitmapText(this.game.world.width-0, 12, 'font',"HP: "+enemyhp,12);
     enemyattext = this.game.add.bitmapText(this.game.world.width-0, 0, 'font',enemyat,12);
