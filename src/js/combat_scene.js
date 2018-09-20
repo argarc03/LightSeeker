@@ -1,5 +1,8 @@
 'use strict';
 
+//Sprites seeker
+
+
 //seeker stats
 var seekerhp = 100; //health
 var seekerat = 2; //attack
@@ -30,9 +33,7 @@ var blocktext;
   create: function () {
     var combatbackground = this.game.add.sprite(0,0, 'combatbackground');
 
-    //render seeker
-    var seeker = this.game.add.sprite(60,180, 'seeker');
-
+    
     seekerhptext = this.game.add.bitmapText(0, 12, 'font',"HP: "+seekerhp,12);
     seekerattext = this.game.add.bitmapText(0, 0, 'font',seekerat,12);
     seekerdftext = this.game.add.bitmapText(12, 0, 'font',seekerdf,12);
@@ -43,6 +44,13 @@ var blocktext;
     //render test enemy (80x120) -> (this.game.world.width-80,-10)
     var test = this.game.add.sprite(this.game.world.width-80,-10, 'spider');
     
+    //render seeker
+    
+    var seeker = this.game.add.sprite(0,-10,'seeker');
+
+    var idle = seeker.animations.add('idle');
+
+    seeker.animations.play('idle',10 ,true);
 
     enemyhptext = this.game.add.bitmapText(this.game.world.width-0, 12, 'font',"HP: "+enemyhp,12);
     enemyattext = this.game.add.bitmapText(this.game.world.width-0, 0, 'font',enemyat,12);

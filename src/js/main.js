@@ -43,6 +43,9 @@ var PreloaderScene = {
     this.game.load.image('combatbackground', 'assets/images/combatbackground.png');
     this.game.load.image('eventimage', 'assets/images/eventimage.jpg');
 
+      //seeker
+      this.game.load.spritesheet('seeker','assets/images/seeker/SeekerIdle.png',80,120,10);
+
     this.game.load.image('spider', 'assets/images/spider.png');
     //fonts
     this.game.load.bitmapFont('font', 'assets/fonts/bitmapFonts/font.png', 
