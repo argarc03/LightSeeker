@@ -1,5 +1,8 @@
 'use strict';
 
+//Sprites seeker
+
+
 //seeker stats
 var seekerhp = 100; //health
 var seekerat = 2; //attack
@@ -28,32 +31,37 @@ var blocktext;
   var CombatScene = {
 
   create: function () {
-    //render background
     var combatbackground = this.game.add.sprite(0,0, 'combatbackground');
-    combatbackground.width = this.game.world.width;
-    combatbackground.height = this.game.world.height;
 
-    //render seeker
-    var seeker = this.game.add.sprite(60,180, 'seeker');
-    seeker.width = 200;
-    seeker.height = 200;
-
-    seekerhptext = this.game.add.bitmapText(60, 60, 'font',"HP: "+seekerhp,24);
-    seekerattext = this.game.add.bitmapText(60, 80, 'font',"ATK: "+seekerat,24);
-    seekerdftext = this.game.add.bitmapText(60, 100, 'font',"DEF: "+seekerdf,24);
-    seekersptext = this.game.add.bitmapText(60, 120, 'font',"SPEED: "+seekersp,24);
+    
+    seekerhptext = this.game.add.bitmapText(0, 12, 'font',"HP: "+seekerhp,12);
+    seekerattext = this.game.add.bitmapText(0, 0, 'font',seekerat,12);
+    seekerdftext = this.game.add.bitmapText(12, 0, 'font',seekerdf,12);
+    seekersptext = this.game.add.bitmapText(24, 0, 'font',seekersp,12);
     //render enemy
-    var enemy = this.game.add.sprite(this.game.world.height - 100,180, 'enemy');
-    enemy.width = 200;
-    enemy.height = 200;
+    //var enemy = this.game.add.sprite(this.game.world.height,0, 'enemy');
 
-    enemyhptext = this.game.add.bitmapText(this.game.world.height - 60, 60, 'font',"HP: "+enemyhp,24);
-    enemyattext = this.game.add.bitmapText(this.game.world.height -60, 80, 'font',"ATK: "+enemyat,24);
-    enemydftext = this.game.add.bitmapText(this.game.world.height -60, 100, 'font',"DEF: "+enemydf,24);
-    enemysptext = this.game.add.bitmapText(this.game.world.height -60, 120, 'font',"SPEED: "+enemysp,24);
+    //render test enemy (80x120) -> (this.game.world.width-80,-10)
+    var test = this.game.add.sprite(this.game.world.width-80,-10, 'spider');
+    
+    //render seeker
+    
+    var seeker = this.game.add.sprite(0,-10,'seekerAnimations');
+    
+
+    var idle = seeker.animations.add('idle', [0,1,2,3,4,5,6,7,8,9],true);
+
+    var attack = seeker.animations.add('attack',[17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],true);
+
+    seeker.animations.play('attack',10,true);
+
+    enemyhptext = this.game.add.bitmapText(this.game.world.width-0, 12, 'font',"HP: "+enemyhp,12);
+    enemyattext = this.game.add.bitmapText(this.game.world.width-0, 0, 'font',enemyat,12);
+    enemydftext = this.game.add.bitmapText(this.game.world.width-12, 0, 'font',enemydf,12);
+    enemysptext = this.game.add.bitmapText(this.game.world.width-24, 0, 'font',enemysp,12);
 
     //render attack button
-    attacktext = this.game.add.bitmapText(100, this.game.world.centerY+200, 'font',"A",44);
+    attacktext = this.game.add.bitmapText(0, this.game.world.height-24, 'font',"A",24);
 
     attacktext.inputEnabled = true;
     
@@ -63,7 +71,7 @@ var blocktext;
     attacktext.events.onInputDown.add(click,this);
 
     //render attack button
-    blocktext = this.game.add.bitmapText(200, this.game.world.centerY+200, 'font',"B",44);
+    blocktext = this.game.add.bitmapText(200, this.game.world.centerY, 'font',"B",24);
 
     blocktext.inputEnabled = true;
     

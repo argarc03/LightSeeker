@@ -21,6 +21,14 @@ main {
   text-align: center;
 }
 
+canvas{
+  width: 800px;
+  height: 600px;
+  image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+}
+
 #game {
   border: 1px solid #333;
 }
