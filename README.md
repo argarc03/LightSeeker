@@ -40,7 +40,9 @@ Sólo hay una luz en el mundo, una que cubre una ínfima región en las infinita
 En Lightseeker encarnarás a un __Buscador de Luz__, el elegido por el __Gran Cristal__ de La Aldea. Recorrerás sinuosas cavernas repletas de peligros, tesoros y sorpresas, tendrás que recurrir a tu audacia para poder volver sano y salvo o descubrir que hay más allá de los túneles.
 <p align="center"><img src="https://user-images.githubusercontent.com/33768598/45785254-e0923180-bc6b-11e8-9d89-46aadacd90a9.jpg" width="600" height="400"></p>
 
-## Créditos
+## Referencias
+ * Slay the Spire
+ * Final Fantasy VII
 
 
 
