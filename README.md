@@ -1,6 +1,7 @@
 LightSeeker
 =====
-By Turing's Songs Studios ([Arturo García Cárdenas](https://github.com/argarc03) and [Carlos Durán Domínguez](https://github.com/CarlosDuranDominguez))
+
+
 
 <h1><i>¡Adéntrate en las galerías subterráneas de Spiliag en busca de las Gemas de Luz!</i></h1>
 <h3>Cada nueva búsqueda en la que te embarques será completamente distinta gracias a nuestro sistema de generación procedural:
@@ -44,8 +45,8 @@ En Lightseeker encarnarás a un __Buscador de Luz__, el elegido por el __Gran Cr
  * Slay the Spire
  * Final Fantasy VII
 
-
-
+Desarrollado por __Turing's Songs Studios__ ([Arturo García Cárdenas](https://github.com/argarc03) y [Carlos Durán Domínguez](https://github.com/CarlosDuranDominguez))
+<p align="center"><img src="https://user-images.githubusercontent.com/36244271/45879847-408cf300-bda6-11e8-8e9d-d22890c375c0.png" width="200" height="200"></p>
 
 
 
