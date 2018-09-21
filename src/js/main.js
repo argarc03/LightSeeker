@@ -9,7 +9,7 @@ var EventScene = require('./event_scene.js');
 var BootScene = {
   preload: function () {
     // load here assets required for the loading screen
-    this.game.load.image('preloader_bar', 'images/preloader_bar.png');
+    this.game.load.image('preloader_bar', 'temporal%20images/preloader_bar.png');
   },
 
   create: function () {
@@ -35,11 +35,7 @@ var PreloaderScene = {
 
     // TODO: load here the assets for the game
     //images
-    
-    this.game.load.image('logo', 'images/phaser.png');
-    this.game.load.image('imagenmenu', 'assets/images/Village.jpg');
-    this.game.load.image('seeker', 'assets/images/seeker.png');
-    this.game.load.image('enemy', 'assets/images/enemy.png');
+    this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
     this.game.load.image('combatbackground', 'assets/images/combatbackground.png');
     this.game.load.image('eventimage', 'assets/images/eventimage.jpg');
 

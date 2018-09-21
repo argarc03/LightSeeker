@@ -17,6 +17,12 @@ var seekersptext; //speed
 
 var seekerTimer={};
 
+var seeker;
+var attack;
+var idle;
+var restore;
+var playIdle;
+var playRestore;
 //seekerTimer.AttackB;
 //seekerTimer.ObjectA;
 //seekerTimer.ObjectB;
@@ -64,27 +70,19 @@ var blocktext;
     
     //render seeker
     
-    var seeker = this.game.add.sprite(0,-10,'seekerAnimations');
-    
+    seeker = this.game.add.sprite(0,-10,'seekerAnimations');
+    idle = seeker.animations.add('idle',[0,1,2,3,4,5,6,7,8,9],true);
+    attack = seeker.animations.add('attack',[17,18,19,20,21,22,23,24,25],true);
+    restore = seeker.animations.add('restore',[26,27,28,29,30,31,32,33],true);
 
-    seekerhptext = this.game.add.bitmapText(60, 60, 'font',"HP: "+seekerhp,24);
-    seekerattext = this.game.add.bitmapText(60, 80, 'font',"ATK: "+seekerat,24);
-    seekerdftext = this.game.add.bitmapText(60, 100, 'font',"DEF: "+seekerdf,24);
-    seekersptext = this.game.add.bitmapText(60, 120, 'font',"SPEED: "+seekersp,24);
+    playIdle=function(){seeker.animations.play('idle',10,true);}
+    playRestore = function(){enemyhp = enemyhp - seekerat;
+      enemyhptext.text = "HP: " + enemyhp; seeker.animations.play('restore',10,false); restore.onComplete.add(playIdle,this);}
 
-    //render enemy
-    var enemy = this.game.add.sprite(this.game.world.height - 100,180, 'enemy');
-    enemy.width = 200;
-    enemy.height = 200;
-
-    var attack = seeker.animations.add('attack',[17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],true);
-
-    seeker.animations.play('attack',10,true);
-
-    enemyhptext = this.game.add.bitmapText(this.game.world.width-0, 12, 'font',"HP: "+enemyhp,12);
-    enemyattext = this.game.add.bitmapText(this.game.world.width-0, 0, 'font',enemyat,12);
-    enemydftext = this.game.add.bitmapText(this.game.world.width-12, 0, 'font',enemydf,12);
-    enemysptext = this.game.add.bitmapText(this.game.world.width-24, 0, 'font',enemysp,12);
+    enemyhptext = this.game.add.bitmapText(this.game.world.width-50, 12, 'font',"HP: "+enemyhp,12);
+    enemyattext = this.game.add.bitmapText(this.game.world.width-50, 0, 'font',enemyat,12);
+    enemydftext = this.game.add.bitmapText(this.game.world.width-40, 0, 'font',enemydf,12);
+    enemysptext = this.game.add.bitmapText(this.game.world.width-30, 0, 'font',enemysp,12);
 
     //render attack button
     attacktext = this.game.add.bitmapText(0, this.game.world.height-24, 'font',"A",24);
@@ -111,10 +109,12 @@ var blocktext;
 
   update: function() {
     if(!seekerTimer.AttackA.isActive){
-      //para sumar tiempo a un evento(despues hay que ordenarlos para que la duracion se refleje bien)
-      //seekerTimer.AttackA.t.tick=seekerTimer.AttackA.t.tick+Phaser.Timer.SECOND;
-      //this.game.time.events.order();
-      console.log(seekerTimer.AttackA.t.timer.duration);
+      
+      if(attack.isFinished)
+      {
+        //console.log(seekerTimer.AttackA.t.timer.duration);
+        
+      }
     }
   }
 
@@ -139,10 +139,11 @@ var click =  function () {
   
   if(seekerTimer.AttackA.isActive)
   {
-    enemyhp = enemyhp - seekerat;
-    enemyhptext.text = "HP: " + enemyhp;
+    seeker.animations.play('attack',10,false);
+    
     seekerTimer.AttackA.isActive = false;
-    seekerTimer.AttackA.t = this.game.time.events.add(Phaser.Timer.SECOND/seekersp,seekerTimer.AttackA.refresh, this);
+    attack.onComplete.add(playRestore,this);
+    seekerTimer.AttackA.t = this.game.time.events.add(3*Phaser.Timer.SECOND/seekersp,seekerTimer.AttackA.refresh, this);
     console.log("Ojala funcionases, puto.");
   }
 }
