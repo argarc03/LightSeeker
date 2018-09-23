@@ -57,19 +57,14 @@ var blocktext;
     //render background
     var combatbackground = this.game.add.sprite(0,0, 'combatbackground');
 
-    
     seekerhptext = this.game.add.bitmapText(0, 12, 'font',"HP: "+seekerhp,12);
     seekerattext = this.game.add.bitmapText(0, 0, 'font',seekerat,12);
     seekerdftext = this.game.add.bitmapText(12, 0, 'font',seekerdf,12);
     seekersptext = this.game.add.bitmapText(24, 0, 'font',seekersp,12);
-    //render enemy
-    //var enemy = this.game.add.sprite(this.game.world.height,0, 'enemy');
+    
+    
 
-    //render test enemy (80x120) -> (this.game.world.width-80,-10)
-    var test = this.game.add.sprite(this.game.world.width-80,-10, 'spider');
-    
     //render seeker
-    
     seeker = this.game.add.sprite(0,-10,'seekerAnimations');
     idle = seeker.animations.add('idle',[0,1,2,3,4,5,6,7,8,9],true);
     attack = seeker.animations.add('attack',[17,18,19,20,21,22,23,24,25],true);
@@ -79,11 +74,19 @@ var blocktext;
     playRestore = function(){enemyhp = enemyhp - seekerat;
       enemyhptext.text = "HP: " + enemyhp; seeker.animations.play('restore',10,false); restore.onComplete.add(playIdle,this);}
 
+
+    playIdle();
+    //render enemy (80x120) -> (this.game.world.width-80,-10)
+    var enemy = this.game.add.sprite(this.game.world.width-80,-10, 'spiderIdle');
+    var enemyIdle = enemy.animations.add('idle',[0,1,2,3,4,5],true);
+
+    enemy.animations.play('idle',8,true);
+
     enemyhptext = this.game.add.bitmapText(this.game.world.width-50, 12, 'font',"HP: "+enemyhp,12);
     enemyattext = this.game.add.bitmapText(this.game.world.width-50, 0, 'font',enemyat,12);
     enemydftext = this.game.add.bitmapText(this.game.world.width-40, 0, 'font',enemydf,12);
     enemysptext = this.game.add.bitmapText(this.game.world.width-30, 0, 'font',enemysp,12);
-
+  
     //render attack button
     attacktext = this.game.add.bitmapText(0, this.game.world.height-24, 'font',"A",24);
 
