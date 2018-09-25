@@ -53,7 +53,10 @@ var blocktext;
       console.log("No te entiendo.");
     }
     
-
+    //music
+    var music = this.game.add.audio('boss');
+    music.volume = 2;
+    //music.play();
     //render background
     var combatbackground = this.game.add.sprite(0,0, 'combatbackground');
 

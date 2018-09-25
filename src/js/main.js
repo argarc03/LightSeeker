@@ -34,6 +34,7 @@ var PreloaderScene = {
     this.load.setPreloadSprite(this.loadingBar);
 
     // TODO: load here the assets for the game
+
     //images
     this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
     this.game.load.image('combatbackground', 'assets/images/combatbackground.png');
@@ -49,7 +50,8 @@ var PreloaderScene = {
     'assets/fonts/bitmapFonts/font.fnt');
     //sounds
     this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
-
+    //music
+    this.load.audio('boss', ['assets/music/bosstheme.wav']);
   },
 
   create: function () {
