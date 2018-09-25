@@ -62,7 +62,11 @@ var blocktext;
     seekerdftext = this.game.add.bitmapText(12, 0, 'font',seekerdf,12);
     seekersptext = this.game.add.bitmapText(24, 0, 'font',seekersp,12);
     
-    
+    //render interface
+    var enemybar = this.game.add.sprite(this.game.world.width-50,25,'statBar');
+    enemybar.height=10
+    enemybar.width=(enemyhp/100)*200;
+
 
     //render seeker
     seeker = this.game.add.sprite(0,-10,'seekerAnimations');
@@ -71,8 +75,14 @@ var blocktext;
     restore = seeker.animations.add('restore',[26,27,28,29,30,31,32,33],true);
 
     playIdle=function(){seeker.animations.play('idle',10,true);}
-    playRestore = function(){enemyhp = enemyhp - seekerat;
-      enemyhptext.text = "HP: " + enemyhp; seeker.animations.play('restore',10,false); restore.onComplete.add(playIdle,this);}
+    playRestore = function(){
+      enemyhp = enemyhp - seekerat;
+      enemyhptext.text = "HP: " + enemyhp; 
+      enemybar.width=(enemyhp/100)*200;
+      seeker.animations.play('restore',10,false); 
+      restore.onComplete.add(playIdle,this);
+      this.game.camera.shake(0.01,300);
+    }
 
 
     playIdle();

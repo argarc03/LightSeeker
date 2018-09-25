@@ -38,6 +38,7 @@ var PreloaderScene = {
     this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
     this.game.load.image('combatbackground', 'assets/images/combatbackground.png');
     this.game.load.image('eventimage', 'assets/images/eventimage.jpg');
+    this.game.load.image('statBar','assets/images/statusBar.png');
 
     //seeker
     this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
@@ -57,9 +58,7 @@ var PreloaderScene = {
 };
 
 window.onload = function () {
-  var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game',
-    
-  );
+  var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
   game.state.add('mainmenu', MainMenuScene);
