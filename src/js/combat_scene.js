@@ -85,11 +85,11 @@ var blocktext;
     seekerTimer.AttackA.refresh = function(){
       seekerTimer.AttackA.isActive = true;
     }
-    
+     
     //music
     var music = this.game.add.audio('boss');
     music.volume = 2;
-    //music.play();
+    music.play();
 
     //render background
     var combatbackground = this.game.add.sprite(0,0, 'combatbackground');
@@ -155,7 +155,7 @@ var blocktext;
 
       emitter = this.game.add.emitter(40, 88, 100); //(x,y,maxParticles)
       emitter.makeParticles('blood');  
-      emitter.start(100,0, 100, 100, true);//(lifespan,frecuency,quantity,total,inmediate)
+      emitter.start(100,0, 100, 100, false);//(lifespan,frecuency,quantity,total,inmediate)
     }
 
     enemyplayIdle();
