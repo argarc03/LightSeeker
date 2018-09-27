@@ -1,33 +1,41 @@
 'use strict';
 
+
+// ¿Hay que hacer un constructor que "reserve memoria" para las acciones y así poder asignar más tarde las funciones?
+
 class Character {
-    constructor(x,y,name, damage, defense, speed, vitality, spriteSheet, game, action){
+    constructor(x,y,name, damage, defense, speed, vitality, spriteSheet, game, actions){
 
         this.name = name;
         this.stats = new Stats(damage, defense, speed, vitality);
         this.hp = vitality;
         this.animationManager = game.add.sprite(x, y, spriteSheet);
-        this.soundManager = new Phaser.SoundManager(game);
         this.actions = [];
         
-        for(var i =0; i<action.length; i++){
-            console.log(i+'aahhhhhh');
-            this.soundManager.add(action[i].name,action[i].volume, action[i].loop);
-            this.animationManager.animations.add(action[i].name, action[i].frames, true);
-            this.actions[action[i].name] = function() {
-                this.animationManager.animations.play(action[i].name, action[i].speed, action[i].loop);
-                this.soundManager.play(action[i].name, action[i].loop);
-                if(action[i].postAction!=null) {
-                    this.game.time.events.add(3*Phaser.Timer.SECOND/speed,action[i].postAction, this);
+        for(let i =0; i<actions.length; i++){
+            game.sound.add(actions[i].name,actions[i].volume, actions[i].loop);
+            this.animationManager.animations.add(actions[i].name, actions[i].frames, true);
+            var that = this;
+            this.actions[actions[i].name] = function(object=undefined) {
+                that.animationManager.animations.play(actions[i].name, actions[i].speed, actions[i].loop);
+                //game.sound.play(actions[i].name, actions[i].loop);
+                console.log(actions[i]);
+                if(actions[i].postAction!=null) {
+                    game.time.events.add(3*Phaser.Timer.SECOND/speed,actions[i].postAction, this);
                 }
-                return action[i].play();
+                return actions[i].play(object);
             };  
         }
-        this.damaged = function(damage) { this.hp = this.hp-damage;};
-        this.isDead = function() { return this.hp == 0; };
+        
+        };
+        hurt(damage) { 
+            this.hp = Math.max(0,this.hp-damage);
+        };
+        get dead() { 
+            return this.hp === 0; 
     }
 }
-
+//¿Cómo hacer que a un campo relacionado con una función al cambiar la función reaccione?
 class Action {
     constructor(name, volume, loop, frames, speed ,play, postAction = null)  {
         this.name = name;
