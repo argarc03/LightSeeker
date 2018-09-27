@@ -57,6 +57,9 @@ var PreloaderScene = {
   create: function () {
     this.game.state.start('combat');
   }
+
+  
+
 };
 
 window.onload = function () {
