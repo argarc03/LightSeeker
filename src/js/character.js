@@ -10,10 +10,18 @@ class Character {
         this.stats = new Stats(damage, defense, speed, health);
         this.hp = health;
         this.sprite = game.add.sprite(x, y, spriteSheet);
-
-        this.sprite.idle = this.sprite.animations.add('idle',[0,1,2,3,4,5,6,7,8,9],true);
-        this.sprite.preattacking = this.sprite.animations.add('preattacking',[17,18,19,20,21,22,23,24],true);
-        
+        for(action in actions) {
+            switch(action.name){
+                case 'idle':
+                    this.sprite.idle = this.sprite.animations.add('idle',[0,1,2,3,4,5,6,7,8,9],true);
+                    break;
+            } 
+        }
+        if(existe idle){
+            
+            this.sprite.preattacking = this.sprite.animations.add('preattacking',[17,18,19,20,21,22,23,24],true);
+            añadir a this.actions idle
+        }
         this.sprite.attacking = this.sprite.animations.add('attacking',[25,26,27,28,29,30,31,32,33],true);
         
 
@@ -73,15 +81,16 @@ class Character {
 }
 //¿Cómo hacer que a un campo relacionado con una función al cambiar la función reaccione?
 class Action {
-    constructor(name, volume, loop, frames, speed ,play, postAction = null)  {
-        this.name = name;
-        this.volume = volume;
-        this.loop = loop;
-        this.frames = frames;
-        this.speed = speed;
-        this.play = play;
-        this.postAction = postAction;
+    constructor(actionName, framesArrays=null,soundsArray=null, emmiter=null) {
+        this.name = actionName;
+        this.framesArrays = framesArrays;
+        this.soundsArray = soundsArray;
+        this.emmiter = emmiter;
     }
+}
+
+class Idle extends Action{
+    constructor(name)
 }
 
 class Stats {
@@ -90,10 +99,5 @@ class Stats {
         this.defense = defense;
         this.speed = speed;
         this.vitality = vitality;
-    }
-}
-
-class Seeker extends Character {
-    constructor(name, damage, defense, speed, vitality){
     }
 }
