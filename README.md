@@ -3,15 +3,13 @@ LightSeeker
 
 
 
-<h1><i>¡Adéntrate en las galerías subterráneas de Spiliag en busca de las Gemas de Luz!</i></h1>
-<h3>Cada nueva búsqueda en la que te embarques será completamente distinta gracias a nuestro sistema de generación procedural:
+## ¡Adéntrate en las galerías subterráneas de Spiliag en busca de las Gemas de Luz!
+### Cada nueva búsqueda en la que te embarques será completamente distinta gracias a nuestro sistema de generación procedural:
 
-<ul>
-  <li>Sucesos aleatorios</li>
-  <li>Enemigos únicos generados aleatoriamente</li> 
-  <li>Bosses colosales que pondrán a prueba tus habilidades</li>
-</ul>
-</h3>
+### - Sucesos aleatorios
+### - Enemigos únicos generados aleatoriamente
+### - Bosses colosales que pondrán a prueba tus habilidades
+
 
 <p align="center"><img src="https://piskel-imgstore-b.appspot.com/img/f00e6238-bd2b-11e8-9a46-5fda3286c4be.gif" width="54" height="82"></p>
 
