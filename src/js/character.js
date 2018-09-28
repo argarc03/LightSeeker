@@ -4,29 +4,60 @@
 // ¿Hay que hacer un constructor que "reserve memoria" para las acciones y así poder asignar más tarde las funciones?
 
 class Character {
-    constructor(x,y,name, damage, defense, speed, health, spriteSheet, game, actions){
+    constructor(x,y,name, damage, defense, speed, health, spriteSheet,game, actions){
 
         this.name = name;
         this.stats = new Stats(damage, defense, speed, health);
         this.hp = health;
-        this.animationManager = game.add.sprite(x, y, spriteSheet);
+        this.sprite = game.add.sprite(x, y, spriteSheet);
+
+        this.sprite.idle = this.sprite.animations.add('idle',[0,1,2,3,4,5,6,7,8,9],true);
+        this.sprite.preattacking = this.sprite.animations.add('preattacking',[17,18,19,20,21,22,23,24],true);
+        
+        this.sprite.attacking = this.sprite.animations.add('attacking',[25,26,27,28,29,30,31,32,33],true);
+        
+
+        this.target
         this.actions;
         this.blocking;
         
         };
 
+        // A futuro mirar opcion de cambiar objetivo
         attack(target){ 
-            target.hurt(this.stats.damage);
+            this.target = target;
+            this.preattacking();
         };
 
-        block(){
-            this.blocking = true;
+        preattacking(){
+            this.sprite.animations.play('preattacking', 10, false); 
+            this.sprite.preattacking.onComplete.add(this.attacking,this);
         }
 
-        desblock(){
-            this.blocking = false;
+        attacking(){
+            this.sprite.animations.play('attacking', 10, false);
+            //this.target.hurt(this.stats.damage);
+            this.sprite.attacking.onComplete.add(this.idle,this);
+        }
+
+        block(){
+            
+        }
+
+        preblocking(){
+            
+        }
+
+        blocking(){
+
+        }
+        postblocking(){
+
         }
         
+        idle(){
+            this.sprite.play('idle',10,true);
+        }
 
         hurt(damage) { 
             if(this.blocking){
