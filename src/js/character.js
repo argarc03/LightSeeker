@@ -4,32 +4,37 @@
 // ¿Hay que hacer un constructor que "reserve memoria" para las acciones y así poder asignar más tarde las funciones?
 
 class Character {
-    constructor(x,y,name, damage, defense, speed, vitality, spriteSheet, game, actions){
+    constructor(x,y,name, damage, defense, speed, health, spriteSheet, game, actions){
 
         this.name = name;
-        this.stats = new Stats(damage, defense, speed, vitality);
-        this.hp = vitality;
+        this.stats = new Stats(damage, defense, speed, health);
+        this.hp = health;
         this.animationManager = game.add.sprite(x, y, spriteSheet);
-        this.actions = [];
-        
-        for(let i =0; i<actions.length; i++){
-            game.sound.add(actions[i].name,actions[i].volume, actions[i].loop);
-            this.animationManager.animations.add(actions[i].name, actions[i].frames, true);
-            var that = this;
-            this.actions[actions[i].name] = function(object=undefined) {
-                that.animationManager.animations.play(actions[i].name, actions[i].speed, actions[i].loop);
-                //game.sound.play(actions[i].name, actions[i].loop);
-                console.log(actions[i]);
-                if(actions[i].postAction!=null) {
-                    game.time.events.add(3*Phaser.Timer.SECOND/speed,actions[i].postAction, this);
-                }
-                return actions[i].play(object);
-            };  
-        }
+        this.actions;
+        this.blocking;
         
         };
+
+        attack(target){ 
+            target.hurt(this.stats.damage);
+        };
+
+        block(){
+            this.blocking = true;
+        }
+
+        desblock(){
+            this.blocking = false;
+        }
+        
+
         hurt(damage) { 
-            this.hp = Math.max(0,this.hp-damage);
+            if(this.blocking){
+                this.hp = Math.max(0,this.hp-Math.max(0,damage-this.stats.defense));
+
+            }else{
+                this.hp = Math.max(0,this.hp-damage);
+            }
         };
         get dead() { 
             return this.hp === 0; 
