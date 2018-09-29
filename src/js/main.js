@@ -46,8 +46,10 @@ var PreloaderScene = {
     //enemy
     this.game.load.spritesheet('spiderAnimations', 'assets/images/spider/spiderAnimations.png',80,120);
     //fonts
+    this.game.load.bitmapFont('font1', 'assets/fonts/bitmapFonts/font1.png', 
+    'assets/fonts/bitmapFonts/font1.fnt'); //solo funciona bien con tamaño 8
     this.game.load.bitmapFont('font', 'assets/fonts/bitmapFonts/font.png', 
-    'assets/fonts/bitmapFonts/font.fnt');
+    'assets/fonts/bitmapFonts/font.fnt'); //solo funciona bien con tamaño 8
     //sounds
     this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
     //music

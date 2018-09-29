@@ -6,7 +6,7 @@
 // Aún se deben controlar los sonidos
 
 class Character {
-    constructor(x, y, name, damage, defense, speed, health, spriteSheet, game, 
+    constructor(x, y, name, damage, defense, speed, health, spriteSheet, game,
         actions, emitter = new StatusEmitter()) {
 
         if (typeof (name) === 'string') {
@@ -19,13 +19,13 @@ class Character {
 
         this.sprite = game.add.sprite(x, y, spriteSheet);
 
-        if(game instanceof Phaser.Game){
+        if (game instanceof Phaser.Game) {
             this.game = game;
         } else {
             throw "game must be an instance of Game"
         }
 
-        
+
 
         if (actions instanceof Array || actions instanceof Object) {
             for (let action in actions) {
@@ -37,11 +37,11 @@ class Character {
                 } else if (actions[action] instanceof Attack) {
                     this.sprite.preAttacking = this.sprite.animations.add('preAttacking', actions[action].framesPreAttacking, true);
                     this.sprite.attacking = this.sprite.animations.add('attacking', actions[action].framesAttacking, true);
-                    this.timeStartLastAttack=NaN;
+                    this.timeStartLastAttack = NaN;
                     this.attack = function (target) {
-                        if(target instanceof Character ){
+                        if (target instanceof Character) {
                             this.target = target;
-                        }  else if (target !== null) {
+                        } else if (target !== null) {
                             throw "target must be Character"
                         }
                         this.timeStartLastAttack = this.game.time.totalElapsedSeconds();
@@ -61,29 +61,29 @@ class Character {
                     }
 
                     this.calculateTotalAttackTime = function () {
-                        return (actions[action].framesPreAttacking.length+actions[action].framesAttacking.length)/this.frameRate;
+                        return (actions[action].framesPreAttacking.length + actions[action].framesAttacking.length) / this.frameRate;
                     }
 
                     this.calculateLastAttackTime = function () {
-                        return this.game.time.totalElapsedSeconds()-this.timeStartLastAttack;
+                        return this.game.time.totalElapsedSeconds() - this.timeStartLastAttack;
                     }
 
                     this.calculateCurrentAttackTime = function () {
-                        if (this.sprite.animations.name === 'attacking'|| this.sprite.animations.name ==='preAttacking'){
-                            return this.game.time.totalElapsedSeconds()-this.timeStartLastAttack;
-                        } else{
+                        if (this.sprite.animations.name === 'attacking' || this.sprite.animations.name === 'preAttacking') {
+                            return this.game.time.totalElapsedSeconds() - this.timeStartLastAttack;
+                        } else {
                             return NaN;
                         }
                     }
 
                 } else if (actions[action] instanceof Block) {
-                    this.sprite.preBlocking = this.sprite.animations.add('preBlocking',actions[action].preBlocking, true);
-                    this.sprite.blocking = this.sprite.animations.add('blocking',actions[action].blocking, true);
-                    this.sprite.postBlocking = this.sprite.animations.add('postBlocking',actions[action].postBlocking, true);
-                    
-                    this.timeStartLastBlock=NaN;
+                    this.sprite.preBlocking = this.sprite.animations.add('preBlocking', actions[action].framesPreBlocking, true);
+                    this.sprite.blocking = this.sprite.animations.add('blocking', actions[action].framesBlocking, true);
+                    this.sprite.postBlocking = this.sprite.animations.add('postBlocking', actions[action].framesPostBlocking, true);
 
-                    this.block= function () {
+                    this.timeStartLastBlock = NaN;
+
+                    this.block = function () {
                         this.timeStartLastBlock = this.game.time.totalElapsedSeconds();
                         this.preBlocking();
                     }
@@ -92,31 +92,35 @@ class Character {
                         this.sprite.preBlocking.onComplete.add(this.blocking, this);
                     }
                     this.blocking = function () {
-                        this.blocking = true;
-                        this.sprite.animations.play('blocking', this.frameRate, false);
-                        if (this.target != null) {
-                            this.target.hurt(this.stats.damage);
-                        }
-                        this.sprite.blocking.onComplete.add(this.idle, this);
+                        this.isBlocking = true;
+                        this.sprite.animations.play('blocking', this.frameRate, true);
+                        this.sprite.blocking.onLoop.add(this.loop, this);
+
+                        this.sprite.blocking.onComplete.add(this.postBlocking, this);
+                    }
+                    this.loop = function () {
+                        if (this.sprite.blocking.loopCount >= (this.frameRate/this.sprite.blocking.frameTotal))
+                            this.sprite.blocking.loop = false;
                     }
                     this.postBlocking = function () {
-                        this.blocking = false;
+                        this.isBlocking = false;
                         this.sprite.animations.play('postBlocking', this.frameRate, false);
-                        this.sprite.preBlocking.onComplete.add(this.idle, this);
+                        this.sprite.postBlocking.onComplete.add(this.idle, this);
                     }
 
                     this.calculateTotalBlockTime = function () {
-                        return (actions[action].framesPreBlocking.length+actions[action].framesBlocking.length+actions[action].framesPostBlocking.length)/this.frameRate;
+                        return ((actions[action].framesPreBlocking.length + actions[action].framesPostBlocking.length)
+                            / this.frameRate) + Phaser.Timer.SECOND;
                     }
 
                     this.calculateLastBlockTime = function () {
-                        return this.game.time.totalElapsedSeconds()-this.timeStartLastBlock;
+                        return this.game.time.totalElapsedSeconds() - this.timeStartLastBlock;
                     }
 
                     this.calculateCurrentBlockTime = function () {
-                        if (this.sprite.animations.name === 'preBlocking'|| this.sprite.animations.name ==='blocking'|| this.sprite.animations.name ==='postPlocking'){
-                            return this.game.time.totalElapsedSeconds()-this.timeStartLastBlock;
-                        } else{
+                        if (this.sprite.animations.name === 'preBlocking' || this.sprite.animations.name === 'blocking' || this.sprite.animations.name === 'postPlocking') {
+                            return this.game.time.totalElapsedSeconds() - this.timeStartLastBlock;
+                        } else {
                             return NaN;
                         }
                     }
@@ -128,13 +132,13 @@ class Character {
             throw "actions must be Array or Object";
         }
 
-        if(emitter instanceof StatusEmitter){
-            if(typeof(emitter.x) === 'number' && typeof(emitter.y) === 'number'){
+        if (emitter instanceof StatusEmitter) {
+            if (typeof (emitter.x) === 'number' && typeof (emitter.y) === 'number') {
                 this.xEmitter = emitter.x;
                 this.yEmitter = emitter.y;
-            } else if(emitter.x === null && emitter.y === null) {
-                this.xEmitter = this.sprite.width/2;
-                this.yEmitter = this.sprite.height/2;
+            } else if (emitter.x === null && emitter.y === null) {
+                this.xEmitter = this.sprite.width / 2;
+                this.yEmitter = this.sprite.height / 2;
             } else {
                 throw " x and y of emitter ";
             }
@@ -143,14 +147,13 @@ class Character {
         }
 
         this.target;
-        this.blocking = true;
-
+        this.isBlocking = false;
     };
 
 
 
     target(target) {
-        if(target instanceof Character){
+        if (target instanceof Character) {
             this.target = target;
         } else {
             throw "target must be an instance of Character";
@@ -189,9 +192,9 @@ class Character {
     }
 
     hurt(damage) {
-        if(typeof(damage)==='number') {
-            damage = this.blocking ? Math.max(0, Math.max(0, damage - this.stats.defense)) : damage;
-            this.game.camera.shake((damage) / this.stats.health);
+        if (typeof (damage) === 'number') {
+            damage = this.isBlocking ? Math.max(0, Math.max(0, damage - this.stats.defense)) : damage;
+            this.game.camera.shake(damage / 200, damage * 20);
             this.hp = this.hp - damage;
         } else {
             throw "damage must be number";
@@ -214,50 +217,56 @@ class Character {
     calculateCurrentBlockTime() {
         return NaN;
     }
-    calculateLastBlockTime(){
+    calculateLastBlockTime() {
         return NaN
     }
 
     get dead() {
         return this.hp === 0;
     }
-    
+
     // Time information.
     get frameRate() {
-        return this.stats.speed*10;
+        return this.stats.speed * 10;
     }
     get totalAttackTime() {
         return calculateTotalAttackTime();
     }
-    
+
     get currentAttackTime() {
         return calculateCurrentAttackTime();
     }
 
     get percentageTimeAttack() {
-        return (this.calculateCurrentAttackTime()/this.calculateTotalAttackTime())*100.
+        return (this.calculateCurrentAttackTime() / this.calculateTotalAttackTime()) * 100;
     }
+
     get timeSinceLastAttack() {
         return calculateLastAttackTime();
     }
-    
+
     get totalBlockTime() {
         return calculateTotalBlockTime();
     }
-    
+
     get currentBlockTime() {
         return calculateCurrentBlockTime();
     }
+
+    get percentageTimeBlock() {
+        return (this.calculateCurrentBlockTime() / this.calculateTotalBlockTime()) * 100;
+    }
+
     get timeSinceLastBlock() {
         return calculateLastBlockTime();
     }
 }
 
 // Esto no debe de ser global.
-var isAnArrayOfType = function(type, array){
+var isAnArrayOfType = function (type, array) {
     if (array instanceof Array) {
-        for(let element in array) {
-            if(typeof(array[element]) !== type ){
+        for (let element in array) {
+            if (typeof (array[element]) !== type) {
                 return false
             }
         }
@@ -280,7 +289,7 @@ class Idle extends Action {
         super(name);
         if (isAnArrayOfType('number', framesIdle)) {
             this.framesIdle = framesIdle;
-            if(typeof(sound) !== 'string' && sound !== null)
+            if (typeof (sound) !== 'string' && sound !== null)
                 throw 'sound must be a string'
             this.sound = sound;
         } else {
@@ -292,7 +301,7 @@ class Idle extends Action {
 class Attack extends Action {
     constructor(name, framesPreAttacking, framesAttacking, soundPreattacking, soundAttacking) {
         super(name);
-        if (isAnArrayOfType('number',framesPreAttacking)) {
+        if (isAnArrayOfType('number', framesPreAttacking)) {
             this.framesPreAttacking = framesPreAttacking;
         } else {
             throw 'elements of framesPreAttacking must be number';
@@ -302,43 +311,43 @@ class Attack extends Action {
         } else {
             throw 'elements of framesAttacking must be number';
         }
-        if(typeof(soundPreattacking) !== 'string' && soundPreattacking !== null)
-                throw 'soundPreAttacking must be a string'
+        if (typeof (soundPreattacking) !== 'string' && soundPreattacking !== null)
+            throw 'soundPreAttacking must be a string'
         this.soundPreattacking = soundPreattacking;
-        if(typeof(soundAttacking) !== 'string' && soundAttacking !== null)
-                throw 'soundAttacking must be a string'
+        if (typeof (soundAttacking) !== 'string' && soundAttacking !== null)
+            throw 'soundAttacking must be a string'
         this.soundAttacking = soundAttacking;
 
     }
 }
 
 class Block extends Action {
-    constructor(name, framesPreBlocking, framesBlocking, framesPostblocking, soundPreblocking, soundBlocking, soundPostblocking) {
+    constructor(name, framesPreBlocking, framesBlocking, framesPostBlocking, soundPreBlocking, soundBlocking, soundPostBlocking) {
         super(name);
-        if (isAnArrayOfType('number',framesPreBlocking)) {
+        if (isAnArrayOfType('number', framesPreBlocking)) {
             this.framesPreBlocking = framesPreBlocking;
         } else {
             throw 'elements of framesPreBlocking must be number';
         }
-        if (isAnArrayOfType('number',framesBlocking)) {
+        if (isAnArrayOfType('number', framesBlocking)) {
             this.framesBlocking = framesBlocking;
         } else {
             throw 'elements of framesBlocking must be number';
         }
-        if (isAnArrayOfType('number',framesPostBlocking)) {
+        if (isAnArrayOfType('number', framesPostBlocking)) {
             this.framesPostBlocking = framesPostBlocking;
         } else {
             throw 'elements of framesPostBlocking must be number';
         }
-        if(typeof(soundPreblocking) !== 'string' && soundPreblocking !== null)
-                throw 'soundPreblocking must be a string'
-        this.soundPreblocking = soundPreblocking;
-        if(typeof(soundBlocking) !== 'string' && soundBlocking !== null)
-                throw 'soundBlocking must be a string'
+        if (typeof (soundPreBlocking) !== 'string' && soundPreBlocking !== null)
+            throw 'soundPreblocking must be a string'
+        this.soundPreblocking = soundPreBlocking;
+        if (typeof (soundBlocking) !== 'string' && soundBlocking !== null)
+            throw 'soundBlocking must be a string'
         this.soundBlocking = soundBlocking;
-        if(typeof(soundPostblocking) !== 'string' && soundPostblocking !== null)
-                throw 'soundPostblocking must be a string'
-        this.soundPostblocking = soundPostblocking;
+        if (typeof (soundPostBlocking) !== 'string' && soundPostBlocking !== null)
+            throw 'soundPostblocking must be a string'
+        this.soundPostblocking = soundPostBlocking;
 
     }
 }
@@ -362,39 +371,39 @@ class Stats {
 
 class StatusEmitter {
     constructor() {
-        switch(arguments.length){
+        switch (arguments.length) {
             case 3:
-                if(typeof(arguments[0])==='string') {
+                if (typeof (arguments[0]) === 'string') {
                     this.blood = arguments[0];
                 } else {
                     throw "blood argument must be string";
                 }
-                if(typeof(arguments[1])==='number') {
+                if (typeof (arguments[1]) === 'number') {
                     this.x = arguments[1];
                 } else {
                     throw "xEmitter argument must be number";
                 }
-                if(typeof(arguments[2])==='number') {
+                if (typeof (arguments[2]) === 'number') {
                     this.y = arguments[2];
                 } else {
                     throw "yEmitter argument must be number";
                 }
-            break;
+                break;
             case 2:
                 this.blood = 'blood';
-                if(typeof(arguments[1])==='number') {
+                if (typeof (arguments[1]) === 'number') {
                     this.x = arguments[1];
                 } else {
                     throw "xEmitter argument must be number";
                 }
-                if(typeof(arguments[2])==='number') {
+                if (typeof (arguments[2]) === 'number') {
                     this.y = arguments[2];
                 } else {
                     throw "yEmitter argument must be number";
                 }
-            break;
+                break;
             case 1:
-                if(typeof(arguments[0])==='string') {
+                if (typeof (arguments[0]) === 'string') {
                     this.blood = arguments[0];
                 } else {
                     throw "blood argument must be string";
@@ -402,15 +411,15 @@ class StatusEmitter {
                 this.x = null;
                 this.y = null;
 
-            break;
+                break;
             case 0:
                 this.blood = 'blood';
                 this.x = null;
                 this.y = null;
-            break;
+                break;
             default:
                 throw "Invalid number of arguments(<blood>, <xEmitter>, <yEmitter>)"
-            break;
+                break;
         }
     }
 }
