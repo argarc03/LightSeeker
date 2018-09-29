@@ -39,15 +39,17 @@ class Character {
                     this.sprite.attacking = this.sprite.animations.add('attacking', actions[action].framesAttacking, true);
                     this.timeStartLastAttack=NaN;
                     this.attack = function (target) {
-                        if (this.target != null) {
+                        if(target instanceof Character ){
                             this.target = target;
+                        }  else if (target !== null) {
+                            throw "target must be Character"
                         }
                         this.timeStartLastAttack = this.game.time.totalElapsedSeconds();
                         this.preAttacking();
                     }
                     this.attacking = function () {
                         this.sprite.animations.play('attacking', this.frameRate, false);
-                        if (this.target != null) {
+                        if (this.target !== null) {
                             this.target.hurt(this.stats.damage);
                         }
                         this.sprite.attacking.onComplete.add(this.idle, this);
