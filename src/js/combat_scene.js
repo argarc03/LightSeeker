@@ -29,6 +29,7 @@ var CombatScene = {
 
   },
   update: function () {
+    console.log(seeker.percentageTimeAttack);
   }
 };
 

@@ -59,7 +59,7 @@ class Character {
                     }
 
                     this.calculateTotalAttackTime = function () {
-                        return (actions[action].framesPreAttacking.length+actions[action].framesAttacking.length)/this.frameRate*Phaser.Timer.SECOND;
+                        return (actions[action].framesPreAttacking.length+actions[action].framesAttacking.length)/this.frameRate;
                     }
 
                     this.calculateLastAttackTime = function () {
@@ -104,7 +104,7 @@ class Character {
                     }
 
                     this.calculateTotalBlockTime = function () {
-                        return (actions[action].framesPreBlocking.length+actions[action].framesBlocking.length+actions[action].framesPostBlocking.length)/this.frameRate*Phaser.Timer.SECOND;
+                        return (actions[action].framesPreBlocking.length+actions[action].framesBlocking.length+actions[action].framesPostBlocking.length)/this.frameRate;
                     }
 
                     this.calculateLastBlockTime = function () {
