@@ -1,10 +1,5 @@
 'use strict';
 
-
-// ¿Cómo mandar buenos mensajes de error?
-// ¿Cómo hacer que una función solo esté aquí?
-// Aún se deben controlar los sonidos
-
 class Character {
     constructor(x, y, name, damage, defense, speed, health, spriteSheet, game,
         actions, emitter = new StatusEmitter()) {
@@ -38,7 +33,7 @@ class Character {
                     this.sprite.preAttacking = this.sprite.animations.add('preAttacking', actions[action].framesPreAttacking, true);
                     this.sprite.attacking = this.sprite.animations.add('attacking', actions[action].framesAttacking, true);
                     this.timeStartLastAttack = NaN;
-                    this.attack = function (target=null) {
+                    this.attack = function (target = null) {
                         if (target instanceof Character) {
                             this.target = target;
                         } else if (target === null) {
@@ -67,12 +62,11 @@ class Character {
                     }
 
                     this.calculateCurrentAttackTime = function () {
-                        switch(this.sprite.animations.currentAnim.name)
-                        {
+                        switch (this.sprite.animations.currentAnim.name) {
                             case 'preAttacking':
-                                return (this.sprite.preAttacking.currentFrame.index-actions[action].framesPreAttacking[0])/this.frameRate;
+                                return (this.sprite.preAttacking.currentFrame.index - actions[action].framesPreAttacking[0]) / this.frameRate;
                             case 'attacking':
-                                return (this.sprite.attacking.currentFrame.index-actions[action].framesAttacking[0]+ actions[action].framesPreAttacking.length)/this.frameRate;
+                                return (this.sprite.attacking.currentFrame.index - actions[action].framesAttacking[0] + actions[action].framesPreAttacking.length) / this.frameRate;
                             default:
                                 return NaN;
                         }
@@ -101,7 +95,7 @@ class Character {
                         this.sprite.blocking.onComplete.add(this.postBlocking, this);
                     }
                     this.loop = function () {
-                        if (this.sprite.blocking.loopCount >= (this.frameRate/this.sprite.blocking.frameTotal))
+                        if (this.sprite.blocking.loopCount >= (this.frameRate / this.sprite.blocking.frameTotal))
                             this.sprite.blocking.loop = false;
                     }
                     this.postBlocking = function () {
@@ -116,17 +110,16 @@ class Character {
                     }
 
                     this.calculateCurrentBlockTime = function () {
-                        
-                        switch(this.sprite.animations.currentAnim.name)
-                        {
+
+                        switch (this.sprite.animations.currentAnim.name) {
                             case 'preBlocking':
-                                return (this.sprite.preBlocking.currentFrame.index-actions[action].framesPreBlocking[0])/this.frameRate;
+                                return (this.sprite.preBlocking.currentFrame.index - actions[action].framesPreBlocking[0]) / this.frameRate;
                             case 'blocking':
-                                return (this.sprite.blocking.currentFrame.index-actions[action].framesBlocking[0]+this.sprite.blocking.loopCount*actions[action].framesBlocking.length
-                                    +actions[action].framesPreBlocking.length)/this.frameRate;
+                                return (this.sprite.blocking.currentFrame.index - actions[action].framesBlocking[0] + this.sprite.blocking.loopCount * actions[action].framesBlocking.length
+                                    + actions[action].framesPreBlocking.length) / this.frameRate;
                             case 'postBlocking':
-                                return (this.sprite.postBlocking.currentFrame.index-actions[action].framesPostBlocking[0]+this.frameRate+
-                                    actions[action].framesPreBlocking.length)/this.frameRate;
+                                return (this.sprite.postBlocking.currentFrame.index - actions[action].framesPostBlocking[0] + this.frameRate +
+                                    actions[action].framesPreBlocking.length) / this.frameRate;
                             default:
                                 return NaN;
                         }
@@ -152,8 +145,8 @@ class Character {
                 this.xEmitter = this.sprite.width / 2;
                 this.yEmitter = this.sprite.height / 2;
             }
-            this.bleed = this.game.add.emitter(x + this.xEmitter, y + this.yEmitter,1000);
-            this.bleed.makeParticles('blood');
+            this.bleed = this.game.add.emitter(x + this.xEmitter, y + this.yEmitter, 1000);
+            this.bleed.makeParticles(emitter.blood);
             this.bleed.gravity = 200;
             this.bleed.minParticleScale = 1;
             this.bleed.maxParticleScale = 2;
@@ -166,7 +159,9 @@ class Character {
         this.isBlocking = false;
     };
 
+    die(){
 
+    }
 
     target(target) {
         if (target instanceof Character) {
@@ -211,22 +206,19 @@ class Character {
         if (typeof (damage) === 'number') {
             damage = this.isBlocking ? Math.max(0, damage - this.stats.defense) : damage;
             this.game.camera.shake(damage / 200, damage * 20);
-            this.hp = Math.max(0,this.hp - damage);
-            
-            this.bleed.flow(2000, 1, 20, 100, true) 
-            
-            
-            if(this.hp===0) {
+            this.hp = Math.max(0, this.hp - damage);
+
+            if (damage > 0)
+                this.bleed.flow(2000, 1, 20, damage * 10, true);
+
+
+            if (this.hp === 0) {
                 this.die();
             }
 
         } else {
             throw "damage must be number";
         }
-    }
-
-    die(){
-
     }
 
     // Time calculations
@@ -381,14 +373,14 @@ class Die extends Action {
 }
 
 class Stats {
-    constructor(damage, defense, speed, vitality) {
+    constructor(damage, defense, speed, health) {
 
         if (typeof (damage) === 'number' && typeof (defense) === 'number'
-            && typeof (speed) === 'number' && typeof (vitality) === 'number') {
+            && typeof (speed) === 'number' && typeof (health) === 'number') {
             this.damage = damage;
             this.defense = defense;
             this.speed = speed;
-            this.vitality = vitality;
+            this.health = health;
         } else {
             throw "The fields in constructor must be number.";
         }
@@ -418,7 +410,7 @@ class StatusEmitter {
                 }
                 break;
             case 2:
-                this.blood = 'blood';
+                this.blood = 'redBlood';
                 if (typeof (arguments[1]) === 'number') {
                     this.x = arguments[1];
                 } else {
@@ -441,7 +433,7 @@ class StatusEmitter {
 
                 break;
             case 0:
-                this.blood = 'blood';
+                this.blood = 'redBlood';
                 this.x = null;
                 this.y = null;
                 break;
