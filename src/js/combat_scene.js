@@ -30,7 +30,8 @@ var CombatScene = {
       {
         idle: new Idle('idle', [0, 1, 2, 3, 4, 5]),
         attack: new Attack('attack', [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41], null, null),
-        block: new Block('block', [48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60], null, null, null)
+        block: new Block('block', [48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60], null, null, null),
+        die: new Die('die', [72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96], null)
       });
 
     seeker.idle();
@@ -51,16 +52,25 @@ var CombatScene = {
   update: function () {
     //console.log(seeker.percentageTimeBlock);
 
+    //console.log(seeker.calculateCurrentBlockTime());
+    console.log(seeker.bleed.maxParticles);
     console.log(seeker.calculateCurrentBlockTime());
 
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
       seeker.block();
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.Q))
+      seeker.attack(enemy);
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.Z))
+      enemy.attack();
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.X))
+      enemy.block();
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.C))
+      enemy.die();
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.H))
+      enemy.hurt(1);
 
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.A))
-      seeker.sprite.animations.stop();
+    
 
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.S))
-      seeker.sprite.animations.currentAnim.play();
 
   }
 };

@@ -22,7 +22,7 @@ class Character {
         if (game instanceof Phaser.Game) {
             this.game = game;
         } else {
-            throw "game must be an instance of Game"
+            throw "game must be an instance of Game";
         }
 
 
@@ -38,10 +38,12 @@ class Character {
                     this.sprite.preAttacking = this.sprite.animations.add('preAttacking', actions[action].framesPreAttacking, true);
                     this.sprite.attacking = this.sprite.animations.add('attacking', actions[action].framesAttacking, true);
                     this.timeStartLastAttack = NaN;
-                    this.attack = function (target) {
+                    this.attack = function (target=null) {
                         if (target instanceof Character) {
                             this.target = target;
-                        } else if (target !== null) {
+                        } else if (target === null) {
+                            this.target = null;
+                        } else {
                             throw "target must be Character"
                         }
                         this.timeStartLastAttack = this.game.time.totalElapsedSeconds();
@@ -64,15 +66,15 @@ class Character {
                         return (actions[action].framesPreAttacking.length + actions[action].framesAttacking.length) / this.frameRate;
                     }
 
-                    this.calculateLastAttackTime = function () {
-                        return this.game.time.totalElapsedSeconds() - this.timeStartLastAttack;
-                    }
-
                     this.calculateCurrentAttackTime = function () {
-                        if (this.sprite.animations.name === 'attacking' || this.sprite.animations.name === 'preAttacking') {
-                            return this.game.time.totalElapsedSeconds() - this.timeStartLastAttack;
-                        } else {
-                            return NaN;
+                        switch(this.sprite.animations.currentAnim.name)
+                        {
+                            case 'preAttacking':
+                                return (this.sprite.preAttacking.currentFrame.index-actions[action].framesPreAttacking[0])/this.frameRate;
+                            case 'attacking':
+                                return (this.sprite.attacking.currentFrame.index-actions[action].framesAttacking[0]+ actions[action].framesPreAttacking.length)/this.frameRate;
+                            default:
+                                return NaN;
                         }
                     }
 
@@ -113,16 +115,26 @@ class Character {
                             / this.frameRate) + Phaser.Timer.SECOND;
                     }
 
-                    this.calculateLastBlockTime = function () {
-                        return this.game.time.totalElapsedSeconds() - this.timeStartLastBlock;
-                    }
-
                     this.calculateCurrentBlockTime = function () {
-                        if (this.sprite.animations.name === 'preBlocking' || this.sprite.animations.name === 'blocking' || this.sprite.animations.name === 'postPlocking') {
-                            return this.game.time.totalElapsedSeconds() - this.timeStartLastBlock;
-                        } else {
-                            return NaN;
+                        
+                        switch(this.sprite.animations.currentAnim.name)
+                        {
+                            case 'preBlocking':
+                                return (this.sprite.preBlocking.currentFrame.index-actions[action].framesPreBlocking[0])/this.frameRate;
+                            case 'blocking':
+                                return (this.sprite.blocking.currentFrame.index-actions[action].framesBlocking[0]+this.sprite.blocking.loopCount*actions[action].framesBlocking.length
+                                    +actions[action].framesPreBlocking.length)/this.frameRate;
+                            case 'postBlocking':
+                                return (this.sprite.postBlocking.currentFrame.index-actions[action].framesPostBlocking[0]+this.frameRate+
+                                    actions[action].framesPreBlocking.length)/this.frameRate;
+                            default:
+                                return NaN;
                         }
+                    }
+                } else if (actions[action] instanceof Die) {
+                    this.sprite.die = this.sprite.animations.add('dying', actions[action].framesDying, true);
+                    this.die = function () {
+                        this.sprite.play('dying', this.frameRate, false);
                     }
                 } else {
                     throw "actions must be Array or Object of Actions";
@@ -139,9 +151,13 @@ class Character {
             } else if (emitter.x === null && emitter.y === null) {
                 this.xEmitter = this.sprite.width / 2;
                 this.yEmitter = this.sprite.height / 2;
-            } else {
-                throw " x and y of emitter ";
             }
+            this.bleed = this.game.add.emitter(x + this.xEmitter, y + this.yEmitter,1000);
+            this.bleed.makeParticles('blood');
+            this.bleed.gravity = 200;
+            this.bleed.minParticleScale = 1;
+            this.bleed.maxParticleScale = 2;
+            this.bleed.bounce = 0;
         } else {
             throw "emitter must be a StatusEmitter";
         }
@@ -193,12 +209,24 @@ class Character {
 
     hurt(damage) {
         if (typeof (damage) === 'number') {
-            damage = this.isBlocking ? Math.max(0, Math.max(0, damage - this.stats.defense)) : damage;
+            damage = this.isBlocking ? Math.max(0, damage - this.stats.defense) : damage;
             this.game.camera.shake(damage / 200, damage * 20);
-            this.hp = this.hp - damage;
+            this.hp = Math.max(0,this.hp - damage);
+            
+            this.bleed.flow(2000, 1, 20, 100, true) 
+            
+            
+            if(this.hp===0) {
+                this.die();
+            }
+
         } else {
             throw "damage must be number";
         }
+    }
+
+    die(){
+
     }
 
     // Time calculations
@@ -208,17 +236,11 @@ class Character {
     calculateCurrentAttackTime() {
         return NaN;
     }
-    calculateLastAttackTime() {
-        return NaN
-    }
     calculateTotalBlockTime() {
         return NaN;
     }
     calculateCurrentBlockTime() {
         return NaN;
-    }
-    calculateLastBlockTime() {
-        return NaN
     }
 
     get dead() {
@@ -241,10 +263,6 @@ class Character {
         return (this.calculateCurrentAttackTime() / this.calculateTotalAttackTime()) * 100;
     }
 
-    get timeSinceLastAttack() {
-        return calculateLastAttackTime();
-    }
-
     get totalBlockTime() {
         return calculateTotalBlockTime();
     }
@@ -255,10 +273,6 @@ class Character {
 
     get percentageTimeBlock() {
         return (this.calculateCurrentBlockTime() / this.calculateTotalBlockTime()) * 100;
-    }
-
-    get timeSinceLastBlock() {
-        return calculateLastBlockTime();
     }
 }
 
@@ -349,6 +363,20 @@ class Block extends Action {
             throw 'soundPostblocking must be a string'
         this.soundPostblocking = soundPostBlocking;
 
+    }
+}
+
+class Die extends Action {
+    constructor(name, framesDying, soundDying) {
+        super(name);
+        if (isAnArrayOfType('number', framesDying)) {
+            this.framesDying = framesDying;
+        } else {
+            throw 'elements of framesDying must be number';
+        }
+        if (typeof (soundDying) !== 'string' && soundDying !== null)
+            throw 'soundPreblocking must be a string'
+        this.soundDying = soundDying;
     }
 }
 
