@@ -12,7 +12,32 @@ var CombatScene = {
 
   seeker: require('./character.js'),
   enemy: require('./character.js'),
-  hpbarseeker: require('./statusBar.js'),
+  hpBarSeeker: require('./statusBar.js'),
+  hpBarEnemy: require('./statusBar.js'),
+  timeActionBar: require('./statusBar.js'),
+
+  // Buttons functions
+  attackKey: function() {
+    if (true){
+      this.seeker.attack(this.enemy);
+    }
+  },
+  blockKey: function() {
+    if (true) {
+      this.seeker.block();
+    }
+  },
+  attackEnemy: function() {
+    if (true) {
+      this.enemy.attack(this.seeker);
+    }
+  },
+  blockEnemy: function() {
+    if (true) {
+     this.enemy.block();
+    }
+  },
+
   create: function () {
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
@@ -26,7 +51,7 @@ var CombatScene = {
 
 
     //render enemy
-    this.enemy = new Character(this.game.world.width - 80, -8, 'Big Spider', 20, 1, 1, 10, 'spiderAnimations', this.game,
+    this.enemy = new Character(this.game.world.width - 80, -8, 'Big Spider', 10, 1, 1, 10, 'spiderAnimations', this.game,
       {
         idle: new Idle('idle', [0, 1, 2, 3, 4, 5]),
         attack: new Attack('attack', [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41], null, null),
@@ -39,13 +64,40 @@ var CombatScene = {
 
 
     //interface
-    this.hpbarseeker = new HealthBar(11,16,8,67,'statBar','retStatBar',this.game);
+    this.hpBarSeeker = new HealthBar(this.game,11,16,'statBar','retStatBar',2000,500,18,0,function(){
+      console.log(this.hp + '/' + this.stats.health);
+      return this.hp + '/' + this.stats.health;
+    }, this.seeker, 'normal8', 8);
+    this.hpBarSeeker.width = 67;
+    this.hpBarSeeker.height = 8;
+    this.hpBarEnemy = new HealthBar(this.game,131,16,'statBar','retStatBar',2000,500,18,0,function(){
+      console.log(this.hp + '/' + this.stats.health);
+      return this.hp + '/' + this.stats.health;
+    }, this.enemy, 'normal8', 8);
+    this.hpBarEnemy.width = 67;
+    this.hpBarEnemy.height = 8;
+    this.timeActionBar = new Bar(this.game,186,29,'statBar');
+    this.timeActionBar.width = -55;
+    this.timeActionBar.height = 4;
 
-    textito = this.game.add.bitmapText(28, 16, 'normal8', this.seeker.hp + '/' + this.seeker.stats.health, 8);
-    textito.text = this.seeker.hp + '/' + this.seeker.stats.health;
 
+    //textito = this.game.add.bitmapText(28, 16, 'normal8', this.seeker.hp + '/' + this.seeker.stats.health, 8);
+    //textito.text = this.seeker.hp + '/' + this.seeker.stats.health;
 
+    // Interface Events
+    this.seeker.onHpChange.add(this.hpBarSeeker.changePercentage,this.hpBarSeeker, 0,this.seeker);
+    this.enemy.onHpChange.add(this.hpBarEnemy.changePercentage, this.hpBarEnemy, 0, this.enemy);
+    this.seeker.onHpChange.add(this.timeActionBar.changePercentage,this.timeActionBar, 0,function(){
+      console.log(this.hp);
+      return this.hp/this.stats.health*100;
+    },this.seeker);
 
+    // Controls
+    
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey,this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey,this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy,this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy,this);
 
     //music
     var music = this.game.add.audio('boss');
@@ -54,29 +106,8 @@ var CombatScene = {
 
   },
   update: function () {
-    //console.log(seeker.percentageTimeBlock);
-
-    //console.log(seeker.calculateCurrentBlockTime());
-    //console.log(seeker.bleed.maxParticles);
-    //console.log(seeker.calculateCurrentBlockTime());
-
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
-      this.seeker.block();
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.Q))
-      this.seeker.attack(this.enemy);
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.Z))
-      this.enemy.attack(this.seeker);
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.X))
-      this.enemy.block();
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.C))
-      this.enemy.die();
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.H))
-      this.enemy.hurt(1);
-
-
     //update render
-    textito.setText(this.seeker.hp + '/' + this.seeker.stats.health);
-    this.hpbarseeker.setPercentage(this.seeker.hp/this.seeker.stats.health*100);
+    //textito.setText(this.seeker.hp + '/' + this.seeker.stats.health);
 
   }
 };

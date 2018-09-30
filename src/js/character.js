@@ -32,7 +32,7 @@ class Character {
                 } else if (actions[action] instanceof Attack) {
                     this.sprite.preAttacking = this.sprite.animations.add('preAttacking', actions[action].framesPreAttacking, true);
                     this.sprite.attacking = this.sprite.animations.add('attacking', actions[action].framesAttacking, true);
-                    this.timeStartLastAttack = NaN;
+                    
                     this.attack = function (target = null) {
                         if (target instanceof Character) {
                             this.target = target;
@@ -41,7 +41,6 @@ class Character {
                         } else {
                             throw "target must be Character"
                         }
-                        this.timeStartLastAttack = this.game.time.totalElapsedSeconds();
                         this.preAttacking();
                     }
                     this.attacking = function () {
@@ -157,7 +156,11 @@ class Character {
 
         this.target;
         this.isBlocking = false;
-    };
+
+        //Signals 
+        this.onHpChange = new Phaser.Signal();
+
+    };    
 
     die(){
 
@@ -206,8 +209,9 @@ class Character {
         if (typeof (damage) === 'number') {
             damage = this.isBlocking ? Math.max(0, damage - this.stats.defense) : damage;
             this.game.camera.shake(damage / 200, damage * 20);
+            
             this.hp = Math.max(0, this.hp - damage);
-
+            this.onHpChange.dispatch();
             if (damage > 0)
                 this.bleed.flow(2000, 1, 20, damage * 10, true);
 
