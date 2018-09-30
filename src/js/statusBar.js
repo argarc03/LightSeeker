@@ -82,8 +82,8 @@ class HealthBar extends Bar {
     }
 
     changePercentage () {
-        if(arguments.length===1&&arguments[0] instanceof Character){
-            this.percentage = arguments[0].hp/arguments[0].stats.health*100;
+        if(arguments.length===2&&arguments[1] instanceof Character){
+            this.percentage = arguments[0].bind(arguments[1])();
         } else{
             throw 'character must be an instance of Character';
         }
@@ -137,3 +137,19 @@ Object.defineProperty(HealthBar.prototype, 'width', {
     }
 
 })
+
+class CircleWithSectors extends Phaser.Graphics{
+    constructor (game,x,y,radius,angles,colors,antiClockWise,segments) {
+        super(game,x,y);
+        
+        if(angles.length===colors.length){
+            this.lineStyle(0);
+            for(let i = 0; i<angles.length; i++){
+                this.beginFill(colors[i]);
+                this.arc(0,0,radius,angles[i], angles[(i+1)%angles.length], antiClockWise,segments);
+                this.endFill();
+            }
+           
+        }
+    }
+}
