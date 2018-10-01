@@ -38,7 +38,13 @@ var CombatScene = {
     }
   },
 
+  // prototype buttons
+  hurtSeeker: function() {
+    this.seeker.hurt(1);
+  },
+
   create: function () {
+    
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
     //render seeker
@@ -89,19 +95,19 @@ var CombatScene = {
       return this.hp/this.stats.health*100;
     }, this.seeker);
 
-    textito=new CircleWithSectors(this.game,50, 50 ,50,[0,1,2,3],[0x000000,0x0000FF,0x00FF00,0xFF0000],false,50);
-    console.log(textito);
-
+    textito=this.game.add.circleWithSectors(193, 31 , 7, [0,Math.PI*2/4,Math.PI*4/3],[0xFF0000,0x0000FF,0x00FF00],[0.5,0.5,0.6],false,50);
     // Controls
     
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey,this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey,this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy,this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy,this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
 
     //music
     var music = this.game.add.audio('boss');
     music.play();
+    
   },
   update: function () {
 

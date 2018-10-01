@@ -6,6 +6,8 @@
 // ¿Cómo cargar recursos que solo van a usarse en una escena?
 // ¿Cómo mandar buenos mensajes de error?
 // Aún se deben controlar los sonidos
+// ¿Qué formato de domcumentación recomiendas?
+// ¿Cómo se hace para que un objeto se pueda añadir con el game.add.[nombre objeto](parametros)?
 
 var MainMenuScene = require('./mainmenu_scene.js');
 

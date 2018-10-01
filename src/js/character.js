@@ -13,14 +13,13 @@ class Character {
         this.hp = health;
 
         this.sprite = game.add.sprite(x, y, spriteSheet);
+        this.actions = actions;
 
         if (game instanceof Phaser.Game) {
             this.game = game;
         } else {
             throw "game must be an instance of Game";
         }
-
-
 
         if (actions instanceof Array || actions instanceof Object) {
             for (let action in actions) {
@@ -282,6 +281,30 @@ var isAnArrayOfType = function (type, array) {
         }
     }
     return true;
+}
+
+class Enemy extends Character {
+    constructor(){
+        super();
+
+    }
+}
+
+class ActionPattern {
+    constructor(pattern, seeker, thisCaracter){
+        if(isAnArrayOfType('string',pattern)) {
+            this.nextAction = function () {
+                var action = this.actions[pattern[this.doneActions]]
+                this.doneActions=(this.doneActions)%pattern.length;
+                return action;
+            }
+        }
+        this.doneActions=0; //(number)
+    }
+    nextAction() {
+        return null;
+    }
+
 }
 
 class Action {
