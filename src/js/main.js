@@ -1,5 +1,14 @@
 'use strict';
 
+//PREGUNTAS
+// ¿Cómo poner formatos en un bitmapText o tenemos que usar text?
+// ¿Las escenas o states del game pueden recibir argumentos?
+// ¿Cómo cargar recursos que solo van a usarse en una escena?
+// ¿Cómo mandar buenos mensajes de error?
+// Aún se deben controlar los sonidos
+// ¿Qué formato de domcumentación recomiendas?
+// ¿Cómo se hace para que un objeto se pueda añadir con el game.add.[nombre objeto](parametros)?
+
 var MainMenuScene = require('./mainmenu_scene.js');
 
 var CombatScene = require('./combat_scene.js');
@@ -28,7 +37,6 @@ var PreloaderScene = {
     this.game.renderer.renderSession.roundPixels = true;
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
-
     this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
     this.loadingBar.anchor.setTo(0, 0.5);
     this.load.setPreloadSprite(this.loadingBar);
@@ -39,15 +47,20 @@ var PreloaderScene = {
     this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
     this.game.load.image('combatbackground', 'assets/images/combatbackground.png');
     this.game.load.image('eventimage', 'assets/images/eventimage.jpg');
+    //interface
     this.game.load.image('statBar','assets/images/statusBar.png');
-    this.game.load.image('blood','assets/images/blood.png');
+    this.game.load.image('retStatBar','assets/images/retardedStatusBar.png');
+    //particles
+    this.game.load.image('redBlood','assets/images/particles/redBlood.png');
+    this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
+    this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
     //seeker
     this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
     //enemy
     this.game.load.spritesheet('spiderAnimations', 'assets/images/spider/spiderAnimations.png',80,120);
     //fonts
-    this.game.load.bitmapFont('font', 'assets/fonts/bitmapFonts/font.png', 
-    'assets/fonts/bitmapFonts/font.fnt');
+    this.game.load.bitmapFont('normal8', 'assets/fonts/bitmapFonts/normal8.png', 
+    'assets/fonts/bitmapFonts/normal8.fnt'); //solo funciona bien con tamaño múltiplo de 8
     //sounds
     this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
     //music
@@ -57,6 +70,9 @@ var PreloaderScene = {
   create: function () {
     this.game.state.start('combat');
   }
+
+  
+
 };
 
 window.onload = function () {
