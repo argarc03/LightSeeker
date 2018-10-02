@@ -48,7 +48,7 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
     //render seeker
-    this.seeker = new Character(0, -8, 'Carlos Leon', 10, 3, 1, 20, 'seekerAnimations', this.game,
+    this.seeker = new Character(this.game, 0, -8, 'Carlos Leon', new Stats(10, 3, 1, 20), 'seekerAnimations',
       {
         idle: new Idle('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
         attack: new Attack('attack', [24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], null, null),
@@ -58,7 +58,7 @@ var CombatScene = {
 
 
     //render enemy
-    this.enemy = new Character(this.game.world.width - 80, -8, 'Big Spider', 10, 1, 1, 10, 'spiderAnimations', this.game,
+    this.enemy = new Character(this.game, this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10), 'spiderAnimations',
       {
         idle: new Idle('idle', [0, 1, 2, 3, 4, 5]),
         attack: new Attack('attack', [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41], null, null),
