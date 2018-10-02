@@ -105,6 +105,11 @@ var CombatScene = {
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
 
+    // prueba texto
+
+    var text = this.game.add.text(40,40,"AHHHHHHHHHHHHHHHHHHHHH");
+    text.font = 'Revalia';
+
     //music
     var music = this.game.add.audio('boss');
     music.play();

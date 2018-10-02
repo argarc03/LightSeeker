@@ -9,6 +9,20 @@
 // ¿Qué formato de domcumentación recomiendas?
 // ¿Cómo se hace para que un objeto se pueda añadir con el game.add.[nombre objeto](parametros)?
 
+var WebFontConfig = {
+
+  //  'active' means all requested fonts have finished loading
+  //  We set a 1 second delay before calling 'createText'.
+  //  For some reason if we don't the browser cannot render the text the first time it's created.
+  active: function() { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
+
+  //  The Google Fonts we want to load (specify as many as you like in the array)
+  google: {
+    families: ['Revalia']
+  }
+
+};
+
 var MainMenuScene = require('./mainmenu_scene.js');
 
 var CombatScene = require('./combat_scene.js');
@@ -61,6 +75,7 @@ var PreloaderScene = {
     //fonts
     this.game.load.bitmapFont('normal8', 'assets/fonts/bitmapFonts/normal8.png', 
     'assets/fonts/bitmapFonts/normal8.fnt'); //solo funciona bien con tamaño múltiplo de 8
+    this.game.load.script('webFont','//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     //sounds
     this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
     //music
