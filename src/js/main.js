@@ -1,26 +1,23 @@
 'use strict';
 
 //PREGUNTAS
-// ¿Cómo poner formatos en un bitmapText o tenemos que usar text?
-// ¿Las escenas o states del game pueden recibir argumentos?
-// ¿Cómo cargar recursos que solo van a usarse en una escena?
-// ¿Cómo mandar buenos mensajes de error?
+
 // Aún se deben controlar los sonidos
-// ¿Qué formato de domcumentación recomiendas?
-// ¿Cómo se hace para que un objeto se pueda añadir con el game.add.[nombre objeto](parametros)?
+// npm install webfont?
+
+var WebFont = require('webfontloader');
 
 var WebFontConfig = {
 
   //  'active' means all requested fonts have finished loading
   //  We set a 1 second delay before calling 'createText'.
   //  For some reason if we don't the browser cannot render the text the first time it's created.
-  active: function() { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
+  active:  function() { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
 
-  //  The Google Fonts we want to load (specify as many as you like in the array)
-  google: {
-    families: ['Revalia']
-  }
-
+  custom: {
+    families: ['jeje'],
+    urls: ["src/assets/fonts/webFonts/stylesheet.css"]
+    }
 };
 
 var MainMenuScene = require('./mainmenu_scene.js');
@@ -73,9 +70,10 @@ var PreloaderScene = {
     //enemy
     this.game.load.spritesheet('spiderAnimations', 'assets/images/spider/spiderAnimations.png',80,120);
     //fonts
+    this.game.load.script('https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont');
+
     this.game.load.bitmapFont('normal8', 'assets/fonts/bitmapFonts/normal8.png', 
     'assets/fonts/bitmapFonts/normal8.fnt'); //solo funciona bien con tamaño múltiplo de 8
-    this.game.load.script('webFont','//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     //sounds
     this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
     //music
@@ -86,8 +84,6 @@ var PreloaderScene = {
     this.game.state.start('combat');
   }
 
-  
-
 };
 
 window.onload = function () {
@@ -97,6 +93,10 @@ window.onload = function () {
   game.state.add('mainmenu', MainMenuScene);
   game.state.add('combat', CombatScene);
   game.state.add('event', EventScene);
+
+  WebFont.load(WebFontConfig);
+
+
 
   game.state.start('boot');
 };

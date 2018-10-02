@@ -107,8 +107,15 @@ var CombatScene = {
 
     // prueba texto
 
-    var text = this.game.add.text(40,40,"AHHHHHHHHHHHHHHHHHHHHH");
-    text.font = 'Revalia';
+    var style = {
+      font: "35px jeje",
+      fill: "#fff",
+      boundsAlignH: "center",
+      boundsAlignV: "middle"
+    };
+
+    var text = this.game.add.text(50, 50, "jeje", style);
+
 
     //music
     var music = this.game.add.audio('boss');
