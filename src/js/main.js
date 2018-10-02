@@ -60,7 +60,7 @@ var PreloaderScene = {
     this.game.load.spritesheet('spiderAnimations', 'assets/images/spider/spiderAnimations.png',80,120);
     //fonts
     this.game.load.bitmapFont('normal8', 'assets/fonts/bitmapFonts/normal8.png', 
-    'assets/fonts/bitmapFonts/normal8.fnt'); //solo funciona bien con tamaño 8
+    'assets/fonts/bitmapFonts/normal8.fnt'); //solo funciona bien con tamaño múltiplo de 8
     //sounds
     this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
     //music
