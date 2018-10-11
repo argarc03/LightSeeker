@@ -1,270 +1,126 @@
 'use strict';
 
-var emitter;
-
 //village stats
 var day = 1;
 var population = 24;
 var totalgems = 0;
 
-//seeker stats
-var seekerhptotal = 100;
-var seekerhp = 100; //health
-var seekerat = 5; //attack
-var seekerdf = 2; //defense
-var seekersp = 1; //speed
+//var seeker = require('./character.js');//dice que character.js es un modulo común de js, que debe ser convertido a un ES6
 
-var seekerhptext; //health
-var seekerattext; //attack
-var seekerdftext; //defense
-var seekersptext; //speed
+var textito = require('./statusBar.js');
+var CombatScene = {
 
-var seekergems = 10; //gems in this run
+  seeker: require('./character.js'),
+  enemy: require('./character.js'),
+  hpBarSeeker: require('./statusBar.js'),
+  hpBarEnemy: require('./statusBar.js'),
+  timeActionBar: require('./statusBar.js'),
 
-//Seeker Actions
-var seekerTimer={};
-
-var seeker;
-var seekerattack;
-var seekeridle;
-var seekerrestore;
-var seekerplayIdle;
-var seekerplayRestore;
-//seekerTimer.AttackB;
-//seekerTimer.ObjectA;
-//seekerTimer.ObjectB;
-
-//enemy stats
-var enemyTimer={};
-
-var enemyname = "SPIDER";
-var enemyhptotal = 20; //total health
-var enemyhp = 20; //health
-var enemyat = 12; //attack
-var enemydf = 1; //defense 
-var enemysp = 1; //speed
-
-var enemy;
-var enemyattack;
-var enemyidle;
-var enemyrestore;
-var enemyplayIdle;
-var enemyplayRestore;
-
-
-var enemyhptext; //health
-var enemyattext; //attack
-var enemydftext; //defense
-var enemysptext; //speed
-
-
-
-
-//interface
-var attacktext;
-var blocktext;
-
-  var CombatScene = {
-
-  create: function () {
-    
-
-
-
-
-    //seeker timer creation
-    seekerTimer.AttackA ={};
-    seekerTimer.AttackA.isActive = true;
-    seekerTimer.AttackA.refresh = function(){
-      seekerTimer.AttackA.isActive = true;
+  // Buttons functions
+  attackKey: function () {
+    if (true) {
+      this.seeker.attack(this.enemy);
     }
-    
-    //enemy timer creation
-    enemyTimer.AttackA ={};
-    seekerTimer.AttackA.isActive = true;
-    seekerTimer.AttackA.refresh = function(){
-      seekerTimer.AttackA.isActive = true;
+  },
+  blockKey: function () {
+    if (true) {
+      this.seeker.block();
     }
-     
-    //music
-    var music = this.game.add.audio('boss');
-    music.volume = 2;
-    music.play();
-
-    //render background
-    var combatbackground = this.game.add.sprite(0,0, 'combatbackground');
-
-
-    //render seeker (0,-8)
-    seeker = this.game.add.sprite(0,-8,'seekerAnimations');
-    seekeridle = seeker.animations.add('idle',[0,1,2,3,4,5,6,7,8,9],true);
-    seekerattack = seeker.animations.add('attack',[17,18,19,20,21,22,23,24,24],true);
-    seekerrestore = seeker.animations.add('restore',[25,26,27,28,29,30,31,32,33],true);
-
-    seekerplayIdle=function(){seeker.animations.play('idle',10,true);}
-    seekerplayRestore = function()
-    {
-      enemyhp = enemyhp - seekerat;
-      if(enemyhp<0) enemyhp=0;
-      enemyhptext.text = enemyhp + "/" + enemyhptotal;
-      enemybar.width=(enemyhp/100)*338;
-      seeker.animations.play('restore',10,false); 
-      seekerrestore.onComplete.add(seekerplayIdle,this);
-      this.game.camera.shake(0.01,300);
-
-      emitter = this.game.add.emitter(160, 88, 100); //(x,y,maxParticles)
-      emitter.makeParticles('blood');  
-      emitter.start(1,0, 100, 100, true);//(lifespan,frecuency,quantity,total,inmediate)
+  },
+  attackEnemy: function () {
+    if (true) {
+      this.enemy.attack(this.seeker);
     }
-
-    seekerplayIdle();
-
-    //render seeker health (bar size = 67)
-    var seekerbar = this.game.add.sprite(11,16,'statBar');
-    seekerbar.height=8;
-    seekerbar.width=(seekerhp/100)*67;
-
-
-    seekerhptext = this.game.add.bitmapText(28, 17, 'font',seekerhp + "/" + seekerhptotal,9);
-    seekerattext = this.game.add.bitmapText(10, 2, 'font',seekerat,12);
-    seekerdftext = this.game.add.bitmapText(36, 2, 'font',seekerdf,12);
-    seekersptext = this.game.add.bitmapText(62, 2, 'font',seekersp,12);
-
-    this.game.add.bitmapText(24, 26, 'font',seekergems,9);
-
-    //render village
-    this.game.add.bitmapText(84, 2, 'font',"DAY "+ day,10);
-
-
-    //render enemy (80x120) -> (this.game.world.width-80,-8)
-    enemy = this.game.add.sprite(this.game.world.width-80,-8, 'spiderAnimations');
-    enemyidle = enemy.animations.add('idle',[0,1,2,3,4,5],true);
-    enemyattack = enemy.animations.add('attack',[18,19,20,21,22,23,24,28],true);
-    enemyrestore = enemy.animations.add('restore',[29,30,31,32,35],true); 
-
-    enemyplayIdle=function(){enemy.animations.play('idle',8,true);}
-    enemyplayRestore = function()
-    {
-      seekerhp = seekerhp - enemyat;
-      if(seekerhp<0) seekerhp=0;
-      seekerhptext.text = seekerhp + "/" + seekerhptotal;
-      seekerbar.width=(seekerhp/100)*67;
-      enemy.animations.play('restore',10,false); 
-      enemyrestore.onComplete.add(enemyplayIdle,this);
-      this.game.camera.shake(0.01,300);
-
-      emitter = this.game.add.emitter(40, 88, 100); //(x,y,maxParticles)
-      emitter.makeParticles('blood');  
-      emitter.start(100,0, 100, 100, false);//(lifespan,frecuency,quantity,total,inmediate)
+  },
+  blockEnemy: function () {
+    if (true) {
+      this.enemy.block();
     }
-
-    enemyplayIdle();
-
-    //render enemy health
-    var enemybar = this.game.add.sprite(this.game.world.width-69,16,'statBar');
-    enemybar.height=8;
-    enemybar.width=(enemyhp/100)*338;
-
-    this.game.add.bitmapText(this.game.world.width-66, 2,'font', enemyname,9);
-    enemyhptext = this.game.add.bitmapText(this.game.world.width-48, 17,'font', enemyhp + "/" + enemyhptotal,9);
-    /*enemyattext = this.game.add.bitmapText(this.game.world.width-50, 0, 'font',enemyat,12);
-    enemydftext = this.game.add.bitmapText(this.game.world.width-40, 0, 'font',enemydf,12);
-    enemysptext = this.game.add.bitmapText(this.game.world.width-30, 0, 'font',enemysp,12);*/
-  
-    //render enemy timer
-
-
-
-    //render attack button
-    attacktext = this.game.add.bitmapText(30, this.game.world.height-21, 'font',"A",24);
-
-    attacktext.inputEnabled = true;
-    
-    //events attack a button
-    attacktext.events.onInputOver.add(remark, this);
-    attacktext.events.onInputOut.add(desmark, this);
-    attacktext.events.onInputUp.add(desclick,this);
-    attacktext.events.onInputDown.add(click,this);
-
-    //render block button
-    blocktext = this.game.add.bitmapText(70, this.game.world.height-21, 'font',"B",24);
-
-    blocktext.inputEnabled = true;
-    
-    blocktext.events.onInputOver.add(remarkB, this);
-    blocktext.events.onInputOut.add(desmarkB, this);
-    blocktext.events.onInputUp.add(desclickB,this);
-    blocktext.events.onInputDown.add(clickB,this);
-
   },
 
-  update: function() {
-    var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    if(spaceKey.isDown)
-    {
-      enemy.animations.play('attack',10,false);
+  // prototype buttons
+  hurtSeeker: function () {
+    this.seeker.hurt(1);
+  },
 
-      enemyattack.onComplete.add(enemyplayRestore,this);
+  create: function () {
 
+    //render background
+    var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
+    //render seeker
+    this.seeker = this.game.add.character(0,-8,'Carlos León',new Stats(10,3,1,20),'seekerAnimations');
+    this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40]);
+    this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59]);
+    this.seeker.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]);
+    this.seeker.addParticle.blood(39,98,10,'blueBlood');
+    //render enemy
+    
+    this.enemy = this.game.add.character(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10), 'wormAnimations');
+    this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
+    this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
+    this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
+    this.enemy.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]);
+    this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
+    this.enemy.idle();
+    this.seeker.idle();
 
-    }
+    //interface
+    this.hpBarSeeker = new HealthBar(this.game, 11, 16, 'statBar', 'retStatBar', 1500, 500, 18, 0, function () {
+      return this.hp + '/' + this.stats.health;
+    }, this.seeker, 'normal8', 8);
+    this.hpBarSeeker.width = 67;
+    this.hpBarSeeker.height = 8;
+    this.hpBarEnemy = new HealthBar(this.game, 131, 16, 'statBar', 'retStatBar', 1500, 500, 18, 0, function () {
+      return this.hp + '/' + this.stats.health;
+    }, this.enemy, 'normal8', 8);
+    this.hpBarEnemy.width = 67;
+    this.hpBarEnemy.height = 8;
+    this.timeActionBar = new Bar(this.game, 186, 29, 'statBar');
+    this.timeActionBar.width = -55;
+    this.timeActionBar.height = 4;
 
+    // Interface Events
+    this.seeker.onHpChange.add(this.hpBarSeeker.changePercentage, this.hpBarSeeker, 0, function () {
+      return this.hp / this.stats.health * 100;
+    }, this.seeker);
+    this.enemy.onHpChange.add(this.hpBarEnemy.changePercentage, this.hpBarEnemy, 0, function () {
+      return this.hp / this.stats.health * 100;
+    }, this.enemy);
+    this.seeker.onHpChange.add(this.timeActionBar.changePercentage, this.timeActionBar, 0, function () {
+      return this.hp / this.stats.health * 100;
+    }, this.seeker);
 
-    if(!seekerTimer.AttackA.isActive){
-      
-      if(seekerattack.isFinished)
-      {
-        //console.log(seekerTimer.AttackA.t.timer.duration);
-        
-      }
-    }
+    textito = this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);
+    // Controls
+
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
+
+    // prueba texto
+
+    var style = {
+      font: "35px jeje",
+      fill: "#fff",
+      boundsAlignH: "center",
+      boundsAlignV: "middle"
+    };
+
+    var text = this.game.add.text(50, 50, "jeje", style);
+
+    //music
+    var music = this.game.add.audio('boss');
+    music.play();
+
+  },
+  update: function () {
+
   }
-
-  
 };
 
-
-var remark =  function () {
-  attacktext.tint = 0x223344;
-}
-
-var desmark =  function () {
-  attacktext.tint = 0xFFFFFF;
-}
-
-var desclick =  function () {
-  attacktext.tint = 0x223344;
-}
-
-var click =  function () {
-  attacktext.tint = 0xAAAAAA;
-  
-  if(seekerTimer.AttackA.isActive)
-  {
-    seeker.animations.play('attack',10,false);
-    
-    seekerTimer.AttackA.isActive = false;
-    seekerattack.onComplete.add(seekerplayRestore,this);
-    seekerTimer.AttackA.t = this.game.time.events.add(3*Phaser.Timer.SECOND/seekersp,seekerTimer.AttackA.refresh, this);
-  }
-}
-
-var remarkB =  function () {
-  blocktext.tint = 0x223344;
-}
-
-var desmarkB =  function () {
-  blocktext.tint = 0xFFFFFF;
-}
-
-var desclickB =  function () {
-  blocktext.tint = 0xAAAAAA;
-  blocktext.tint = 0x223344;
-}
-
-var clickB =  function () {
-  
-}
 
 
 module.exports = CombatScene;

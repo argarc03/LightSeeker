@@ -5,8 +5,8 @@
   "license": "CC-BY-NC-SA-4.0",
   "repository": "gituser/awesome-game",
   "dependencies": {
-    "browserify": "*",
     "browser-sync": "*",
+    "browserify": "*",
     "del": "*",
     "gulp": "*",
     "gulp-connect": "*",
@@ -15,6 +15,7 @@
     "merge-stream": "*",
     "phaser": "2.6.0",
     "vinyl-source-stream": "*",
-    "watchify": "*"
+    "watchify": "*",
+    "webfontloader": "^1.6.28"
   }
 }
