@@ -61,6 +61,8 @@ var PreloaderScene = {
     //interface
     this.game.load.image('statBar','assets/images/statusBar.png');
     this.game.load.image('retStatBar','assets/images/retardedStatusBar.png');
+
+    this.game.load.spritesheet('attackButton','assets/images/attackButton.png',32,32);
     //particles
     this.game.load.image('redBlood','assets/images/particles/redBlood.png');
     this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');

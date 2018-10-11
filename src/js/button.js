@@ -1,7 +1,7 @@
 'use strict'
 
 // Seguramente hay que cambiarle el formato al texto dependiendo del estado del boton.
-class Button {
+/*class Button {
     constructor(text, posX, posY, quietImage, hoverImage, clickImage, disClickImage, action) {
         this.text = text;
         this.x = posX;
@@ -16,10 +16,11 @@ class Button {
     act(){
         
     }
-}
+}*/
 
-class timerButton extends Button {
+class timerButton extends Phaser.Button {
     constructor() {
-
+        super();
+        
     }
 }

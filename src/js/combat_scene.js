@@ -69,6 +69,10 @@ var CombatScene = {
     this.seeker.idle();
     this.enemy.idle();
 
+    //prueba botones
+    var attackButton = this.game.add.button(20, 120, 'attackButton', this.attackKey, this, 1, 0, 2);
+
+
 
     //interface
     this.hpBarSeeker = new HealthBar(this.game, 11, 16, 'statBar', 'retStatBar', 1500, 500, 18, 0, function () {
