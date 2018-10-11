@@ -69,6 +69,9 @@ var PreloaderScene = {
     this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
     //enemy
     this.game.load.spritesheet('spiderAnimations', 'assets/images/spider/spiderAnimations.png',80,120);
+
+    this.game.load.spritesheet('wormAnimations', 'assets/images/worm/WormAlpha.png',80,120);
+
     //fonts
     this.game.load.script('https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont');
 
