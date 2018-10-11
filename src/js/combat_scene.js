@@ -48,27 +48,22 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
     //render seeker
-    this.seeker = new Character(this.game, 0, -8, 'Carlos Leon', new Stats(10, 3, 1, 20), 'seekerAnimations',
-      {
-        idle: new Idle('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
-        attack: new Attack('attack', [24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], null, null),
-        block: new Block('block', [48, 49, 50, 51, 52], [53, 54], [57, 58, 59], null, null, null),
-        die: new Die('die', [72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95], null)
-      }, new StatusEmitter('blueBlood', 39, 98));
-
-
+    this.seeker = this.game.add.character(0,-8,'Carlos León',new Stats(10,3,1,20),'seekerAnimations');
+    this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40]);
+    this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59]);
+    this.seeker.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]);
+    this.seeker.addParticle.blood(39,98,10,'blueBlood');
     //render enemy
-    this.enemy = new Character(this.game, this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10), 'spiderAnimations',
-      {
-        idle: new Idle('idle', [0, 1, 2, 3, 4, 5]),
-        attack: new Attack('attack', [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41], null, null),
-        block: new Block('block', [48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60], null, null, null),
-        die: new Die('die', [72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96], null)
-      }, new StatusEmitter('greenBlood', 40, 93));
-
-    this.seeker.idle();
+    
+    this.enemy = this.game.add.character(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10), 'spiderAnimations');
+    this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
+    this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
+    this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
+    this.enemy.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]);
+    this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
     this.enemy.idle();
-
+    this.seeker.idle();
 
     //interface
     this.hpBarSeeker = new HealthBar(this.game, 11, 16, 'statBar', 'retStatBar', 1500, 500, 18, 0, function () {
@@ -115,7 +110,6 @@ var CombatScene = {
     };
 
     var text = this.game.add.text(50, 50, "jeje", style);
-
 
     //music
     var music = this.game.add.audio('boss');
