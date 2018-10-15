@@ -1,8 +1,27 @@
+/**
+* @author       Carlos Durán Domínguez <carduran@ucm.es>
+* @copyright    2018 Turing's Songs Studios© 
+* @license      {}
+*/
+
 'use strict';
 
-class Character extends Phaser.Sprite{
+
+/**
+ * A Character is an instance...
+*/
+class Character extends Phaser.Sprite {
+    /**
+     * 
+     * @param {Phaser.Game} game - 
+     * @param {number} x - 
+     * @param {number} y -
+     * @param {string} name -
+     * @param {Stats} stats -
+     * @param {string} spriteSheet -
+    */
     constructor(game, x, y, name, stats, spriteSheet) {
-        super(game,x,y,spriteSheet)
+        super(game, x, y, spriteSheet)
         this.name = name;
         this.stats = stats;
         this.hp = stats.health;
@@ -16,12 +35,12 @@ class Character extends Phaser.Sprite{
         this.addAction = new ActionFactory(this);
         this.addParticle = new ParticleFactory(this);
     }
-
-    target(target) {
-        this.target = target;
-    }
+    /**
+     * 
+     * @param {number} damage -
+     */
     hurt(damage) {
-        damage = this.isBlocking ? Math.max(0, damage - this.stats.defense) : damage;
+        damage = this.isBlocking ? this.stats.damagedNotBlocked(damage) : damage;
         this.game.camera.shake(damage / 200, damage * 20);
         this.hp = Math.max(0, this.hp - damage);
         this.onHpChange.dispatch();
@@ -32,111 +51,328 @@ class Character extends Phaser.Sprite{
             this.die();
         }
     }
-
+    /**
+     * 
+     * @param {number} damage -
+     */
     _damaged(damage) {
 
     }
-
+    /**
+     * 
+     */
     die() {
         this.animations.stop();
         this.onDeath.dispatch();
     }
-
+    /**
+     * 
+     */
     idle() {
         this.animations.stop();
         this.onRest.dispatch();
     }
 
-    // Time information.
+    /**
+     * 
+     */
     get frameRate() {
-        return this.stats.speed * 10;
+        return this.stats.frameRate;
     }
 }
 
+/**
+ * 
+ */
 Phaser.GameObjectFactory.prototype.character = function (x, y, name, stats, spriteSheet, emitter, group) {
     if (group === undefined) { group = this.world; }
-    return group.add( new Character(this.game, x, y, name, stats, spriteSheet, emitter));
+    return group.add(new Character(this.game, x, y, name, stats, spriteSheet, emitter));
+}
+/**
+ * 
+ */
+class Seeker extends Character {
+    /**
+     * 
+     * @param {Phaser.Game} game - 
+     * @param {number} x - 
+     * @param {number} y -
+     * @param {string} name -
+     * @param {Stats} stats -
+     * @param {string} spriteSheet -
+    */
+    constructor(game, x, y, name, stats, spriteSheet) {
+        super(game, x, y, name, stats, spriteSheet);
+        this.addAction = new SeekerActionFactory(this);
+    }
 }
 
+Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, spriteSheet, emitter, group) {
+    if (group === undefined) { group = this.world; }
+    return group.add(new Seeker(this.game, x, y, name, stats, spriteSheet, emitter));
+}
+
+/**
+ * 
+ */
+var Action = {
+    /**
+     * 
+     */
+    idle() {
+        this.onRest.dispatch();
+        this.play('idle', this.stats.frameRate, true);
+    },
+    /**
+     * 
+     * @param {Character} target 
+     */
+    attack(target) {
+        this._preAttacking(target);
+    },
+    /**
+     * 
+     * @param {Character} target 
+     */
+    preAttacking(target) {
+        this.animations.play('preAttacking', this.stats.frameRate, false);
+        this.animations._anims.preAttacking.onComplete.add(this._attacking, this, 0, target);
+    },
+    /**
+     * 
+     * @param {Character} target 
+     */
+    attacking(target) {
+        this.animations.play('attacking', this.stats.frameRate, false);
+        if (arguments[2] !== null) {
+            arguments[2].hurt(this.stats.realDamage);
+        };
+        this.animations._anims.attacking.onComplete.add(this.idle, this);
+    },
+    /**
+     * 
+     */
+    block() {
+        this._preBlocking();
+    },
+    /**
+     * 
+     */
+    preBlocking() {
+        this.animations.play('preBlocking', this.stats.frameRate, false);
+        this.animations._anims.preBlocking.onComplete.add(this._blocking, this);
+    },
+    /**
+     * 
+     */
+    blocking() {
+        this.isBlocking = true;
+        this.animations.play('blocking', this.stats.frameRate, true);
+        this.animations._anims.blocking.onLoop.add(this._loop, this);
+        this.animations._anims.blocking.onComplete.add(this._postBlocking, this);
+    },
+    /**
+     * 
+     */
+    loop() {
+        console.log(this.animations._anims.blocking);
+        console.log(this.stats.blockingTime / this.animations._anims.blocking._frames.length / this.stats.frameRate);
+        if (this.animations._anims.blocking.loopCount >= (this.stats.blockingTime / this.animations._anims.blocking._frames.length * this.stats.frameRate/Phaser.Timer.SECOND))
+            this.animations._anims.blocking.loop = false;
+    },
+    /**
+     * 
+     */
+    postBlocking() {
+        this.isBlocking = false;
+        this.animations.play('postBlocking', this.stats.frameRate, false);
+        this.animations._anims.postBlocking.onComplete.add(this.idle, this);
+    },
+    /**
+     * 
+     */
+    die() {
+        this.onDeath.dispatch();
+        this.animations.play('dying', this.frameRate, false);
+    }
+}
+
+/**
+ * 
+ */
+var CoolDown = {
+    /**
+     * 
+     * @param {number} time 
+     */
+    addAllTime(time) {
+        console.log(this);
+        for (let timer in this.coolDown) {
+            if (this.coolDown[timer].running) {
+                this.coolDown[timer].events.forEach(event => {
+                    event.tick += time;
+                });
+                this.coolDown[timer].nextTick += time;
+            } else {
+                TimerAlterations.newStart.apply(this,[timer]);
+            }
+        }
+    },
+    /**
+     * 
+     */
+    addOnceStart(character,action) {
+        for (event in this.addOnceStart.events) {
+            console.log(character[action].totalTime);
+            this.add(CoolDown.toRealCoolDown(this.addOnceStart.events[event].time,character[action].totalTime()), this.addOnceStart.events[event], this)
+        }
+    },
+    /**
+     * 
+     */
+    stopAll() {
+
+    },
+
+    toRealCoolDown(animationTime, coolDown) {
+        return Math.max(animationTime, coolDown);
+    }
+}
+
+var TimerAlterations = {
+    newStart (timer) {
+        this.coolDown[timer].addOnceStart(this,timer);
+        this.coolDown[timer].start();
+    }
+}
+
+
 class ActionFactory {
+
+    /**
+     * 
+     * @param {Character} character 
+     */
     constructor(character) {
         this.character = character;
     }
 
-    idle(frames) {        
-        this.character.onRest.dispatch();
+    /**
+     * 
+     * @param {number[]|string[]} frames 
+     */
+    idle(frames) {
         this.character.animations.add('idle', frames, true);
-        this.character.idle = function () {this.play('idle', this.frameRate, true);};
+        this.character.idle = Action.idle;
     }
 
+    /**
+     * 
+     * @param {number[]|string[]} framesPreAttacking 
+     * @param {number[]|string[]} framesAttacking 
+     */
     attack(framesPreAttacking, framesAttacking) {
         this.character.animations.add('preAttacking', framesPreAttacking, true);
         this.character.animations.add('attacking', framesAttacking, true);
-        this.character.attack = function (target = null) {
-            this._preAttacking(target);
-        };
-        this.character._preAttacking = function (target) {
-            this.animations.play('preAttacking', this.frameRate, false);
-            this.animations._anims.preAttacking.onComplete.add(this._attacking, this, 0, target);
-        };
-        this.character._attacking = function () {
-            
-            this.animations.play('attacking', this.frameRate, false);
-            if (arguments[2] !== null) {
-                arguments[2].hurt(this.stats.damage);
-            };
-            this.animations._anims.attacking.onComplete.add(this.idle, this);
-        };
-        this.character.calculateTotalAttackTime = TimeCalculations.totalAttackTime;
-        this.character.calculateCurrentAttackTime = TimeCalculations.currentAttackTime;
+        this.character.attack = Action.attack;
+        this.character._preAttacking = Action.preAttacking;
+        this.character._attacking = Action.attacking;
+        this.character.attack.totalTime = TimeCalculations.totalAttackTime;
+        this.character.attack.currentTime = TimeCalculations.currentAttackTime;
     }
 
+    /**
+     * 
+     * @param {number[]|string[]} framesPreBlocking 
+     * @param {number[]|string[]} framesBlocking 
+     * @param {number[]|string[]} framesPostBlocking 
+     */
     block(framesPreBlocking, framesBlocking, framesPostBlocking) {
         this.character.animations.add('preBlocking', framesPreBlocking, true);
         this.character.animations.add('blocking', framesBlocking, true);
         this.character.animations.add('postBlocking', framesPostBlocking, true);
-        this.character.block = function() {
-            this._preBlocking();
-        };
-        this.character._preBlocking = function() {
-            this.animations.play('preBlocking', this.frameRate, false);
-            this.animations._anims.preBlocking.onComplete.add(this._blocking, this);
-        };
-        this.character._blocking = function () {
-            this.isBlocking = true;
-            this.animations.play('blocking', this.frameRate, true);
-            this.animations._anims.blocking.onLoop.add(this._loop, this);
-            this.animations._anims.blocking.onComplete.add(this._postBlocking, this);
-        };
-        this.character._loop = function () {
-            if (this.animations._anims.blocking.loopCount >= (this.frameRate / this.animations._anims.blocking.frameTotal))
-                this.animations._anims.blocking.loop = false;
+        this.character.block = Action.block;
+        this.character._preBlocking = Action.preBlocking;
+        this.character._blocking = Action.blocking;
+        this.character._loop = Action.loop;
+        this.character._postBlocking = Action.postBlocking;
+        this.character.block.totalTime = TimeCalculations.totalBlockTime;
+        this.character.currentTime = TimeCalculations.currentBlockTime;
+    }
+
+    /**
+     * 
+     * @param {number[]|string[]} framesDying 
+     */
+    die(framesDying) {
+        this.character.animations.add('dying', framesDying, true);
+        this.character.die = Action.die;
+    }
+}
+//Hay que encender todos los timers al igual que apagarlos.
+class SeekerActionFactory extends ActionFactory {
+    constructor(character) {
+        super(character);
+        this.character.coolDown = {};
+    }
+    idle(frames) {
+        super.idle(frames);
+    }
+
+    attack(framesPreAttacking, framesAttacking, globalCoolDown, selfCoolDown) {
+        super.attack(framesPreAttacking, framesAttacking);
+
+        this.character.coolDown.attack = this.character.game.time.create(false);
+        this.character.coolDown.attack.addOnceStart = CoolDown.addOnceStart;
+        this.character.coolDown.attack.addOnceStart.events = {};
+        this.character.coolDown.attack.addOnceStart.events.end = this.character.coolDown.attack.stop;//function(){ this.stop(); };
+        this.character.coolDown.attack.addOnceStart.events.end.time = selfCoolDown;
+        this.character.coolDown.attack.global = globalCoolDown;
+
+        this.character.attack = function (target) {
+            if (!this.coolDown.attack.running) {
+                Action.attack.apply(this, [target]);
+                CoolDown.addAllTime.apply(this, [this.coolDown.attack.global]);
+            }
         }
-        this.character._postBlocking = function () {
-            this.isBlocking = false;
-            this.animations.play('postBlocking', this.frameRate, false);
-            this.animations._anims.postBlocking.onComplete.add(this.idle, this);
+        this.character.attack.currentTime = TimeCalculations.currentAttackTime.bind(this.character);
+        this.character.attack.totalTime = TimeCalculations.totalAttackTime.bind(this.character);
+    }
+
+    block(framesPreBlocking, framesBlocking, framesPostBlocking, globalCoolDown, selfCoolDown) {
+        super.block(framesPreBlocking, framesBlocking, framesPostBlocking);
+
+        this.character.coolDown.block = this.character.game.time.create(false);
+        this.character.coolDown.block.addOnceStart = CoolDown.addOnceStart;
+        this.character.coolDown.block.addOnceStart.events = {};
+        this.character.coolDown.block.addOnceStart.events.end = this.character.coolDown.block.stop;//function(){ this.stop(); };
+        this.character.coolDown.block.addOnceStart.events.end.time = selfCoolDown;
+        this.character.coolDown.block.global = globalCoolDown;
+
+        this.character.block = function () {
+            if (!this.coolDown.block.running) {
+                Action.block.apply(this);
+                CoolDown.addAllTime.apply(this, [this.coolDown.block.global]);
+            }
+
         }
-        this.character.calculateTotalBlockTime = TimeCalculations.totalBlockTime;
-        this.character.calculateCurrentBlockTime = TimeCalculations.currentBlockTime;
+
+        this.character.block.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
+        this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
     }
 
     die(framesDying) {
-        this.character.animations.add('dying', framesDying, true);
-        this.character.die = function () {
-            this.onDeath.dispatch();
-            this.play('dying', this.frameRate, false);
-        }
+        super.die(framesDying);
     }
 }
 
 class ParticleFactory {
-    constructor(character){
+    constructor(character) {
         this.character = character;
     }
 
     blood(x = this.character.width / 2, y = this.character.width / 2, radius = 5, emittedBlood = 'redBlood') {
-        
+
         this.character.bleed = this.character.game.add.emitter(this.character.x + x, this.character.y + y, 1000);
         this.character.bleed.makeParticles(emittedBlood);
         this.character.bleed.radius = radius;
@@ -146,14 +382,13 @@ class ParticleFactory {
         this.character.bleed.minParticleScale = 1;
         this.character.bleed.maxParticleScale = 2;
         this.character.bleed.bounce = 0;
-        console.log(this.character.bleed);
-        this.character._damaged = function(damage) { 
+        this.character._damaged = function (damage) {
 
             let angle = this.game.rnd.angle();
-            let radius = this.game.rnd.frac()*this.bleed.radius;
-            this.bleed.emitX = radius*Math.sin(Math.PI/180*angle)+this.bleed.x;
-            this.bleed.emitY = radius*Math.cos(Math.PI/180*angle)+this.bleed.y;
-            this.bleed.flow(2000, 1, 20, damage * 10, true); 
+            let radius = this.game.rnd.frac() * this.bleed.radius;
+            this.bleed.emitX = radius * Math.sin(Math.PI / 180 * angle) + this.bleed.x;
+            this.bleed.emitY = radius * Math.cos(Math.PI / 180 * angle) + this.bleed.y;
+            this.bleed.flow(2000, 1, 20, damage * 10, true);
 
         };
 
@@ -181,34 +416,34 @@ class ActionPattern {
     }
 }
 
-class TimeCalculations {
+var TimeCalculations = {
     totalAttackTime() {
-        return (this.actions[action].framesPreAttacking.length + this.actions[action].framesAttacking.length) / this.frameRate;
-    }
+        return (this.animations._anims.preAttacking._frames.length + this.animations._anims.attacking._frames.length) / this.stats.frameRate;
+    },
     currentAttackTime() {
-        switch (this.sprite.animations.currentAnim.name) {
+        switch (this.animations.currentAnim.name) {
             case 'preAttacking':
-                return (this.sprite.preAttacking.currentFrame.index - actions[action].framesPreAttacking[0]) / this.frameRate;
+                return (this.animations._anims.preAttacking.currentFrame.index - this.animations._anims.preAttacking._frames[0]) / this.stats.frameRate;
             case 'attacking':
-                return (this.sprite.attacking.currentFrame.index - actions[action].framesAttacking[0] + actions[action].framesPreAttacking.length) / this.frameRate;
+                return (this.animations._anims.attacking.currentFrame.index - this.animations._anims.attacking._frames[0] + this.animations._anims.preAttacking._frames.length) / this.stats.frameRate;
             default:
                 return NaN;
         }
-    }
+    },
     totalBlockTime() {
-        return ((actions[action].framesPreBlocking.length + actions[action].framesPostBlocking.length)
-            / this.frameRate) + Phaser.Timer.SECOND;
-    }
+        return ((this.animations._anims.preBlocking._frames.length + this.animations._anims.postBlocking._frames.length)
+            / this.stats.frameRate) + this.stats.blockingTime;
+    },
     currentBlockTime() {
-        switch (this.sprite.animations.currentAnim.name) {
+        switch (this.animations.currentAnim.name) {
             case 'preBlocking':
-                return (this.sprite.preBlocking.currentFrame.index - actions[action].framesPreBlocking[0]) / this.frameRate;
+                return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.preBlocking._frames[0]) / this.stats.frameRate;
             case 'blocking':
-                return (this.sprite.blocking.currentFrame.index - actions[action].framesBlocking[0] + this.sprite.blocking.loopCount * actions[action].framesBlocking.length
-                    + actions[action].framesPreBlocking.length) / this.frameRate;
+                return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.blocking._frames[0] + this.animations._anims.blocking.loopCount * this.animations._anims.blocking._frames.length
+                    + this.animations._anims.preBlocking._frames.length) / this.stats.frameRate;
             case 'postBlocking':
-                return (this.sprite.postBlocking.currentFrame.index - actions[action].framesPostBlocking[0] + this.frameRate +
-                    actions[action].framesPreBlocking.length) / this.frameRate;
+                return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.postBlocking._frames[0] + this.stats.blockingTime +
+                    this.animations._anims.preBlocking._frames.length) / this.stats.frameRate;
             default:
                 return NaN;
         }
@@ -217,9 +452,60 @@ class TimeCalculations {
 
 class Stats {
     constructor(damage, defense, speed, health) {
-        this.damage = damage;
-        this.defense = defense;
-        this.speed = speed;
-        this.health = health;
+        this._damage = damage;
+        this.onDamageChange = new Phaser.Signal();
+        this._defense = defense;
+        this.onDefenseChange = new Phaser.Signal();
+        this._speed = speed;
+        this.onSpeedChange = new Phaser.Signal();
+        this._health = health;
+        this.onHealthChange = new Phaser.Signal();
+    }
+
+    // Stats to utilities
+    damagedNotBlocked(damage) {
+        return Math.max(0, damage - this.stats.realBlock);
+    }
+    get frameRate() {
+        return 10 * this.speed;
+    }
+    get realBlock() {
+        return this.defense;
+    }
+    get realDamage() {
+        return this.damage;
+    }
+    get blockingTime() {
+        return Phaser.Timer.SECOND;
+    }
+
+    // Get/Set stats
+    set damage(value){
+        this.onDamageChange.dispatch();
+        this._damage = value;
+    }
+    set defense(value){
+        this.onDefenseChange.dispatch();
+        this._defense = value;
+    }
+    set speed(value){
+        this.onSpeedChange.dispatch();
+        this._speed = value;
+    }
+    set health(value){
+        this.onHealthChange.dispatch();
+        this._health = value;
+    }
+    get damage(){
+        return this._damage;
+    }
+    get defense(){
+        return this._defense;
+    }
+    get speed(){
+        return this._speed;
+    }
+    get health(){
+        return this._health
     }
 }
