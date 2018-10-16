@@ -5,7 +5,7 @@
   "license": "CC-BY-NC-SA-4.0",
   "repository": "gituser/awesome-game",
   "dependencies": {
-    "browser-sync": "*",
+    "browser-sync": "^2.26.3",
     "browserify": "*",
     "del": "*",
     "gulp": "*",
@@ -16,7 +16,8 @@
     "phaser": "2.6.0",
     "vinyl-source-stream": "*",
     "watchify": "*",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "webfonts-loader": "^4.1.0"
   },
   "devDependencies": {
     "webfont": "^8.1.4"

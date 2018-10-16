@@ -46,7 +46,7 @@ var CombatScene = {
   create: function () {
 
     //render background
-    var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
+    var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
     //render seeker
     this.seeker = this.game.add.seeker(0, -8, 'Carlos León', new Stats(10, 3, 1, 20), 'seekerAnimations');
     this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -66,6 +66,10 @@ var CombatScene = {
     this.seeker.idle();
 
     //interface
+    var mask = this.game.add.sprite(0,0,'interface');
+   
+    //mask.tint = 0x605437;
+
     /*
     this.hpBarSeeker = new HealthBar(this.game, 11, 16, 'statBar', 'retStatBar', 1500, 500, 18, 0, function () {
       return this.hp + '/' + this.stats.health;
@@ -100,7 +104,7 @@ var CombatScene = {
    var style = {
     font: "10px minecraftregular",
     fill: "#fff",
-    boundsAlignH: "center",
+    boundsAlignH: "right",
     boundsAlignV: "middle"
   };
     var texti = this.game.add.richText(50,100,Color('#00ff00','hola'),style);

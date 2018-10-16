@@ -57,11 +57,15 @@ var PreloaderScene = {
 
     //images
     this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
-    this.game.load.image('combatbackground', 'assets/images/combatbackground.png');
+    this.game.load.image('watercombatbackground', 'assets/images/background/watercombatbackground.png');
     this.game.load.image('eventimage', 'assets/images/eventimage.jpg');
     //interface
     this.game.load.image('statBar','assets/images/statusBar.png');
     this.game.load.image('retStatBar','assets/images/retardedStatusBar.png');
+
+    this.game.load.image('interface', 'assets/images/interface/combatinterfaceback.png');
+    this.game.load.image('blue', 'assets/images/interface/blue.png');
+
     //particles
     this.game.load.image('redBlood','assets/images/particles/redBlood.png');
     this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
