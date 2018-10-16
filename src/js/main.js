@@ -5,20 +5,21 @@
 // Aún se deben controlar los sonidos
 // npm install webfont?
 
-var WebFont = require('webfontloader');
-
-var WebFontConfig = {
-
-  //  'active' means all requested fonts have finished loading
-  //  We set a 1 second delay before calling 'createText'.
-  //  For some reason if we don't the browser cannot render the text the first time it's created.
-  active:  function() { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
-
+ var webFontLoading = {
+  //call rungame when fonts are loaded
+  active: function() {
+		PreloaderScene.init;
+  },
   custom: {
-    families: ['jeje'],
-    urls: ["src/assets/fonts/webFonts/stylesheet.css"]
-    }
+    //array of family names, the ones written within the stylesheet.css coming
+    //in the fontSquirrel's webfont kit 
+    families: ['minecraftregular'],
+    //local path to stylesheet.css
+    urls: ["assets/fonts/webFonts/stylesheet.css"]
+  }
 };
+
+var WebFont = require('webfontloader');
 
 var MainMenuScene = require('./mainmenu_scene.js');
 
@@ -72,34 +73,31 @@ var PreloaderScene = {
 
     this.game.load.spritesheet('wormAnimations', 'assets/images/worm/WormAlpha.png',80,120);
 
-    //fonts
-    this.game.load.script('https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont');
-
-    this.game.load.bitmapFont('normal8', 'assets/fonts/bitmapFonts/normal8.png', 
-    'assets/fonts/bitmapFonts/normal8.fnt'); //solo funciona bien con tamaño múltiplo de 8
     //sounds
     this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
     //music
     this.load.audio('boss', ['assets/music/bosstheme.wav']);
+
+    WebFont.load(webFontLoading);
+
   },
 
   create: function () {
-    this.game.state.start('combat');
+      this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
+
+      PreloaderScene.game.state.start('combat');
   }
 
 };
 
 window.onload = function () {
   var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
+  webFontLoading.game = game;
   game.state.add('boot', BootScene);
   game.state.add('preloader', PreloaderScene);
   game.state.add('mainmenu', MainMenuScene);
   game.state.add('combat', CombatScene);
   game.state.add('event', EventScene);
-
-  WebFont.load(WebFontConfig);
-
-
 
   game.state.start('boot');
 };

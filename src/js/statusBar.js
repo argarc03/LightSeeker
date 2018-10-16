@@ -1,105 +1,87 @@
 'use strict';
 
-class TextVariable {
-    constructor(name, textFunction, signal, textContext) {
-        this.name = name;
-        this.textFunction = textFunction.bind(textContext);
-        this.signal = signal;
-    }
-}
-class Format {
-    constructor(name) {
-        this.head;
-        this.tail;
-        this.function;
-        this.argument;
-        switch (name) {
-            case 'bold':
-                this.head = '/<b>/';
-                this.tail = '/</b>/';
-                this.function = Phaser.Text.addFontWeight;
-                this.argument = 'bold';
-                break;
-            case 'bolder':
-                this.head = '/<bb>/';
-                this.tail = '/</bb>/';
-                this.function = Phaser.Text.addFontWeight;
-                this.argument = 'bolder';
-                break;
-            case 'lighter':
-                this.head = '/<l>/';
-                this.tail = '/</l>/';
-                this.function = Phaser.Text.addFontWeight;
-                this.argument = 'ligther';
-                break;
-            case 'color':
-                this.head = '/<c:/(/#[0-9-Fa-f]{6}/)/>/';
-                this.tail = '</c>';
-                this.function = Phaser.Text.addColor;
-                this.argument = '';
-                break;
-            case 'strokecolor':
-                this.head = '/<sc:/(/#[0-9-Fa-f]{6}/)/>/';
-                this.tail = '</sc>';
-                this.function = Phaser.Text.addStrokeColor;
-                this.argument = '';
-                break;
-            case 'italic':
-                this.head = '/<i>/';
-                this.tail = '/</i>/';
-                this.function = Phaser.Text.addFontStyle;
-                this.argument = 'italic';
-                break;
-            case 'oblique':
-                this.head = '/<b>/';
-                this.tail = '/</b>/';
-                this.function = Phaser.Text.addFontStyle;
-                this.argument = 'italic';
-                break;
 
-        }
-    }
-}
-class MiniFormat {
-    constructor(firstPosition, lastPosition, format) {
-        this.firstPosition = firstPosition;
-        this.lastPosition = lastPosition;
-        this.format = format;
-    }
-}
 class RichText extends Phaser.Text {
     constructor(game, x, y, text, style) {
         super(game, x, y, '', style);
         this._protoText = text;
-        this.reWrite()
+        this.index = 0;
+        this.reWrite(text);
+
     }
-    reWrite() {
-        let formats = [];
-        let aux = this._protoText;
-        //Encontramos los indices de los formatos
-        indexOfRegEx.apply(aux, [new RegExp('<b>')]).forEach(
-            function (element) {
-                formats.push(new MiniFormat(element, -1, 'bold'));
-            }
-        );
-        //los indices finales
-        let i = 0;
-        indexOfRegEx.apply(aux, [new RegExp('</b>')]).forEach(
-            function (element) {
-                formats[i].lastPosition = element;
-                i++;
-            }
-        );
-        aux = aux.replace(new RegExp('<b>', 'g'), '');
-        aux = aux.replace(new RegExp('</b>', 'g'), '');
-        //restamos a cada posicion el tamaño de la cabecera de todas las cabeceras anteriores.
-        realIndex.apply(formats);
-        console.log(formats);
-        for (i = 0; i < formats.length; i++) {
-            this.addFontWeight('bold', formats[i].firstPosition);
-            this.addFontWeight('bold', formats[i].lastPosition);
-        }
-        this.setText(aux);
+    write() {
+        this.reWrite(this._protoText);
+        this.dirty = true;
+    }
+    reWrite(proto) {
+       if(typeof(proto)==='string') {
+           this.text = this.text + proto;
+           this.index+=proto.length;
+       } else if(typeof(proto)==='function') {
+           proto.apply(this);
+       } else if(Array.isArray(proto)) {
+           for(let element in proto) {
+               this.reWrite(proto[element]);
+           }
+       }
+    }
+}
+var fun = function(func) {
+    return function() {
+        this.reWrite(func());
+    }
+}
+var Style = function(format) {
+    var args=[];
+    for(let element in arguments) {
+        args.push(arguments[element]);
+    }
+    args=args.splice(1);
+    return  function() {
+        let preStyle = this._fontComponents.fontStyle;
+        this.addFontStyle(format,this.index);
+        this.reWrite(args);
+        this.addFontStyle(preStyle,this.index);
+    }  
+}
+
+var Color = function(color) {
+    var args=[];
+    for(let element in arguments) {
+        args.push(arguments[element]);
+    }
+    args=args.splice(1);
+    return function() {
+        let preColor = this.fill;
+        this.addColor(color,this.index);
+        this.reWrite(args);
+        this.addColor(preColor,this.index);
+    }
+}
+var StrokeColor = function(color) {
+    var args=[];
+    for(let element in arguments) {
+        args.push(arguments[element]);
+    }
+    args=args.splice(1);
+    return function() {
+        let preStrokeColor = this.style.stroke===undefined?'#000000':this.style.stroke;
+        this.addStrokeColor(color,this.index);
+        this.reWrite(args);
+        this.addStrokeColor(preStrokeColor,this.index);
+    }
+}
+var FontWeight = function(style) {
+    var args=[];
+    for(let element in arguments) {
+        args.push(arguments[element]);
+    }
+    args=args.splice(1);
+    return function() {
+        let preStyle = this._fontComponents.fontWeight;
+        this.addFontWeight(style,this.index);
+        this.reWrite(args);
+        this.addFontWeight(preStyle,this.index);
     }
 }
 Phaser.GameObjectFactory.prototype.richText = function (x, y, text, style, group) {
@@ -107,61 +89,6 @@ Phaser.GameObjectFactory.prototype.richText = function (x, y, text, style, group
     return group.add(new RichText(this.game, x, y, text, style));
 }
 
-
-
-var realIndex = function () {
-    let minIndex = { firstPosition: 0, lastPosition: 0 };
-    let minFirstIndex = 0;
-    let minLastIndex = -1;
-    let nameIndex = 'firstPosition';
-    let futureMinIndex;
-    let j = 0;
-    while (minLastIndex != this.length - 1 && j < 20) {
-        j++;
-        let minAux = 50000;
-        let minIndexAux = -1;
-        for (let i = minFirstIndex + 1; i < this.length; i++) {
-            if (this[i].firstPosition < minAux) {
-                minAux = this[i].firstPosition;
-                minIndexAux = i;
-                futureMinIndex = 'firstPosition';
-            }
-            this[i].firstPosition -= nameIndex == 'firstPosition' ? 3 : 4;
-        }
-        for (let i = minLastIndex + 1; i < this.length; i++) {
-            if (this[i].lastPosition < minAux) {
-                minAux = this[i].lastPosition;
-                minIndexAux = i;
-                futureMinIndex = 'lastPosition';
-            }
-            this[i].lastPosition -= nameIndex == 'firstPosition' ? 3 : 4;
-        }
-        if (futureMinIndex == 'firstPosition') {
-            minFirstIndex = minIndexAux;
-        } else {
-            minLastIndex = minIndexAux;
-        }
-        nameIndex = futureMinIndex;
-    }
-
-}
-
-var indexOfRegEx = function (regEx) {
-
-    let ret = [];
-    let i = 0;
-    let j = 0;
-    let aux = 0
-    aux = this.slice(i).search(regEx);
-    i += aux;
-    while (aux != -1 && j < 10) {
-        ret.push(i);
-        aux = this.slice(i + 1).search(regEx);
-        i += aux + 1;
-        j++;
-    }
-    return ret;
-}
 // ¯\_(ツ)_/¯
 class ReactiveText extends Phaser.Text {
     constructor(game, x = 0, y = 0, text = '', style = {}, textVariables = []) {

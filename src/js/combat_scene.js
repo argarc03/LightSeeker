@@ -97,17 +97,14 @@ var CombatScene = {
     var healthBarSeeker = this.game.add.healthBar(0,0,this.seeker,'statBar','retStatBar','statBar',
         {},1000,100);//this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);
     */
-    var texti = this.game.add.richText(50,50,'<b>hola</b>aaaaa',{font: "20px Arial", fill: "#ffffff"});
+   var style = {
+    font: "10px minecraftregular",
+    fill: "#fff",
+    boundsAlignH: "center",
+    boundsAlignV: "middle"
+  };
+    var texti = this.game.add.richText(50,100,Color('#00ff00','hola'),style);
     //texti.addColor('#ffff00',0);
-    var text = this.game.add.reactiveText();//
-    text.addVariable('actualHp', function () {
-      return this.hp;
-    }, this.seeker.onHpChange, this.seeker);
-    text.addVariable('maxHp', function () {
-      return this.stats.health;
-    }, this.seeker.stats.onHealthChange, this.seeker);
-    text.protoText = '%actualHp/%maxHp';
-
     // Controls
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);
@@ -117,12 +114,7 @@ var CombatScene = {
 
     // prueba texto
 
-    var style = {
-      font: "35px jeje",
-      fill: "#fff",
-      boundsAlignH: "center",
-      boundsAlignV: "middle"
-    };
+    this.game.input.onDown.add(gofull, this);
 
     //var text = this.game.add.text(50, 50, "jeje", style);
 
@@ -137,5 +129,17 @@ var CombatScene = {
 };
 
 
+function gofull() {
+
+  if (this.game.scale.isFullScreen)
+  {
+      this.game.scale.stopFullScreen();
+  }
+  else
+  {
+      this.game.scale.startFullScreen(false);
+  }
+
+}
 
 module.exports = CombatScene;

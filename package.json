@@ -17,5 +17,8 @@
     "vinyl-source-stream": "*",
     "watchify": "*",
     "webfontloader": "^1.6.28"
+  },
+  "devDependencies": {
+    "webfont": "^8.1.4"
   }
 }
