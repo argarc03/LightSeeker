@@ -148,6 +148,7 @@ var Action = {
             arguments[2].hurt(this.stats.realDamage);
         };
         this.animations._anims.attacking.onComplete.add(this.idle, this);
+        
     },
     /**
      * 
@@ -175,8 +176,6 @@ var Action = {
      * 
      */
     loop() {
-        console.log(this.animations._anims.blocking);
-        console.log(this.stats.blockingTime / this.animations._anims.blocking._frames.length / this.stats.frameRate);
         if (this.animations._anims.blocking.loopCount >= (this.stats.blockingTime / this.animations._anims.blocking._frames.length * this.stats.frameRate/Phaser.Timer.SECOND))
             this.animations._anims.blocking.loop = false;
     },
@@ -206,7 +205,6 @@ var CoolDown = {
      * @param {number} time 
      */
     addAllTime(time) {
-        console.log(this);
         for (let timer in this.coolDown) {
             if (this.coolDown[timer].running) {
                 this.coolDown[timer].events.forEach(event => {
@@ -223,8 +221,14 @@ var CoolDown = {
      */
     addOnceStart(character,action) {
         for (event in this.addOnceStart.events) {
-            console.log(character[action].totalTime);
             this.add(CoolDown.toRealCoolDown(this.addOnceStart.events[event].time,character[action].totalTime()), this.addOnceStart.events[event], this)
+        }
+    },
+    signalEmiter(event){
+        
+        if(this.coolDown[event].running){
+            this.coolDown[event].while.dispatch();
+            this.game.time.events.add(this.frameRate,CoolDown.signalEmiter,this, event);
         }
     },
     /**
@@ -272,9 +276,9 @@ class ActionFactory {
      * @param {number[]|string[]} framesAttacking 
      */
     attack(framesPreAttacking, framesAttacking) {
+        this.character.attack = Action.attack;
         this.character.animations.add('preAttacking', framesPreAttacking, true);
         this.character.animations.add('attacking', framesAttacking, true);
-        this.character.attack = Action.attack;
         this.character._preAttacking = Action.preAttacking;
         this.character._attacking = Action.attacking;
         this.character.attack.totalTime = TimeCalculations.totalAttackTime;
@@ -321,8 +325,8 @@ class SeekerActionFactory extends ActionFactory {
 
     attack(framesPreAttacking, framesAttacking, globalCoolDown, selfCoolDown) {
         super.attack(framesPreAttacking, framesAttacking);
-
         this.character.coolDown.attack = this.character.game.time.create(false);
+        this.character.coolDown.attack.while = new Phaser.Signal();
         this.character.coolDown.attack.addOnceStart = CoolDown.addOnceStart;
         this.character.coolDown.attack.addOnceStart.events = {};
         this.character.coolDown.attack.addOnceStart.events.end = this.character.coolDown.attack.stop;//function(){ this.stop(); };
@@ -333,10 +337,17 @@ class SeekerActionFactory extends ActionFactory {
             if (!this.coolDown.attack.running) {
                 Action.attack.apply(this, [target]);
                 CoolDown.addAllTime.apply(this, [this.coolDown.attack.global]);
+
+                CoolDown.signalEmiter.apply(this,['attack']);
             }
         }
         this.character.attack.currentTime = TimeCalculations.currentAttackTime.bind(this.character);
         this.character.attack.totalTime = TimeCalculations.totalAttackTime.bind(this.character);
+        this.character.attack.timeToCoolDown = function(){
+            console.log(this.coolDown.attack);
+            return this.coolDown.attack.events[0].tick-Date.now();
+        }.bind(this.character);
+        this.character.attack.coolDownTime = selfCoolDown;
     }
 
     block(framesPreBlocking, framesBlocking, framesPostBlocking, globalCoolDown, selfCoolDown) {

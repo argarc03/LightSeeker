@@ -66,45 +66,35 @@ var CombatScene = {
     this.seeker.idle();
 
     //interface
-    /*
-    this.hpBarSeeker = new HealthBar(this.game, 11, 16, 'statBar', 'retStatBar', 1500, 500, 18, 0, function () {
-      return this.hp + '/' + this.stats.health;
-    }, this.seeker, 'normal8', 8);
-    this.hpBarSeeker.width = 67;
-    this.hpBarSeeker.height = 8;
-    this.hpBarEnemy = new HealthBar(this.game, 131, 16, 'statBar', 'retStatBar', 1500, 500, 18, 0, function () {
-      return this.hp + '/' + this.stats.health;
-    }, this.enemy, 'normal8', 8);
-    this.hpBarEnemy.width = 67;
-    this.hpBarEnemy.height = 8;
-    this.timeActionBar = new Bar(this.game, 186, 29, 'statBar');
-    this.timeActionBar.width = -55;
-    this.timeActionBar.height = 4;
-
-    // Interface Events
-    this.seeker.onHpChange.add(this.hpBarSeeker.changePercentage, this.hpBarSeeker, 0, function () {
-      return this.hp / this.stats.health * 100;
-    }, this.seeker);
-    this.enemy.onHpChange.add(this.hpBarEnemy.changePercentage, this.hpBarEnemy, 0, function () {
-      return this.hp / this.stats.health * 100;
-    }, this.enemy);
-    this.seeker.onHpChange.add(this.timeActionBar.changePercentage, this.timeActionBar, 0, function () {
-      return this.hp / this.stats.health * 100;
-    }, this.seeker);
-  */
-
+    this.game.add.reactiveBar(this.game.world, 0, 0, 'attackIcon', function(){
+      
+      return (1-this.attack.timeToCoolDown()/this.attack.coolDownTime)*100;
+    }, this.seeker, this.seeker.coolDown.attack.while);
     /*
     var healthBarSeeker = this.game.add.healthBar(0,0,this.seeker,'statBar','retStatBar','statBar',
         {},1000,100);//this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);
     */
    var style = {
-    font: "10px minecraftregular",
+    font: "minecraftregular",
     fill: "#fff",
-    boundsAlignH: "center",
-    boundsAlignV: "middle"
+    fontSize: 10
   };
-    var texti = this.game.add.richText(50,100,Color('#00ff00','hola'),style);
-    //texti.addColor('#ffff00',0);
+    var texti = this.game.add.richText(10,10, 150,['H/0123456789. ',Color('#00ff00','Me'),' llamo Cosa Cososa y estoy obsesionado con el fran de manzana.'],style);
+    var g = this.game.add.graphics(1,0);
+    for(let i = 0; i<75; i++){
+      g.beginFill(0xffffff);
+      g.drawRect(2*i,0,1,1);
+      g.beginFill(0x000000);
+      g.drawRect(2*i+1,0,1,1);
+    }
+    g.angle= 90 ;
+    var ge = this.game.add.graphics(0,0);
+    for(let i = 0; i<100; i++){
+      ge.beginFill(0xffffff);
+      ge.drawRect(2*i,0,1,1);
+      ge.beginFill(0x000000);
+      ge.drawRect(2*i+1,0,1,1);
+    }
     // Controls
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);

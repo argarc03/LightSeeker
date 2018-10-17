@@ -6,15 +6,18 @@
 // npm install webfont?
 
  var webFontLoading = {
-  //call rungame when fonts are loaded
   active: function() {
-		PreloaderScene.init;
+		var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
+    webFontLoading.game = game;
+    game.state.add('boot', BootScene);
+    game.state.add('preloader', PreloaderScene);
+    game.state.add('mainmenu', MainMenuScene);
+    game.state.add('combat', CombatScene);
+    game.state.add('event', EventScene);
+    game.state.start('boot');
   },
   custom: {
-    //array of family names, the ones written within the stylesheet.css coming
-    //in the fontSquirrel's webfont kit 
     families: ['minecraftregular'],
-    //local path to stylesheet.css
     urls: ["assets/fonts/webFonts/stylesheet.css"]
   }
 };
@@ -54,31 +57,39 @@ var PreloaderScene = {
     this.load.setPreloadSprite(this.loadingBar);
 
     // TODO: load here the assets for the game
+    //IMAGES
+      //INTERFACE
+        //HealthBar
+        this.game.load.image('healthBar','assets/images/interface/healthBar.png');
+        this.game.load.image('damageBar','assets/images/interface/damageBar.png');
+        this.game.load.image('empty','assets/images/interface/emptyBar.png');
+        this.game.load.image('frameBar','assets/images/interface/frameBar.png');
+        //Action Icon
+        this.game.load.image('attackIcon','assets/images/interface/attackIcon.png');
+        this.game.load.image('blockIcon','assets/images/interface/blockIcon.png');
+        //Items
+        this.game.load.image('itemIcon','assets/images/interface/itemIcon.png');
+        this.game.load.image('itemIcon2','assets/images/interface/itemIcon2.png');
+      //BACKGROUNDS
+      this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
+      this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
+      //PARTICLES
+      this.game.load.image('redBlood','assets/images/particles/redBlood.png');
+      this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
+      this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
+      //CHARACTERS
+        //Seeker
+        this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
+        //Enemies
+        this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
+        this.game.load.spritesheet('wormAnimations', 'assets/images/enemies/WormAlpha.png',80,120);
+    //SOUNDS
+      //Effects
+      this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
+      //Music
+      this.load.audio('boss', ['assets/music/bosstheme.wav']);
+      this.load.audio('firetheme', ['assets/music/firetheme.wav']);
 
-    //images
-    this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
-    this.game.load.image('combatbackground', 'assets/images/combatbackground.png');
-    this.game.load.image('eventimage', 'assets/images/eventimage.jpg');
-    //interface
-    this.game.load.image('statBar','assets/images/statusBar.png');
-    this.game.load.image('retStatBar','assets/images/retardedStatusBar.png');
-    //particles
-    this.game.load.image('redBlood','assets/images/particles/redBlood.png');
-    this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
-    this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
-    //seeker
-    this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
-    //enemy
-    this.game.load.spritesheet('spiderAnimations', 'assets/images/spider/spiderAnimations.png',80,120);
-
-    this.game.load.spritesheet('wormAnimations', 'assets/images/worm/WormAlpha.png',80,120);
-
-    //sounds
-    this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
-    //music
-    this.load.audio('boss', ['assets/music/bosstheme.wav']);
-
-    WebFont.load(webFontLoading);
 
   },
 
@@ -90,14 +101,8 @@ var PreloaderScene = {
 
 };
 
-window.onload = function () {
-  var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
-  webFontLoading.game = game;
-  game.state.add('boot', BootScene);
-  game.state.add('preloader', PreloaderScene);
-  game.state.add('mainmenu', MainMenuScene);
-  game.state.add('combat', CombatScene);
-  game.state.add('event', EventScene);
+WebFont.load(webFontLoading);
 
-  game.state.start('boot');
+window.onload = function () {
+  
 };

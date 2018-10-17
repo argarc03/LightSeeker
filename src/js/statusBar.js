@@ -1,92 +1,129 @@
 'use strict';
 
 
-class RichText extends Phaser.Text {
-    constructor(game, x, y, text, style) {
-        super(game, x, y, '', style);
+class RichText extends Phaser.Group {
+    constructor(game, x, y, lineWidth, text, style, parent) {
+        super(game, parent);
         this._protoText = text;
-        this.index = 0;
+        this.numberOfCharacters = 0;
+        this.x = x;
+        this.y = y;
+        this.xLast = 0;
+        this.yLast = 0;
+        this.styleLast = {
+            font: style.font === undefined ? 'Arial' : style.font,
+            fontStyle: style.fontStyle === undefined ? 'normal' : style.fontStyle,
+            fontVariant: style.fontVariant === undefined ? 'normal' : style.fontVariant,
+            fontWeight: style.fontWeight === undefined ? 'normal' : style.fontWeight,
+            fontSize: style.fontSize === undefined ? '8px' : style.fontSize,
+            backgroundColor: style.backgroundColor === undefined ? null : style.backgroundColor,
+            fill: style.fill === undefined ? '#000000' : style.fill,
+            align: style.align === undefined ? 'left' : style.align,
+            boundsAlignH: style.boundsAlignH === undefined ? 'left' : style.boundsAlignH,
+            boundsAlignV: style.boundsAlignV === undefined ? 'top' : style.boundsAlignV,
+            stroke: style.stroke === undefined ? 'black' : style.stroke,
+            strokeThickness: style.strokeThickness === undefined ? 0 : style.strokeThickness,
+            wordWrap: style.wordWrap === undefined ? false : style.wordWrap,
+            wordWrapWidth: style.wordWrapWidth === undefined ? false : style.wordWrapWidth,
+            maxLines: style.maxLines === undefined ? 0 : style.maxLines
+        };
+        this.lineWidth = lineWidth;
+        this.lineHeight = this.styleLast.fontSize;
         this.reWrite(text);
-
     }
     write() {
         this.reWrite(this._protoText);
-        this.dirty = true;
     }
     reWrite(proto) {
-       if(typeof(proto)==='string') {
-           this.text = this.text + proto;
-           this.index+=proto.length;
-       } else if(typeof(proto)==='function') {
-           proto.apply(this);
-       } else if(Array.isArray(proto)) {
-           for(let element in proto) {
-               this.reWrite(proto[element]);
-           }
-       }
+        if (typeof (proto) === 'string') {
+            for (let i = 0; i < proto.length; i++) {
+                if (!(proto.charAt(i) === ' ' && this.xLast === 0)) {
+                    let a = this.add(new Phaser.Text(this.game, this.xLast, this.yLast, proto.charAt(i), this.styleLast));
+                    this.xLast += a.width;
+                    if (this.xLast > this.lineWidth) {
+                        this.yLast += this.lineHeight;
+                        if (proto.charAt(i) === ' ') {
+                            this.xLast=0;
+                            this.removeChild(a);
+                            a.destroy();
+                        } else {
+                            a.x = 0;
+                            this.xLast = a.width;
+                            a.y = this.yLast;
+                        }
+                    }
+                    this.numberOfCharacters++;
+                }
+            }
+        } else if (typeof (proto) === 'function') {
+            proto.apply(this);
+        } else if (Array.isArray(proto)) {
+            for (let element in proto) {
+                this.reWrite(proto[element]);
+            }
+        }
     }
 }
-var fun = function(func) {
-    return function() {
+var fun = function (func) {
+    return function () {
         this.reWrite(func());
     }
 }
-var Style = function(format) {
-    var args=[];
-    for(let element in arguments) {
+var Style = function (format) {
+    let args = [];
+    for (let element in arguments) {
         args.push(arguments[element]);
     }
-    args=args.splice(1);
-    return  function() {
-        let preStyle = this._fontComponents.fontStyle;
-        this.addFontStyle(format,this.index);
+    args = args.splice(1);
+    return function () {
+        let preStyle = this.styleLast.fontStyle;
+        this.styleLast.fontStyle = format;
         this.reWrite(args);
-        this.addFontStyle(preStyle,this.index);
-    }  
+        this.styleLast.fontStyle = preStyle;
+    }
 }
 
-var Color = function(color) {
-    var args=[];
-    for(let element in arguments) {
+var Color = function (color) {
+    let args = [];
+    for (let element in arguments) {
         args.push(arguments[element]);
     }
-    args=args.splice(1);
-    return function() {
-        let preColor = this.fill;
-        this.addColor(color,this.index);
+    args = args.splice(1);
+    return function () {
+        let preColor = this.styleLast.fill;
+        this.styleLast.fill = color;
         this.reWrite(args);
-        this.addColor(preColor,this.index);
+        this.styleLast.fill = preColor;
     }
 }
-var StrokeColor = function(color) {
-    var args=[];
-    for(let element in arguments) {
+var StrokeColor = function (color) {
+    let args = [];
+    for (let element in arguments) {
         args.push(arguments[element]);
     }
-    args=args.splice(1);
-    return function() {
-        let preStrokeColor = this.style.stroke===undefined?'#000000':this.style.stroke;
-        this.addStrokeColor(color,this.index);
+    args = args.splice(1);
+    return function () {
+        let preStrokeColor = this.styleLast.stroke;
+        this.styleLast.stroke = color;
         this.reWrite(args);
-        this.addStrokeColor(preStrokeColor,this.index);
+        this.styleLast.stroke = preStrokeColor;
     }
 }
-var FontWeight = function(style) {
-    var args=[];
-    for(let element in arguments) {
+var FontWeight = function (style) {
+    let args = [];
+    for (let element in arguments) {
         args.push(arguments[element]);
     }
-    args=args.splice(1);
-    return function() {
-        let preStyle = this._fontComponents.fontWeight;
-        this.addFontWeight(style,this.index);
+    args = args.splice(1);
+    return function () {
+        let preStyle = this.styleLast.fontWeight;
+        this.styleLast.fontWeight = style;
         this.reWrite(args);
-        this.addFontWeight(preStyle,this.index);
+        this.styleLast.fontWeight = preStyle;
     }
 }
-Phaser.GameObjectFactory.prototype.richText = function (x, y, text, style, group) {
-    if (group === undefined) { group = this.world; }
-    return group.add(new RichText(this.game, x, y, text, style));
+Phaser.GameObjectFactory.prototype.richText = function (x, y, lineWidth, text, style = {}, group = this.game.world) {
+    return new RichText(this.game, x, y, lineWidth, text, style, group);
 }
 
 // ¯\_(ツ)_/¯
@@ -181,7 +218,6 @@ class Bar extends Phaser.Group {
         return 100 * this._percentage;
     }
     set percentage(value) {
-        console.log(value);
         value = value / 100;
         this._percentage = value;
         this.mask.clear();
@@ -210,7 +246,7 @@ class Bar extends Phaser.Group {
         this.percentage(this._percentage);
     }
 }
-Phaser.GameObjectFactory.prototype.bar = function (parent, x, y, key, frame) {
+Phaser.GameObjectFactory.prototype.bar = function (x, y, key, frame, parent = this.game.world) {
     return new Bar(this.game, parent, x, y, key, frame);
 }
 
@@ -281,7 +317,6 @@ class HealthBar extends Phaser.Group {
     }
 }
 Phaser.GameObjectFactory.prototype.healthBar = function (x, y, character, upKey, downKey, voidKey, style, delay, speed, downFrame = null, upFrame = null, voidFrame = null, parent = this.game.world) {
-    console.log(parent);
     return new HealthBar(this.game, x, y, character, upKey, downKey, voidKey, style, delay, speed, downFrame, upFrame, voidFrame, parent);
 }
 
