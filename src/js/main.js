@@ -59,6 +59,7 @@ var PreloaderScene = {
     // TODO: load here the assets for the game
     //IMAGES
       //INTERFACE
+        this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');
@@ -72,7 +73,7 @@ var PreloaderScene = {
         this.game.load.image('itemIcon2','assets/images/interface/itemIcon2.png');
       //BACKGROUNDS
       this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
-      this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
+      this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');

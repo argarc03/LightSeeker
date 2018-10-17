@@ -46,7 +46,7 @@ var CombatScene = {
   create: function () {
 
     //render background
-    var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
+    var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
     //render seeker
     this.seeker = this.game.add.seeker(0, -8, 'Carlos León', new Stats(10, 3, 1, 20), 'seekerAnimations');
     this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -66,10 +66,14 @@ var CombatScene = {
     this.seeker.idle();
 
     //interface
+    var mask = this.game.add.sprite(0,0,'interface');
     this.game.add.reactiveBar(this.game.world, 0, 0, 'attackIcon', function(){
       
       return (1-this.attack.timeToCoolDown()/this.attack.coolDownTime)*100;
     }, this.seeker, this.seeker.coolDown.attack.while);
+   
+    //mask.tint = 0x605437;
+
     /*
     var healthBarSeeker = this.game.add.healthBar(0,0,this.seeker,'statBar','retStatBar','statBar',
         {},1000,100);//this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);
