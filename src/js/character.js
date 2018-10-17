@@ -325,6 +325,7 @@ class SeekerActionFactory extends ActionFactory {
 
     attack(framesPreAttacking, framesAttacking, globalCoolDown, selfCoolDown) {
         super.attack(framesPreAttacking, framesAttacking);
+
         this.character.coolDown.attack = this.character.game.time.create(false);
         this.character.coolDown.attack.while = new Phaser.Signal();
         this.character.coolDown.attack.addOnceStart = CoolDown.addOnceStart;
@@ -344,7 +345,7 @@ class SeekerActionFactory extends ActionFactory {
         this.character.attack.currentTime = TimeCalculations.currentAttackTime.bind(this.character);
         this.character.attack.totalTime = TimeCalculations.totalAttackTime.bind(this.character);
         this.character.attack.timeToCoolDown = function(){
-            console.log(this.coolDown.attack);
+            //console.log(this.coolDown.attack);
             return this.coolDown.attack.events[0].tick-Date.now();
         }.bind(this.character);
         this.character.attack.coolDownTime = selfCoolDown;
@@ -354,6 +355,7 @@ class SeekerActionFactory extends ActionFactory {
         super.block(framesPreBlocking, framesBlocking, framesPostBlocking);
 
         this.character.coolDown.block = this.character.game.time.create(false);
+        this.character.coolDown.block.while = new Phaser.Signal();
         this.character.coolDown.block.addOnceStart = CoolDown.addOnceStart;
         this.character.coolDown.block.addOnceStart.events = {};
         this.character.coolDown.block.addOnceStart.events.end = this.character.coolDown.block.stop;//function(){ this.stop(); };
@@ -364,12 +366,20 @@ class SeekerActionFactory extends ActionFactory {
             if (!this.coolDown.block.running) {
                 Action.block.apply(this);
                 CoolDown.addAllTime.apply(this, [this.coolDown.block.global]);
+
+                CoolDown.signalEmiter.apply(this,['block']);
             }
 
         }
 
         this.character.block.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
         this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
+
+        this.character.block.timeToCoolDown = function(){
+            //console.log(this.coolDown.block);
+            return this.coolDown.block.events[0].tick-Date.now();
+        }.bind(this.character);
+        this.character.block.coolDownTime = selfCoolDown;
     }
 
     die(framesDying) {

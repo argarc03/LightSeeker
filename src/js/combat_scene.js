@@ -4,7 +4,7 @@
 var day = 1;
 var population = 24;
 var totalgems = 0;
-
+var selector;
 //var seeker = require('./character.js');//dice que character.js es un modulo común de js, que debe ser convertido a un ES6
 
 var textito = require('./statusBar.js');
@@ -20,6 +20,7 @@ var CombatScene = {
   attackKey: function () {
     if (true) {
       this.seeker.attack(this.enemy);
+      this.game.add.audio('preAttacking',0.1).play();
     }
   },
   blockKey: function () {
@@ -66,38 +67,51 @@ var CombatScene = {
     this.seeker.idle();
 
     //interface
-    var mask = this.game.add.sprite(0,0,'interface');
-    this.game.add.reactiveBar(this.game.world, 0, 0, 'attackIcon', function(){
-      
-      return (1-this.attack.timeToCoolDown()/this.attack.coolDownTime)*100;
+
+    
+    
+
+    var mask = this.game.add.sprite(0, 0, 'interface');
+
+    //attackbutton
+    this.game.add.sprite(25, 132, 'attackIcon').tint = 0x676767;
+    this.game.add.reactiveBar(this.game.world, 25, 132, true, 'attackIcon', function () {
+
+      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
     }, this.seeker, this.seeker.coolDown.attack.while);
-   
+
+    //blockbutton
+    this.game.add.sprite(44, 132, 'blockIcon').tint = 0x676767;
+    this.game.add.reactiveBar(this.game.world, 44, 132, true, 'blockIcon', function () {
+
+      return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
+    }, this.seeker, this.seeker.coolDown.block.while);
+
     //mask.tint = 0x605437;
 
-    /*
-    var healthBarSeeker = this.game.add.healthBar(0,0,this.seeker,'statBar','retStatBar','statBar',
-        {},1000,100);//this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);
-    */
-   var style = {
-    font: "minecraftregular",
-    fill: "#fff",
-    fontSize: 10
-  };
-    var texti = this.game.add.richText(10,10, 150,['H/0123456789. ',Color('#00ff00','Me'),' llamo Cosa Cososa y estoy obsesionado con el fran de manzana.'],style);
-    var g = this.game.add.graphics(1,0);
-    for(let i = 0; i<75; i++){
+
+    /*var healthBarSeeker = this.game.add.healthBar(this.game, 0,100,this.seeker,'healthBar','damageBar','emptyBar',
+        {},1000,100);//this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);*/
+    var style = {
+      font: "minecraftregular",
+      fill: "#fff",
+      fontSize: 10
+    };
+    var texti = this.game.add.richText(5, -1, 50, Color('#262626', 'Carlos'), style);
+    var g = this.game.add.graphics(1, 0);
+    for (let i = 0; i < 75; i++) {
       g.beginFill(0xffffff);
-      g.drawRect(2*i,0,1,1);
+      g.drawRect(2 * i, 0, 1, 1);
       g.beginFill(0x000000);
-      g.drawRect(2*i+1,0,1,1);
+      g.drawRect(2 * i + 1, 0, 1, 1);
     }
-    g.angle= 90 ;
-    var ge = this.game.add.graphics(0,0);
-    for(let i = 0; i<100; i++){
+    g.angle = 90;
+    var ge = this.game.add.graphics(0, 0);
+    for (let i = 0; i < 100; i++) {
       ge.beginFill(0xffffff);
-      ge.drawRect(2*i,0,1,1);
+      ge.drawRect(2 * i, 0, 1, 1);
       ge.beginFill(0x000000);
-      ge.drawRect(2*i+1,0,1,1);
+      ge.drawRect(2 * i + 1, 0, 1, 1);
     }
     // Controls
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
@@ -108,30 +122,33 @@ var CombatScene = {
 
     // prueba texto
 
-    this.game.input.onDown.add(gofull, this);
+    this.game.input.onDown.add(gofull, this);//FULLSCREEN
 
     //var text = this.game.add.text(50, 50, "jeje", style);
 
     //music
-    var music = this.game.add.audio('boss', 0.1, true);
+    var music = this.game.add.audio('firetheme', 0.1, true);
     music.play();
+
+    //prueba cursor
+     selector = this.game.add.sprite(50, 50, 'cursor');
 
   },
   update: function () {
-
+    //prueba cursor
+    selector.x = this.game.input.x;
+    selector.y = this.game.input.y;
   }
 };
 
 
 function gofull() {
 
-  if (this.game.scale.isFullScreen)
-  {
-      this.game.scale.stopFullScreen();
+  if (this.game.scale.isFullScreen) {
+    this.game.scale.stopFullScreen();
   }
-  else
-  {
-      this.game.scale.startFullScreen(false);
+  else {
+    this.game.scale.startFullScreen(false);
   }
 
 }

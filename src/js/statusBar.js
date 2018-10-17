@@ -43,7 +43,7 @@ class RichText extends Phaser.Group {
                     if (this.xLast > this.lineWidth) {
                         this.yLast += this.lineHeight;
                         if (proto.charAt(i) === ' ') {
-                            this.xLast=0;
+                            this.xLast = 0;
                             this.removeChild(a);
                             a.destroy();
                         } else {
@@ -204,7 +204,7 @@ Phaser.GameObjectFactory.prototype.reactiveIteratorText = function (x, y, textFu
 }
 
 class Bar extends Phaser.Group {
-    constructor(game, parent, x, y, key, frame = null) {
+    constructor(game, parent, x, y,vertical, key, frame = null) {
         super(game, parent);
         this.bar = this.add(new Phaser.Sprite(game, x, y, key, frame));
         this.mask = this.add(new Phaser.Graphics(game, x, y));
@@ -212,6 +212,8 @@ class Bar extends Phaser.Group {
         this.mask.beginFill(0xffffff);
         this.mask.drawRect(0, 0, this.bar.width, this.bar.height);
         this.maxWidth = this.bar.width;
+        this.maxHeight = this.bar.height;
+        this.vertical = vertical;
         this._percentage = 1;
     }
     get percentage() {
@@ -222,37 +224,40 @@ class Bar extends Phaser.Group {
         this._percentage = value;
         this.mask.clear();
         this.mask.beginFill(0xffffff);
-        this.mask.drawRect(0, 0, Math.round(this.bar.width * value), this.bar.height);
+        if (this.vertical)
+            this.mask.drawRect(0, 0, this.bar.width, Math.round(this.bar.height * value));
+        else
+            this.mask.drawRect(0, 0, Math.round(this.bar.width * value), this.bar.height);
     }
-    get angle() {
-        return this.bar.angle;
-    }
-    set angle(angle) {
-        this.bar.angle = angle;
-        this.mask.angle = angle;
-    }
-    get width() {
-        return this.bar.width;
-    }
-    set width(value) {
-        this.bar.width = value;
-        this.percentage(this._percentage);
-    }
-    get height() {
-        return this.bar.height;
-    }
-    set height(value) {
-        this.bar.height = value;
-        this.percentage(this._percentage);
-    }
+get angle() {
+    return this.bar.angle;
+}
+set angle(angle) {
+    this.bar.angle = angle;
+    this.mask.angle = angle;
+}
+get width() {
+    return this.bar.width;
+}
+set width(value) {
+    this.bar.width = value;
+    this.percentage(this._percentage);
+}
+get height() {
+    return this.bar.height;
+}
+set height(value) {
+    this.bar.height = value;
+    this.percentage(this._percentage);
+}
 }
 Phaser.GameObjectFactory.prototype.bar = function (x, y, key, frame, parent = this.game.world) {
     return new Bar(this.game, parent, x, y, key, frame);
 }
 
 class ReactiveBar extends Bar {
-    constructor(game, parent, x, y, key, percentageFunction, functionContext, signal, frame = null) {
-        super(game, parent, x, y, key, frame);
+    constructor(game, parent, x, y,vertical, key, percentageFunction, functionContext, signal, frame = null) {
+        super(game, parent, x, y,vertical, key, frame);
         this.percentageFunction = percentageFunction.bind(functionContext);
         signal.add(this.changePercentage, this, 0);
     }
@@ -260,8 +265,8 @@ class ReactiveBar extends Bar {
         this.percentage = this.percentageFunction();
     }
 }
-Phaser.GameObjectFactory.prototype.reactiveBar = function (parent, x, y, key, percentageFunction, functionContext, signal, frame) {
-    return new ReactiveBar(this.game, parent, x, y, key, percentageFunction, functionContext, signal, frame);
+Phaser.GameObjectFactory.prototype.reactiveBar = function (parent, x, y,vertical, key, percentageFunction, functionContext, signal, frame) {
+    return new ReactiveBar(this.game, parent, x, y,vertical, key, percentageFunction, functionContext, signal, frame);
 }
 
 class ReactiveContinuousBar extends ReactiveBar {
@@ -284,7 +289,10 @@ class ReactiveContinuousBar extends ReactiveBar {
         console.log(this._percentage);
         if (this.percentage > this.percentageFunction()) {
             this.timer = this.game.time.create();
-            this.percentage -= 100 / this.bar.width;
+            if(this.vertical)
+                this.percentage -= 100 / this.bar.height;
+            else
+                this.percentage -= 100 / this.bar.width;
             this.timer.add(this._speed, this.reChangePercentage, this);
             this.timer.start();
         } else {
@@ -301,16 +309,17 @@ Phaser.GameObjectFactory.prototype.reactiveContinuousBar = function (parent, x, 
 class HealthBar extends Phaser.Group {
     constructor(game, x, y, character, upKey, downKey, voidKey, style, delay, speed, downFrame, upFrame, voidFrame, parent) {
         super(game, parent);
+
         this.voidBar = this.add(new Bar(game, this, x, y, voidKey, voidFrame));
-        this.downBar = this.add(new ReactiveContinuousBar(game, this, x, y, downKey, this.hpPercentage, character, character.onHpChange, delay, speed, downFrame));
-        this.upBar = this.add(new ReactiveContinuousBar(game, this, x, y, upKey, this.hpPercentage, character, character.onHpChange, 0, speed * 10, upFrame));
-        this.hpText = this.add(new ReactiveIteratorText(game, x, y, this.hpText, this.hp, style, character.onHpChange, delay, speed, character, character, []));
+        this.downBar = this.add(new ReactiveContinuousBar(game, this, x, y, downKey, this.hpPercentage(), character, character.onHpChange, delay, speed, downFrame));
+        this.upBar = this.add(new ReactiveContinuousBar(game, this, x, y, upKey, this.hpPercentage(), character, character.onHpChange, 0, speed * 10, upFrame));
+        this.hpText = this.add(new ReactiveIteratorText(game, x, y, this.hpText(), this.hp(), style, character.onHpChange, delay, speed, character, character, []));
     }
     hpPercentage() {
-        return this.hp / this.stats.health * 100;
+        return this.hp / this.health * 100;
     }
     hpText() {
-        return arguments[0] + "/" + this.stats.health;
+        return arguments[0] + "/" + this.health;
     }
     hp() {
         return this.hp;

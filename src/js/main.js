@@ -60,10 +60,13 @@ var PreloaderScene = {
     //IMAGES
       //INTERFACE
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
+        //Cursor
+        this.game.load.image('cursor','assets/images/interface/cursor.png');
+        this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');
-        this.game.load.image('empty','assets/images/interface/emptyBar.png');
+        this.game.load.image('emptyBar','assets/images/interface/emptyBar.png');
         this.game.load.image('frameBar','assets/images/interface/frameBar.png');
         //Action Icon
         this.game.load.image('attackIcon','assets/images/interface/attackIcon.png');
@@ -86,7 +89,9 @@ var PreloaderScene = {
         this.game.load.spritesheet('wormAnimations', 'assets/images/enemies/WormAlpha.png',80,120);
     //SOUNDS
       //Effects
-      this.load.audio('track', ['assets/sounds/pencilsketching.mp3']);
+      this.load.audio('attacking', ['assets/sounds/attacking.wav']);
+      this.load.audio('preAttacking', ['assets/sounds/preAttacking.wav']);
+      this.load.audio('blocking', ['assets/sounds/blocking.wav']);
       //Music
       this.load.audio('boss', ['assets/music/bosstheme.wav']);
       this.load.audio('firetheme', ['assets/music/firetheme.wav']);
