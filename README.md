@@ -1,6 +1,8 @@
-LightSeeker 
+LightSeeker <p align="right"><img src="https://user-images.githubusercontent.com/36244271/45879847-408cf300-bda6-11e8-8e9d-d22890c375c0.png" width="100" height="100"></p>
 =====
-<p align="right"><img src="https://user-images.githubusercontent.com/36244271/45879847-408cf300-bda6-11e8-8e9d-d22890c375c0.png" width="100" height="100"></p>
+
+
+
 ## Get inside the subterranean galleries of Spiliag in search of the Light Gems!
 ### Each new quest you get into will be completely different thanks to our procedural generation system:
 
