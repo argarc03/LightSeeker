@@ -1,4 +1,6 @@
-<p align="left"><img src="https://user-images.githubusercontent.com/36244271/45879847-408cf300-bda6-11e8-8e9d-d22890c375c0.png" width="100" height="100"></p>
+<p align="left"><img src="https://user-images.githubusercontent.com/36244271/45879847-408cf300-bda6-11e8-8e9d-d22890c375c0.png" width="50" height="50"></p>
+
+
 LightSeeker 
 =====
 
