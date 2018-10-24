@@ -67,25 +67,20 @@ var CombatScene = {
     this.seeker.idle();
 
     //interface
-
-    
-    
-
     var mask = this.game.add.sprite(0, 0, 'interface');
 
     //attackbutton
     this.game.add.sprite(25, 132, 'attackIcon').tint = 0x676767;
-    this.game.add.reactiveBar(this.game.world, 25, 132, true, 'attackIcon', function () {
-
+    let a = this.game.add.reactiveBar(this.game.world, 25, 132, 'attackIcon', function () {
       return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
-    }, this.seeker, this.seeker.coolDown.attack.while);
+    }, this.seeker, this.seeker.coolDown.attack.while).maskAngle = -90;
 
     //blockbutton
     this.game.add.sprite(44, 132, 'blockIcon').tint = 0x676767;
-    this.game.add.reactiveBar(this.game.world, 44, 132, true, 'blockIcon', function () {
+    this.game.add.reactiveBar(this.game.world, 44, 132, 'blockIcon', function () {
 
       return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
-    }, this.seeker, this.seeker.coolDown.block.while);
+    }, this.seeker, this.seeker.coolDown.block.while).maskAngle = -90;
 
     //mask.tint = 0x605437;
 
@@ -97,7 +92,7 @@ var CombatScene = {
       fill: "#fff",
       fontSize: 10
     };
-    var texti = this.game.add.richText(5, -1, 50, Color('#262626', 'Carlos'), style);
+    var texti = this.game.add.richText(5, -1, 50, Color('#262626', Tremble(2,10,0.5,'Carlos')), style);
     var g = this.game.add.graphics(1, 0);
     for (let i = 0; i < 75; i++) {
       g.beginFill(0xffffff);

@@ -32,6 +32,7 @@ class RichText extends Phaser.Group {
         this.reWrite(text);
     }
     write() {
+        this.removeAll(true);
         this.reWrite(this._protoText);
     }
     reWrite(proto) {
@@ -41,14 +42,35 @@ class RichText extends Phaser.Group {
                     let a = this.add(new Phaser.Text(this.game, this.xLast, this.yLast, proto.charAt(i), this.styleLast));
                     this.xLast += a.width;
                     if (this.xLast > this.lineWidth) {
-                        this.yLast += this.lineHeight;
+                        let indexUntilSpace = this.numberOfCharacters-1;
+                        let temporalWidth = a.width;
+                        while(this.getChildAt(indexUntilSpace).text!=" "){
+                            indexUntilSpace--;
+                            temporalWidth+=this.getChildAt(indexUntilSpace).width;
+                        }
+                        if(temporalWidth<=this.lineWidth && proto.charAt(i) !== ' ')
+                            this.yLast += this.lineHeight;
+                        if(temporalWidth>this.lineWidth)
+                            this.yLast-=(Math.trunc(temporalWidth/this.lineWidth)-1)*this.lineHeight;
+                        this.xLast = -this.getChildAt(indexUntilSpace).width;
+
+                        for(let j = indexUntilSpace; j<this.numberOfCharacters; j++){
+                            let c = this.getChildAt(j);
+                            
+                            if(this.xLast>this.lineWidth){
+                                this.yLast += this.lineHeight;
+                                this.xLast = 0
+                            }
+                            c.y = this.yLast;
+                            c.x = this.xLast;
+                            this.xLast+=c.width;
+                        }
                         if (proto.charAt(i) === ' ') {
                             this.xLast = 0;
-                            this.removeChild(a);
-                            a.destroy();
+                            this.yLast += this.lineHeight;
                         } else {
-                            a.x = 0;
-                            this.xLast = a.width;
+                            a.x = this.xLast;
+                            this.xLast += a.width;
                             a.y = this.yLast;
                         }
                     }
@@ -82,7 +104,6 @@ var Style = function (format) {
         this.styleLast.fontStyle = preStyle;
     }
 }
-
 var Color = function (color) {
     let args = [];
     for (let element in arguments) {
@@ -122,50 +143,47 @@ var FontWeight = function (style) {
         this.styleLast.fontWeight = preStyle;
     }
 }
+var Tremble = function (amplitud, frecuencia, longitudDeOnda) {
+    let args = [];
+    
+    for (let element in arguments) {
+        args.push(arguments[element]);
+    }
+    args = args.splice(3);
+    return function () {
+        let inicio = this.numberOfCharacters;
+        this.reWrite(args);
+        for(inicio;inicio<this.numberOfCharacters; inicio++) {
+            this.getChildAt(inicio).initialY = this.getChildAt(inicio).y;
+            this.getChildAt(inicio).update = function () {
+                this.y = amplitud*Math.sin(this.game.time.totalElapsedSeconds()*2*Math.PI*frecuencia+this.parent.getChildIndex(this)/longitudDeOnda)
+                     + this.initialY;
+            }; 
+        }
+    }
+}
 Phaser.GameObjectFactory.prototype.richText = function (x, y, lineWidth, text, style = {}, group = this.game.world) {
     return new RichText(this.game, x, y, lineWidth, text, style, group);
 }
 
 // ¯\_(ツ)_/¯
-class ReactiveText extends Phaser.Text {
-    constructor(game, x = 0, y = 0, text = '', style = {}, textVariables = []) {
-        super(game, x, y, '', style);
-        this.textVariables = textVariables;
-        this._protoText = text;
+class ReactiveRichText extends RichText {
+    constructor(game, x, y, lineWidth, text, style, parent, signal) {
+        super(game, x, y, lineWidth, text, style, parent);
         for (let i = 0; i < textVariables.length; i++) {
-            this.textVariables[i].signal.add(this.write, this, 0);
+            signal.add(this.write, this, 0);
         }
         this.write();
-    }
-    write() {
-        let aux = this._protoText;
-        for (let i = 0; i < this.textVariables.length; i++) {
-            aux = aux.replace(new RegExp('%' + this.textVariables[i].name), this.textVariables[i].textFunction);
-        }
-        this.setText(aux);
-    }
-    addVariable(variableName, textFunction, singal, textContext) {
-        this.textVariables.push(new TextVariable(variableName, textFunction, singal, textContext));
-        this.textVariables[this.textVariables.length - 1].signal.add(this.write, this, 0);
-        this.write();
-    }
-
-    set protoText(value) {
-        this._protoText = value;
-        this.write();
-    }
-    get protoText() {
-        return this._protoText;
     }
 }
 
-Phaser.GameObjectFactory.prototype.reactiveText = function (x, y, text, style, textVariables, group) {
+Phaser.GameObjectFactory.prototype.reactiveRichText = function (x, y, lineWidth, text, style, parent, signal, group) {
     if (group === undefined) { group = this.world; }
-    return group.add(new ReactiveText(this.game, x, y, text, style, textVariables));
+    return group.add(new ReactiveRichText(this.game, x, y, lineWidth, text, style, parent, signal));
 }
 
 
-class ReactiveIteratorText extends ReactiveText {
+class ReactiveIteratorText extends ReactiveRichText {
     constructor(game, x, y, textFunction, boundaryFunction, style, signal, delay, speed, textContext, boundaryContext, args) {
         super(game, x, y, textFunction, style, signal, textContext, args);
 
@@ -204,7 +222,7 @@ Phaser.GameObjectFactory.prototype.reactiveIteratorText = function (x, y, textFu
 }
 
 class Bar extends Phaser.Group {
-    constructor(game, parent, x, y,vertical, key, frame = null) {
+    constructor(game, parent, x, y, key, frame = null) {
         super(game, parent);
         this.bar = this.add(new Phaser.Sprite(game, x, y, key, frame));
         this.mask = this.add(new Phaser.Graphics(game, x, y));
@@ -213,8 +231,8 @@ class Bar extends Phaser.Group {
         this.mask.drawRect(0, 0, this.bar.width, this.bar.height);
         this.maxWidth = this.bar.width;
         this.maxHeight = this.bar.height;
-        this.vertical = vertical;
         this._percentage = 1;
+        this._maskAngle = 0;
     }
     get percentage() {
         return 100 * this._percentage;
@@ -224,17 +242,22 @@ class Bar extends Phaser.Group {
         this._percentage = value;
         this.mask.clear();
         this.mask.beginFill(0xffffff);
-        if (this.vertical)
-            this.mask.drawRect(0, 0, this.bar.width, Math.round(this.bar.height * value));
-        else
-            this.mask.drawRect(0, 0, Math.round(this.bar.width * value), this.bar.height);
+        this.mask.drawRect(0, 0, Math.round(this.bar.width * value), this.bar.height);
     }
 get angle() {
     return this.bar.angle;
 }
+set maskAngle(value) {
+    this._maskAngle = value;
+    this.angle=this.angle;
+}
 set angle(angle) {
     this.bar.angle = angle;
-    this.mask.angle = angle;
+    this.mask.angle = angle+this._maskAngle;
+    this.mask.y =this.bar.y + this.bar.height/2-Math.sqrt(this.bar.width*this.bar.width+
+        this.bar.height*this.bar.height)/2*Math.cos((this._maskAngle-45)*Math.PI/180);
+    this.mask.x =this.bar.x + this.bar.width/2+Math.sqrt(this.bar.width*this.bar.width+
+        this.bar.height*this.bar.height)/2*Math.sin((this._maskAngle-45)*Math.PI/180);
 }
 get width() {
     return this.bar.width;
@@ -256,8 +279,8 @@ Phaser.GameObjectFactory.prototype.bar = function (x, y, key, frame, parent = th
 }
 
 class ReactiveBar extends Bar {
-    constructor(game, parent, x, y,vertical, key, percentageFunction, functionContext, signal, frame = null) {
-        super(game, parent, x, y,vertical, key, frame);
+    constructor(game, parent, x, y, key, percentageFunction, functionContext, signal, frame = null) {
+        super(game, parent, x, y, key, frame);
         this.percentageFunction = percentageFunction.bind(functionContext);
         signal.add(this.changePercentage, this, 0);
     }
@@ -265,8 +288,8 @@ class ReactiveBar extends Bar {
         this.percentage = this.percentageFunction();
     }
 }
-Phaser.GameObjectFactory.prototype.reactiveBar = function (parent, x, y,vertical, key, percentageFunction, functionContext, signal, frame) {
-    return new ReactiveBar(this.game, parent, x, y,vertical, key, percentageFunction, functionContext, signal, frame);
+Phaser.GameObjectFactory.prototype.reactiveBar = function (parent, x, y, key, percentageFunction, functionContext, signal, frame) {
+    return new ReactiveBar(this.game, parent, x, y, key, percentageFunction, functionContext, signal, frame);
 }
 
 class ReactiveContinuousBar extends ReactiveBar {

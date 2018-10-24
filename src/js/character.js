@@ -485,7 +485,7 @@ class Stats {
 
     // Stats to utilities
     damagedNotBlocked(damage) {
-        return Math.max(0, damage - this.stats.realBlock);
+        return Math.max(0, damage - this.realBlock);
     }
     get frameRate() {
         return 10 * this.speed;
