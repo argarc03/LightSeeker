@@ -7,14 +7,18 @@ var totalgems = 0;
 var selector;
 //var seeker = require('./character.js');//dice que character.js es un modulo común de js, que debe ser convertido a un ES6
 
-var textito = require('./statusBar.js');
 var CombatScene = {
 
-  seeker: require('./character.js'),
-  enemy: require('./character.js'),
-  hpBarSeeker: require('./statusBar.js'),
-  hpBarEnemy: require('./statusBar.js'),
-  timeActionBar: require('./statusBar.js'),
+  MainMenuScene: function () {
+    this.game.state.start('mainmenu');
+
+  },
+
+  seeker: require('../characters/character.js'),
+  enemy: require('../characters/character.js'),
+  hpBarSeeker: require('../interface/statusBar.js'),
+  hpBarEnemy: require('../interface/statusBar.js'),
+  timeActionBar: require('../interface/statusBar.js'),
 
   // Buttons functions
   attackKey: function () {
@@ -87,14 +91,10 @@ var CombatScene = {
 
     /*var healthBarSeeker = this.game.add.healthBar(this.game, 0,100,this.seeker,'healthBar','damageBar','emptyBar',
         {},1000,100);//this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);*/
-    var style = {
-      font: "minecraftregular",
-      fill: "#fff",
-      fontSize: 10
-    };
+    var style = require('../../assets/fonts/style.json');
     var textMonster = this.game.add.richText(120, 60, 50, Color('#FF0000', Tremble(1,5,1,'GRAAHH!!')), style);
-    var textSeeker = this.game.add.richText(50, 60, 50, Color('#000000', Tremble(0.1,1,1,'Shut up, monster!')), style);
-
+    var textSeeker = this.game.add.richText(0, 60, 50, Color('#000000', Tremble(0.1,1,1,'Are you a spider?')), style);
+    console.log(textSeeker);
     var g = this.game.add.graphics(1, 0);
     for (let i = 0; i < 75; i++) {
       g.beginFill(0xffffff);
@@ -116,6 +116,8 @@ var CombatScene = {
     this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
+
+    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);
 
     // prueba texto
 

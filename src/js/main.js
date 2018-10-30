@@ -3,7 +3,13 @@
 //PREGUNTAS
 
 // Aún se deben controlar los sonidos
-// npm install webfont?
+
+var IntroScene = require('./scenes/intro_scene.js');
+var MainMenuScene = require('./scenes/mainmenu_scene.js');
+var CombatScene = require('./scenes/combat_scene.js');
+var EventScene = require('./scenes/event_scene.js');
+var CreditsScene = require('./scenes/credits_scene.js');
+
 
  var webFontLoading = {
   active: function() {
@@ -11,9 +17,11 @@
     webFontLoading.game = game;
     game.state.add('boot', BootScene);
     game.state.add('preloader', PreloaderScene);
+    game.state.add('intro', IntroScene);
     game.state.add('mainmenu', MainMenuScene);
     game.state.add('combat', CombatScene);
     game.state.add('event', EventScene);
+    game.state.add('credits', CreditsScene);
     game.state.start('boot');
   },
   custom: {
@@ -24,11 +32,6 @@
 
 var WebFont = require('webfontloader');
 
-var MainMenuScene = require('./mainmenu_scene.js');
-
-var CombatScene = require('./combat_scene.js');
-
-var EventScene = require('./event_scene.js');
 
 var BootScene = {
   preload: function () {
@@ -102,7 +105,7 @@ var PreloaderScene = {
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 
-      PreloaderScene.game.state.start('combat');
+      PreloaderScene.game.state.start('intro');
   }
 
 };
