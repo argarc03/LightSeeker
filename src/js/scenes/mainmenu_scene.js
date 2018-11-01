@@ -1,21 +1,32 @@
 'use strict';
 
-  var MainMenuScene = {
-    EventScene: function(){
-      this.game.state.start('event');
-    },
+require('../interface/optionMenu.js');
 
-    CombatScene: function(){
-      this.game.state.start('combat');
-    },
+var MainMenuScene = {
+  EventScene: function () {
+    this.game.state.start('event');
+  },
 
-    CreditsScene: function(){
-      this.game.state.start('credits');
-    },
+  CombatScene: function () {
+    this.game.state.start('combat');
+  },
+
+  CreditsScene: function () {
+    this.game.state.start('credits');
+  },
 
   create: function () {
     var style = require('../../assets/fonts/style.json');
-    var text = this.game.add.richText(80, 80, 80,Tremble(1,1,1,"MAIN MENU"), style);
+    var text = this.game.add.richText(80, 80, 80, Tremble(1, 1, 1, "MAIN MENU"), style);
+
+    //exit
+    this.game.add.optionMenu(['botonParaDormir',0,0,'itemIcon',function(){},{},'','','','',{}]);//AAAAAAAAAAA
+    //mainmenuoptionsscene
+
+    //new run/continue run
+
+    //
+
 
 
     //Controles para cambiar de escenas
@@ -48,21 +59,7 @@
 
     playtexto.events.onInputDown.add(StartCombat,this);*/
 
-
-    //exit
-
-    //mainmenuoptionsscene
-
-    //new run/continue run
-
-    //
-
-
-
   }
-
-
-  
 };
 
 

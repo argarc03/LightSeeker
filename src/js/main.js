@@ -61,6 +61,7 @@ var PreloaderScene = {
 
     // TODO: load here the assets for the game
     //IMAGES
+        this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
       //INTERFACE
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         //Cursor
@@ -105,7 +106,7 @@ var PreloaderScene = {
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 
-      PreloaderScene.game.state.start('intro');
+      PreloaderScene.game.state.start('mainmenu');
   }
 
 };
