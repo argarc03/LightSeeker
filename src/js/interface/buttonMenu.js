@@ -3,13 +3,16 @@
 
 class ButtonMenu extends Phaser.Button {
     constructor(game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame) {
-        super(game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
+        //Phaser.Button.call(this, game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
 
+        super(game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
         this.name = name;
-        this.left = null;
-        this.right = null;
-        this.up = null;
-        this.down = null;
+        this.leftButton = null;
+        this.rightButton = null;
+        this.upButton = null;
+        this.downButton = null;
+        this.x = x;
+        this.y = y;
     }
 
     goLeft() { return this.left; }

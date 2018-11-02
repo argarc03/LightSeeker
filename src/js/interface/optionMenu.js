@@ -1,5 +1,6 @@
 'use strict';
 
+require('./buttonMenu');
 
 
 class OptionMenu extends Phaser.Group {
@@ -7,19 +8,24 @@ class OptionMenu extends Phaser.Group {
         super(game, parent);
 
         buttonsMenu.forEach(element => {
-            let b = require('./buttonMenu.js');
-            b = this.add(new ButtonMenu(this.game,...element));
+            let b = this.add(new ButtonMenu(this.game,...element.slice(0,element.length-1)));
             b.onInputOver.add(this.over,this,[b]);
         }, this);
-
+        console.log ('NOOOOOOOOO',this.children[0].x);
         buttonsMenu.forEach(element => {
-            this.children.left = this.children.find(function(element2){return element2.name===element[element.length-1].left;});
-            this.children.right = this.children.find(function(element2){return element2.name===element[element.length-1].right;});
-            this.children.up = this.children.find(function(element2){return element2.name===element[element.length-1].up;});
-            this.children.down = this.children.find(function(element2){return element2.name===element[element.length-1].down;});
+            let child = this.children.find(function(element2){return element2.name===element[0]});
+            
+            child.leftButton = 
+                this.children.find(function(element2){return element2.name===element[element.length-1].leftButton});
+            child.rightButton = 
+                this.children.find(function(element2){return element2.name===element[element.length-1].rightButton});
+            child.upButton = 
+                this.children.find(function(element2){return element2.name===element[element.length-1].upButton});
+            child.downButton = 
+                this.children.find(function(element2){return element2.name===element[element.length-1].downButton});
         },this);
-
-        this.currentButton = buttonsMenu[0];
+        console.log ('SIIIIIII',this.children[0].x);
+        this.currentButton = this.children[0];
     }
 
     goLeft() {
