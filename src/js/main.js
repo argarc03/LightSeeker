@@ -7,7 +7,8 @@
 
  var webFontLoading = {
   active: function() {
-		var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
+    var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
+    
     webFontLoading.game = game;
     game.state.add('boot', BootScene);
     game.state.add('preloader', PreloaderScene);
@@ -17,7 +18,7 @@
     game.state.start('boot');
   },
   custom: {
-    families: ['minecraftregular'],
+    families: ['Minecraft'],
     urls: ["assets/fonts/webFonts/stylesheet.css"]
   }
 };
@@ -55,7 +56,6 @@ var PreloaderScene = {
     this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
     this.loadingBar.anchor.setTo(0, 0.5);
     this.load.setPreloadSprite(this.loadingBar);
-
     // TODO: load here the assets for the game
     //IMAGES
       //INTERFACE
@@ -67,6 +67,7 @@ var PreloaderScene = {
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');
         this.game.load.image('emptyBar','assets/images/interface/emptyBar.png');
+        this.game.load.image('healBar','assets/images/interface/healBar.png')
         this.game.load.image('frameBar','assets/images/interface/frameBar.png');
         //Action Icon
         this.game.load.image('attackIcon','assets/images/interface/attackIcon.png');
@@ -106,7 +107,6 @@ var PreloaderScene = {
   }
 
 };
-
 WebFont.load(webFontLoading);
 
 window.onload = function () {

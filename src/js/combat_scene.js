@@ -1,5 +1,4 @@
 'use strict';
-
 //village stats
 var day = 1;
 var population = 24;
@@ -82,19 +81,16 @@ var CombatScene = {
       return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
     }, this.seeker, this.seeker.coolDown.block.while).maskAngle = -90;
 
-    //mask.tint = 0x605437;
-
-
     /*var healthBarSeeker = this.game.add.healthBar(this.game, 0,100,this.seeker,'healthBar','damageBar','emptyBar',
         {},1000,100);//this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);*/
     var style = {
-      font: "minecraftregular",
+      font: "Minecraft",
       fill: "#fff",
       fontSize: 10
     };
     var textMonster = this.game.add.richText(120, 60, 50, Color('#FF0000', Tremble(1,5,1,'GRAAHH!!')), style);
-    var textSeeker = this.game.add.richText(50, 60, 50, Color('#000000', Tremble(0.1,1,1,'Shut up, monster!')), style);
-
+    var textSeeker = this.game.add.reactiveRichText(49.3, 60, 50, Color('#000000', VariableNumber(function(){return this.hp}, this.seeker, 1000)), style,[this.seeker.onHpChange]);
+    this.game.add.healthBar(0, 0, this.seeker, 'emptyBar','healBar','damageBar','healthBar', style, 2000, 500);
     var g = this.game.add.graphics(1, 0);
     for (let i = 0; i < 75; i++) {
       g.beginFill(0xffffff);

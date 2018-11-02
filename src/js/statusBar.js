@@ -1,6 +1,5 @@
 'use strict';
 
-
 class RichText extends Phaser.Group {
     constructor(game, x, y, lineWidth, text, style, parent) {
         super(game, parent);
@@ -33,6 +32,9 @@ class RichText extends Phaser.Group {
     }
     write() {
         this.removeAll(true);
+        this.xLast = 0;
+        this.yLast = 0;
+        this.numberOfCharacters = 0;
         this.reWrite(this._protoText);
     }
     reWrite(proto) {
@@ -42,36 +44,43 @@ class RichText extends Phaser.Group {
                     let a = this.add(new Phaser.Text(this.game, this.xLast, this.yLast, proto.charAt(i), this.styleLast));
                     this.xLast += a.width;
                     if (this.xLast > this.lineWidth) {
-                        let indexUntilSpace = this.numberOfCharacters-1;
-                        let temporalWidth = a.width;
-                        while(this.getChildAt(indexUntilSpace).text!=" "){
-                            indexUntilSpace--;
-                            temporalWidth+=this.getChildAt(indexUntilSpace).width;
-                        }
-                        if(temporalWidth<=this.lineWidth && proto.charAt(i) !== ' ')
-                            this.yLast += this.lineHeight;
-                        if(temporalWidth>this.lineWidth)
-                            this.yLast-=(Math.trunc(temporalWidth/this.lineWidth)-1)*this.lineHeight;
-                        this.xLast = -this.getChildAt(indexUntilSpace).width;
-
-                        for(let j = indexUntilSpace; j<this.numberOfCharacters; j++){
-                            let c = this.getChildAt(j);
-                            
-                            if(this.xLast>this.lineWidth){
-                                this.yLast += this.lineHeight;
-                                this.xLast = 0
+                        if (a.text !== ' ') {
+                            let index = i;
+                            let temporalWidth = 0;
+                            while (index >= 0 && this.getChildAt(index).text !== ' ') {
+                                temporalWidth += this.getChildAt(index).width;
+                                index--;
                             }
-                            c.y = this.yLast;
-                            c.x = this.xLast;
-                            this.xLast+=c.width;
-                        }
-                        if (proto.charAt(i) === ' ') {
+                            if (index < 0) {
+                                index = 0;
+                            }
+                            if (this.getChildAt(index).text === ' ') {
+                                index++;
+                            }
+                            if (temporalWidth > this.lineWidth) {
+                                this.xLast = this.getChildAt(index).x;
+                                this.yLast = this.getChildAt(index).y;
+                            } else {
+                                this.xLast = 0;
+                                this.yLast += this.lineHeight;
+                            }
+                            for (let j = index; j <= i; j++) {
+                                if (this.xLast > this.lineWidth) {
+                                    this.xLast = 0;
+                                    this.yLast += this.lineHeight;
+                                }
+
+                                this.getChildAt(j).x = this.xLast;
+                                this.getChildAt(j).y = this.yLast;
+                                this.xLast += this.getChildAt(j).width;
+                            }
+                            if (this.xLast > this.lineWidth) {
+                                this.xLast = 0;
+                                this.yLast += this.lineHeight;
+                            }
+                        } else {
                             this.xLast = 0;
                             this.yLast += this.lineHeight;
-                        } else {
-                            a.x = this.xLast;
-                            this.xLast += a.width;
-                            a.y = this.yLast;
                         }
                     }
                     this.numberOfCharacters++;
@@ -145,7 +154,7 @@ var FontWeight = function (style) {
 }
 var Tremble = function (amplitud, frecuencia, longitudDeOnda) {
     let args = [];
-    
+
     for (let element in arguments) {
         args.push(arguments[element]);
     }
@@ -153,72 +162,49 @@ var Tremble = function (amplitud, frecuencia, longitudDeOnda) {
     return function () {
         let inicio = this.numberOfCharacters;
         this.reWrite(args);
-        for(inicio;inicio<this.numberOfCharacters; inicio++) {
+        for (inicio; inicio < this.numberOfCharacters; inicio++) {
             this.getChildAt(inicio).initialY = this.getChildAt(inicio).y;
             this.getChildAt(inicio).update = function () {
-                this.y = amplitud*Math.sin(this.game.time.totalElapsedSeconds()*2*Math.PI*frecuencia+this.parent.getChildIndex(this)/longitudDeOnda)
-                     + this.initialY;
-            }; 
+                this.y = amplitud * Math.sin(this.game.time.totalElapsedSeconds() * 2 * Math.PI * frecuencia + this.parent.getChildIndex(this) / longitudDeOnda)
+                    + this.initialY;
+            };
         }
     }
 }
+
+var VariableNumber = function (numberfunction, context, delay) {
+    var value = numberfunction.apply(context);
+    return function () {
+        if (value !== numberfunction.apply(context)) {
+            if (value > numberfunction.apply(context)) {
+                value--;
+            } else {
+                value++;
+            }
+            this.game.time.create().add(delay, this.write, this).timer.start();
+        }
+        this.reWrite(value.toString());
+    }
+}
+
 Phaser.GameObjectFactory.prototype.richText = function (x, y, lineWidth, text, style = {}, group = this.game.world) {
     return new RichText(this.game, x, y, lineWidth, text, style, group);
 }
 
 // ¯\_(ツ)_/¯
 class ReactiveRichText extends RichText {
-    constructor(game, x, y, lineWidth, text, style, parent, signal) {
+    constructor(game, x, y, lineWidth, text, style, parent, signals) {
         super(game, x, y, lineWidth, text, style, parent);
-        for (let i = 0; i < textVariables.length; i++) {
-            signal.add(this.write, this, 0);
+        for (let i = 0; i < signals.length; i++) {
+            signals[i].add(this.write, this, 0);
         }
         this.write();
     }
 }
 
-Phaser.GameObjectFactory.prototype.reactiveRichText = function (x, y, lineWidth, text, style, parent, signal, group) {
+Phaser.GameObjectFactory.prototype.reactiveRichText = function (x, y, lineWidth, text, style, signal, group) {
     if (group === undefined) { group = this.world; }
-    return group.add(new ReactiveRichText(this.game, x, y, lineWidth, text, style, parent, signal));
-}
-
-
-class ReactiveIteratorText extends ReactiveRichText {
-    constructor(game, x, y, textFunction, boundaryFunction, style, signal, delay, speed, textContext, boundaryContext, args) {
-        super(game, x, y, textFunction, style, signal, textContext, args);
-
-        this.boundaryFunction = boundaryFunction.bind(boundaryContext);
-        this.delay = delay;
-        this._frecuency = 1 / speed;
-        this.timer = null;
-        this.actualValue = this.boundaryFunction();
-        this.args.unshift(this.actualValue);
-        this.setText(this.textFunction(this.args));
-    }
-    write() {
-        if (this.timer === null) {
-            this.timer = this.game.time.create();
-            this.timer.add(this.delay, this.rewrite, this);
-            this.timer.start();
-        }
-    }
-    rewrite() {
-        if (this.actualValue > this.boundaryFunction()) {
-            this.actualValue--;
-            this.args[0] = this.actualValue;
-            this.setText(this.textFunction(this.args));
-            this.timer = this.game.time.create();
-            this.timer.add(this._frecuency, this.rewrite, this);
-            this.timer.start();
-        } else {
-            this.timer = null;
-        }
-    }
-}
-
-Phaser.GameObjectFactory.prototype.reactiveIteratorText = function (x, y, textFunction, boundaryFunction, style, signal, delay, speed, textContext, boundaryContext, args, group) {
-    if (group === undefined) { group = this.world; }
-    return group.add(new ReactiveIteratorText(this.game, x, y, textFunction, boundaryFunction, style, signal, delay, speed, textContext, boundaryContext, args));
+    return group.add(new ReactiveRichText(this.game, x, y, lineWidth, text, style, group, signal));
 }
 
 class Bar extends Phaser.Group {
@@ -244,35 +230,35 @@ class Bar extends Phaser.Group {
         this.mask.beginFill(0xffffff);
         this.mask.drawRect(0, 0, Math.round(this.bar.width * value), this.bar.height);
     }
-get angle() {
-    return this.bar.angle;
-}
-set maskAngle(value) {
-    this._maskAngle = value;
-    this.angle=this.angle;
-}
-set angle(angle) {
-    this.bar.angle = angle;
-    this.mask.angle = angle+this._maskAngle;
-    this.mask.y =this.bar.y + this.bar.height/2-Math.sqrt(this.bar.width*this.bar.width+
-        this.bar.height*this.bar.height)/2*Math.cos((this._maskAngle-45)*Math.PI/180);
-    this.mask.x =this.bar.x + this.bar.width/2+Math.sqrt(this.bar.width*this.bar.width+
-        this.bar.height*this.bar.height)/2*Math.sin((this._maskAngle-45)*Math.PI/180);
-}
-get width() {
-    return this.bar.width;
-}
-set width(value) {
-    this.bar.width = value;
-    this.percentage(this._percentage);
-}
-get height() {
-    return this.bar.height;
-}
-set height(value) {
-    this.bar.height = value;
-    this.percentage(this._percentage);
-}
+    get angle() {
+        return this.bar.angle;
+    }
+    set maskAngle(value) {
+        this._maskAngle = value;
+        this.angle = this.angle;
+    }
+    set angle(angle) {
+        this.bar.angle = angle;
+        this.mask.angle = angle + this._maskAngle;
+        this.mask.y = this.bar.y + this.bar.height / 2 - Math.sqrt(this.bar.width * this.bar.width +
+            this.bar.height * this.bar.height) / 2 * Math.cos((this._maskAngle - 45) * Math.PI / 180);
+        this.mask.x = this.bar.x + this.bar.width / 2 + Math.sqrt(this.bar.width * this.bar.width +
+            this.bar.height * this.bar.height) / 2 * Math.sin((this._maskAngle - 45) * Math.PI / 180);
+    }
+    get width() {
+        return this.bar.width;
+    }
+    set width(value) {
+        this.bar.width = value;
+        this.percentage(this._percentage);
+    }
+    get height() {
+        return this.bar.height;
+    }
+    set height(value) {
+        this.bar.height = value;
+        this.percentage(this._percentage);
+    }
 }
 Phaser.GameObjectFactory.prototype.bar = function (x, y, key, frame, parent = this.game.world) {
     return new Bar(this.game, parent, x, y, key, frame);
@@ -293,63 +279,104 @@ Phaser.GameObjectFactory.prototype.reactiveBar = function (parent, x, y, key, pe
 }
 
 class ReactiveContinuousBar extends ReactiveBar {
-    constructor(game, parent, x, y, key, percentageFunction, functionContext, signal, delay, speed, frame = null) {
+    constructor(game, parent, x, y, key, percentageFunction, functionContext, signal, decreaseDelay, increaseDelay, decreaseSpeed, increaseSpeed, frame = null) {
         super(game, parent, x, y, key, percentageFunction, functionContext, signal, frame);
-
-        this.delay = delay;
-        this._speed = this.bar.width / speed;
+        this.increasing = false;
+        this.decreasing = false;
+        this._decreaseDelay = decreaseDelay;
+        this._increaseSpeed = increaseDelay;
+        this._increaseSpeed = this.bar.width / increaseSpeed;
+        this._decreaseSpeed = this.bar.width / decreaseSpeed;
         this.timer = null;
     }
     changePercentage() {
-        if (this.timer === null) {
-
-            this.timer = this.game.time.create();
-            this.timer.add(this.delay, this.reChangePercentage, this);
-            this.timer.start();
+        if (this.percentageFunction() > this.percentage) {
+            console.log('sube');
+            if (!this.increasing) {
+                if (this.timer !== null) {
+                    this.timer.stops(true);
+                }
+                this.decreasing = false;
+                this.increasing = true;
+                this.timer = this.game.time.create();
+                this.timer.add(this._increaseDelay, this.reChangePercentage, this);
+                this.timer.start();
+            }
+        } else {
+            console.log('baja');
+            if (!this.decreasing) {
+                if (this.timer !== null) {
+                    this.timer.stops(true);
+                }
+                this.increasing = false;
+                this.decreasing = true;
+                this.timer = this.game.time.create();
+                this.timer.add(this._decreaseDelay, this.reChangePercentage, this);
+                this.timer.start();
+            }
         }
     }
     reChangePercentage() {
-        console.log(this._percentage);
-        if (this.percentage > this.percentageFunction()) {
-            this.timer = this.game.time.create();
-            if(this.vertical)
-                this.percentage -= 100 / this.bar.height;
-            else
-                this.percentage -= 100 / this.bar.width;
-            this.timer.add(this._speed, this.reChangePercentage, this);
-            this.timer.start();
-        } else {
-            this.percentage = this.percentageFunction();
-            this.timer = null;
+        if(this.increasing) {
+            console.log('SUBE');
+            if (this.percentage < this.percentageFunction()) {
+                this.timer = this.game.time.create();
+                if (this.vertical)
+                    this.percentage += 100 / this.bar.height;
+                else
+                    this.percentage += 100 / this.bar.width;
+                this.timer.add(this._increaseSpeed, this.reChangePercentage, this);
+                this.timer.start();
+            } else {
+                this.increasing = false;
+                this.percentage = this.percentageFunction();
+                this.timer = null;
+            }
+        } else if(this.decreasing){
+            console.log('BAJA');
+            if (this.percentage > this.percentageFunction()) {
+                this.timer = this.game.time.create();
+                if (this.vertical)
+                    this.percentage -= 100 / this.bar.height;
+                else
+                    this.percentage -= 100 / this.bar.width;
+                this.timer.add(this._decreaseSpeed, this.reChangePercentage, this);
+                this.timer.start();
+            } else {
+                this.decreasing = false;
+                this.percentage = this.percentageFunction();
+                this.timer = null;
+            }
         }
+        
     }
 }
 
-Phaser.GameObjectFactory.prototype.reactiveContinuousBar = function (parent, x, y, key, percentageFunction, functionContext, signal, delay, speed, frame = null) {
-    return new ReactiveContinuousBar(this.game, parent, x, y, key, percentageFunction, functionContext, signal, delay, speed, frame);
+Phaser.GameObjectFactory.prototype.reactiveContinuousBar = function (parent, x, y, key, percentageFunction, functionContext, signal, decreaseDelay, increaseDelay, decreaseSpeed, increaseSpeed, frame = null) {
+    return new ReactiveContinuousBar(this.game, parent, x, y, key, percentageFunction, functionContext, signal, decreaseDelay, increaseDelay, decreaseSpeed, increaseSpeed, frame);
 }
 
 class HealthBar extends Phaser.Group {
-    constructor(game, x, y, character, upKey, downKey, voidKey, style, delay, speed, downFrame, upFrame, voidFrame, parent) {
+    constructor(game, x, y, character, voidKey, healKey, damageKey, healthKey, style, delay, speed, voidFrame, healFrame, damageFrame, healthFrame, parent) {
         super(game, parent);
 
         this.voidBar = this.add(new Bar(game, this, x, y, voidKey, voidFrame));
-        this.downBar = this.add(new ReactiveContinuousBar(game, this, x, y, downKey, this.hpPercentage(), character, character.onHpChange, delay, speed, downFrame));
-        this.upBar = this.add(new ReactiveContinuousBar(game, this, x, y, upKey, this.hpPercentage(), character, character.onHpChange, 0, speed * 10, upFrame));
-        this.hpText = this.add(new ReactiveIteratorText(game, x, y, this.hpText(), this.hp(), style, character.onHpChange, delay, speed, character, character, []));
+        this.healBar = this.add(new ReactiveContinuousBar(game, this, x, y, healKey, this.hpPercentage, character, character.onHpChange, 0, 0, speed,speed, healFrame))
+        this.damageBar = this.add(new ReactiveContinuousBar(game, this, x, y, damageKey, this.hpPercentage, character, character.onHpChange, delay, 0, speed, speed, damageFrame));
+        this.healthBar = this.add(new ReactiveContinuousBar(game, this, x, y, healthKey, this.hpPercentage, character, character.onHpChange, 0, delay, speed,speed, healthFrame));
+        this.hpText = this.add(new ReactiveRichText(game, x, y, this.voidBar.width, [VariableNumber(function () { return this.hp }, character, speed),
+            '/',
+        VariableNumber(function () { return this.stats.health }, character, 1000)], style, this, [character.onHpChange, character.stats.onHealthChange]));
     }
     hpPercentage() {
-        return this.hp / this.health * 100;
-    }
-    hpText() {
-        return arguments[0] + "/" + this.health;
+        return this.hp / this.stats.health * 100;
     }
     hp() {
         return this.hp;
     }
 }
-Phaser.GameObjectFactory.prototype.healthBar = function (x, y, character, upKey, downKey, voidKey, style, delay, speed, downFrame = null, upFrame = null, voidFrame = null, parent = this.game.world) {
-    return new HealthBar(this.game, x, y, character, upKey, downKey, voidKey, style, delay, speed, downFrame, upFrame, voidFrame, parent);
+Phaser.GameObjectFactory.prototype.healthBar = function (x, y, character, voidKey, healKey, damageKey, healthKey, style, delay, speed, voidFrame = null, healFrame = null, damageFrame = null, healthFrame = null, parent = this.game.world) {
+    return new HealthBar(this.game, x, y, character, voidKey, healKey, damageKey, healthKey, style, delay, speed, voidFrame, healFrame, damageFrame, healthFrame, parent);
 }
 
 class CircleBar {
