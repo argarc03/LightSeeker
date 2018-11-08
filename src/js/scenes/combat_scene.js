@@ -126,16 +126,15 @@ var CombatScene = {
       ge.beginFill(0x000000);
       ge.drawRect(2 * i + 1, 0, 1, 1);
     }
-    
 
-    // prueba texto
-
-    this.game.input.onDown.add(gofull, this);//FULLSCREEN
+    //para ir a fullscreen pulsar F4
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
 
     //var text = this.game.add.text(50, 50, "jeje", style);
 
     //music
     var music = this.game.add.audio('firetheme', 0.1, true);
+    this.game.sound.stopAll();
     music.play();
 
     //prueba cursor
@@ -146,19 +145,21 @@ var CombatScene = {
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
+  },
+
+  goFullscreen: function() {
+
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
+  
   }
 };
 
 
-function gofull() {
 
-  if (this.game.scale.isFullScreen) {
-    this.game.scale.stopFullScreen();
-  }
-  else {
-    this.game.scale.startFullScreen(false);
-  }
-
-}
 
 module.exports = CombatScene;

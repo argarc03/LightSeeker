@@ -10,6 +10,7 @@ class OptionMenu extends Phaser.Group {
         buttonsMenu.forEach(element => {
             let b = this.add(new ButtonMenu(this.game,...element.slice(0,element.length-1)));
             b.onInputOver.add(this.over,this,[b]);
+            b.input.useHandCursor = false;
         }, this);
         console.log ('NOOOOOOOOO',this.children[0].x);
         buttonsMenu.forEach(element => {

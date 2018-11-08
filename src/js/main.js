@@ -78,6 +78,8 @@ var PreloaderScene = {
         //Items
         this.game.load.image('itemIcon','assets/images/interface/itemIcon.png');
         this.game.load.image('itemIcon2','assets/images/interface/itemIcon2.png');
+        //Buttons
+        this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
       //BACKGROUNDS
       this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
@@ -99,6 +101,8 @@ var PreloaderScene = {
       //Music
       this.load.audio('boss', ['assets/music/bosstheme.wav']);
       this.load.audio('firetheme', ['assets/music/firetheme.wav']);
+      this.load.audio('shoptheme', ['assets/music/shoptheme.wav']);
+      this.load.audio('watertheme', ['assets/music/watertheme.wav']);
 
 
   },
