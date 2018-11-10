@@ -67,6 +67,7 @@ var PreloaderScene = {
         //Cursor
         this.game.load.image('cursor','assets/images/interface/cursor.png');
         this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
+        this.game.load.image('selectCursor','assets/images/interface/selectCursor.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');

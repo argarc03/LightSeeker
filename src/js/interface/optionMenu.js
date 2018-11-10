@@ -8,25 +8,25 @@ class OptionMenu extends Phaser.Group {
         super(game, parent);
 
         buttonsMenu.forEach(element => {
-            let b = this.add(new ButtonMenu(this.game,...element.slice(0,element.length-1)));
-            b.onInputOver.add(this.over,this,[b]);
+            let b = this.add(new ButtonMenu(this.game, ...element.slice(0, element.length - 1)));
+            b.onInputOver.add(this.over, this, [b]);
             b.input.useHandCursor = false;
         }, this);
-        console.log ('NOOOOOOOOO',this.children[0].x);
+        console.log('NOOOOOOOOO', this.children[0]);
         buttonsMenu.forEach(element => {
-            let child = this.children.find(function(element2){return element2.name===element[0]});
-            
-            child.leftButton = 
-                this.children.find(function(element2){return element2.name===element[element.length-1].leftButton});
-            child.rightButton = 
-                this.children.find(function(element2){return element2.name===element[element.length-1].rightButton});
-            child.upButton = 
-                this.children.find(function(element2){return element2.name===element[element.length-1].upButton});
-            child.downButton = 
-                this.children.find(function(element2){return element2.name===element[element.length-1].downButton});
-        },this);
-        console.log ('SIIIIIII',this.children[0].x);
-        this.currentButton = this.children[0];
+            let child = this.children.find(function (element2) { return element2.name === element[0] });
+
+            child.leftButton =
+                this.children.find(function (element2) { return element2.name === element[element.length - 1].leftButton });
+            child.rightButton =
+                this.children.find(function (element2) { return element2.name === element[element.length - 1].rightButton });
+            child.upButton =
+                this.children.find(function (element2) { return element2.name === element[element.length - 1].upButton });
+            child.downButton =
+                this.children.find(function (element2) { return element2.name === element[element.length - 1].downButton });
+        }, this);
+        console.log('SIIIIIII', this.children[0]);
+        this.currentButton = this.children[0]; //currentButton no está bien asignado
     }
 
     goLeft() {
@@ -83,5 +83,5 @@ class OptionMenu extends Phaser.Group {
 
 Phaser.GameObjectFactory.prototype.optionMenu = function (buttonsMenu, group) {
     if (group === undefined) { group = this.world; }
-    return group.add(new OptionMenu(this.game,buttonsMenu, group));
+    return group.add(new OptionMenu(this.game, buttonsMenu, group));
 }

@@ -28,6 +28,9 @@ var MainMenuScene = {
     ]);
     console.log(a);
 
+    //prueba cursor
+    selector = this.game.add.sprite(50, 50, 'cursor');
+    
     //mainmenuoptionsscene
     //new run/continue run
 
@@ -36,8 +39,8 @@ var MainMenuScene = {
 
 
     //Controles para moverse entre botones
-    this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(function(){a.goUp()}, this);
-    this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(function(){a.goDown()}, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(a.goUp, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(a.goDown, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function(){console.log("enter")}, this);
 
     //Controles para cambiar de escenas
@@ -49,8 +52,7 @@ var MainMenuScene = {
     this.game.sound.stopAll();
     music.play();
 
-    //prueba cursor
-    selector = this.game.add.sprite(50, 50, 'cursor');
+    
   },
 
   update: function () {
