@@ -88,6 +88,7 @@ var PreloaderScene = {
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
       this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
+      this.game.load.spritesheet('crystalShines','assets/images/particles/crystalShines.png',3,3);
       //CHARACTERS
         //Seeker
         this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
