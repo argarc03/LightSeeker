@@ -19,12 +19,17 @@ var MainMenuScene = {
 
   create: function () {
     var style = require('../../assets/fonts/style.json');
-    var text = this.game.add.richText(76, 10, 80, Tremble(1, 1, 1, "MAIN MENU"), style);
+    //background
+    this.game.add.image(0,0,'mainmenubackground');
 
+    //version
+    var text = this.game.add.richText(176, 140, 80, "v 1.0", style);
     //exit
     // name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group
     var a = this.game.add.optionMenu([['botonDeAbajo',85,100,'button',this.EventScene,this,1,0,2,1,{up: 'botonDeArriba'}],
-    ['botonDeArriba',85,60,'button',this.CombatScene,this,1,0,2,1,{down: 'botonDeAbajo'}]
+    ['botonDeArriba',85,60,'button',this.CombatScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
+    ['botonCredits',125,60,'button',this.CreditsScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
+    ['botonShop',45,60,'button',this.CreditsScene,this,1,0,2,1,{down: 'botonDeAbajo'}]
     ]);
     console.log(a);
 
@@ -39,7 +44,7 @@ var MainMenuScene = {
 
 
     //Controles para moverse entre botones
-    this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(a.goUp, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(a.goUp, this);//no funcionaaa aaaaaaaaaa
     this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(a.goDown, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function(){console.log("enter")}, this);
 

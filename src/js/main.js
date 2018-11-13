@@ -82,7 +82,7 @@ var PreloaderScene = {
         //Buttons
         this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
       //BACKGROUNDS
-      this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
+      this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
