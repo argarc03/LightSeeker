@@ -109,7 +109,7 @@ var PreloaderScene = {
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 
-      PreloaderScene.game.state.start('combat');
+      PreloaderScene.game.state.start('event');
   }
 
 };
@@ -133,6 +133,8 @@ var ReactiveRichText = require('./interface/reactiveRichText');
 var RichText = require('./interface/richText');
 var ActionButton = require('./interface/actionButton');
 var SeekerCombatHUD = require('./interface/seekerCombatHUD');
+var ScrollText = require('./interface/scrollText');
+var EventHUD = require('./interface/eventHUD');
 /**
  * 
  */
@@ -184,4 +186,12 @@ Phaser.GameObjectFactory.prototype.actionButton = function(x, y, buttondKey, bar
 
 Phaser.GameObjectFactory.prototype.seekerCombatHUD = function(x, y, seeker, enemy, parent = this.game.world) {
     return new SeekerCombatHUD(this.game, parent, x, y, seeker, enemy);
+}
+
+Phaser.GameObjectFactory.prototype.scrollText = function(x,y,width,height,text, style, parent = this.game.world) {
+    return new ScrollText(this.game, parent,x,y,width,height,text, style);
+}
+
+Phaser.GameObjectFactory.prototype.eventHUD = function(seeker, text, options, parent = this.game.world) {
+    return new EventHUD(this.game, parent, seeker, text, options);
 }
