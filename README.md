@@ -1,56 +1,64 @@
-# Awesome game
+<p align="left"><img src="https://user-images.githubusercontent.com/36244271/45879847-408cf300-bda6-11e8-8e9d-d22890c375c0.png" width="50" height="50"></p>
+
+
+LightSeeker 
+=====
 
 Awesome game by
 [gituser](https://github.com/gituser).
 
 Initial scaffolding generated with [generator-gamejam](https://github.com/belen-albeza/generator-gamejam/).
 
-## Installation
+## Get inside the subterranean galleries of Spiliag in search of the Light Gems!
+### Each new quest you get into will be completely different thanks to our procedural generation system:
 
-### Requirements
+### - Random events
+### - Unique enemies randomly generated
+### - Colossal bosses who will test your skills
 
 This games uses [gulp](http://gulpjs.com/) for building and tasks automation.
 
 You can install gulp with npm:
 
-```
-npm install -g gulp
-```
+## Fights with a renovated [Active Time Battle](https://www.giantbomb.com/active-time-battle/3015-95/) style!
 
 ### Build
 
-Clone this repository and install dependencies:
+Attack or block at the right moment! Because you need to restore your actions.
+Watch the enemy’s moves carefully.
 
-```
-git clone gituser/awesome-game
-cd awesome-game
-npm install
-```
+Be wary. Each enemy involve a different challenge.
 
-To **build** the game, run the `dist` task from the project root:
+## Forge your fate with your decisions!
+<p align="center"><img src="https://user-images.githubusercontent.com/33768598/45785240-d3754280-bc6b-11e8-93ad-7af6ebbeb003.jpg" width="500" height="300"></p>
 
-```
-gulp dist
-```
+All of your choices have consequences. Choose wisely. You can be awarded with __Light Gems__ or punished with dangerous situations where only your wisdom can save yourself.
 
-The `dist` folder will contain a build of the game. You can then start a local server that serves this directory statically to play the game in local:
+## Bring your loot to keep The Village safe or improve your skills!
 
 ```
 npm install -g http-server
 http-server dist
 ```
 
-You can **clean up** the temporary files and the `dist` folder by running:
+In your adventure you can go back and save the __Light Gems__, but there is a price. Proceed if you can or die trying. A new __LightSeeker__ will be chosen and you must guide him to glory.
 
-```
-gulp clean
-```
+## Lore
 
-## Development
+There is only a light in the world. And like every light, it needs energy to live.
+In LightSeeker you take the control of a Lightseeker, the chosen by the __Great Crystal__ of __The Village__. You will explore dangerous caves plenty of hidden treasures and surprises. You will need your boldness to go back safe and sound or discover what is inside the dungeons…
+<p align="center"><img src="https://user-images.githubusercontent.com/33768598/45785254-e0923180-bc6b-11e8-9d89-46aadacd90a9.jpg" width="600" height="400"></p>
 
-This project uses [Browserify](http://browserify.org) to handle JavaScript modules.
+## References
 
-There is a task that will automatically run Browserify when a JavaScript file changes, and it will also reload the browser.
+ * Slay the Spire
+ * Final Fantasy VII
+ * Mario & Luigi
+ * Rogue
+ * Diablo
+
+Developed by __Turing's Song Studios__ ([Arturo García Cárdenas](https://github.com/argarc03) y [Carlos Durán Domínguez](https://github.com/CarlosDuranDominguez))
+<p align="center"><img src="https://user-images.githubusercontent.com/36244271/45879847-408cf300-bda6-11e8-8e9d-d22890c375c0.png" width="200" height="200"></p>
 
 ```
 gulp run
