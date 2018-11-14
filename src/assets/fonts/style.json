@@ -1,5 +1,6 @@
 {
-    "font": "minecraftregular",
+    "font": "Minecraft",
     "fill": "#fff",
-    "fontSize": 10
+    "fontSize": 10,
+    "align":"center"
 }

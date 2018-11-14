@@ -1,4 +1,8 @@
 'use strict';
+
+var Stats = require('../characters/stats');
+var textFunctions = require('../interface/textFunctions');
+
 //village stats
 var day = 1;
 var population = 24;
@@ -12,13 +16,8 @@ var CombatScene = {
     this.game.state.start('mainmenu');
 
   },
-
-  seeker: require('../characters/character.js'),
-  enemy: require('../characters/character.js'),
-  hpBarSeeker: require('../interface/statusBar.js'),
-  hpBarEnemy: require('../interface/statusBar.js'),
-  timeActionBar: require('../interface/statusBar.js'),
-
+  seeker: null,
+  enemy: null,
   // Buttons functions
   attackKey: function () {
     if (true) {
@@ -52,15 +51,15 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
     //render seeker
-    this.seeker = this.game.add.seeker(0, -8, 'Carlos León', new Stats(10, 3, 1, 20), 'seekerAnimations');
+    this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(10, 3, 1, 20, 1), 'seekerAnimations');
     this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 5000, 5000);
-    this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 5000, 5000);
+    this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000);
+    this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000);
     this.seeker.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]);
     this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
     //render enemy
 
-    this.enemy = this.game.add.character(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10), 'spiderAnimations');
+    this.enemy = this.game.add.character(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations');
     this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
     this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
     this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
@@ -70,38 +69,14 @@ var CombatScene = {
     this.seeker.idle();
 
     //interface
-    var mask = this.game.add.sprite(0, 0, 'interface');
+    this.game.add.seekerCombatHUD(0,0,this.seeker,this.enemy);
+    
 
-    //attackbutton
-    this.game.add.sprite(25, 132, 'attackIcon').tint = 0x676767;
-    let a = this.game.add.reactiveBar(this.game.world, 25, 132, 'attackIcon', function () {
-      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
-    }, this.seeker, this.seeker.coolDown.attack.while).maskAngle = -90;
-
-    //blockbutton
-    this.game.add.sprite(44, 132, 'blockIcon').tint = 0x676767;
-    this.game.add.reactiveBar(this.game.world, 44, 132, 'blockIcon', function () {
-
-      return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
-    }, this.seeker, this.seeker.coolDown.block.while).maskAngle = -90;
-
-    /*var healthBarSeeker = this.game.add.healthBar(this.game, 0,100,this.seeker,'healthBar','damageBar','emptyBar',
-        {},1000,100);//this.game.add.circleWithSectors(193, 31, 7, [0, Math.PI * 2 / 4, Math.PI * 4 / 3], [0xFF0000, 0x0000FF, 0x00FF00], [0.5, 0.5, 0.6], false, 50);*/
-<<<<<<< HEAD:src/js/combat_scene.js
-    var style = {
-      font: "Minecraft",
-      fill: "#fff",
-      fontSize: 10
-    };
-    var textMonster = this.game.add.richText(120, 60, 50, Color('#FF0000', Tremble(1,5,1,'GRAAHH!!')), style);
-    var textSeeker = this.game.add.reactiveRichText(49.3, 60, 50, Color('#000000', VariableNumber(function(){return this.hp}, this.seeker, 1000)), style,[this.seeker.onHpChange]);
-    this.game.add.healthBar(0, 0, this.seeker, 'emptyBar','healBar','damageBar','healthBar', style, 2000, 500);
-=======
     var style = require('../../assets/fonts/style.json');
-    var textMonster = this.game.add.richText(120, 60, 50, Color('#FF0000', Tremble(1,5,1,'GRAAHH!!')), style);
-    var textSeeker = this.game.add.richText(0, 60, 50, Color('#000000', Tremble(0.1,1,1,'Are you a spider?')), style);
-    console.log(textSeeker);
->>>>>>> sistemacooldown:src/js/scenes/combat_scene.js
+
+    
+    var textMonster = this.game.add.richText(120, 60, 50, textFunctions.Color('#FF0000', textFunctions.Tremble(1,5,1,'GRAAHH!!')), style);
+    var textSeeker = this.game.add.richText(0, 60, 50, textFunctions.Color('#000000', textFunctions.Tremble(0.1,1,1,'Are you a spider?')), style);
     var g = this.game.add.graphics(1, 0);
     for (let i = 0; i < 75; i++) {
       g.beginFill(0xffffff);
@@ -128,7 +103,7 @@ var CombatScene = {
 
     // prueba texto
 
-    this.game.input.onDown.add(gofull, this);//FULLSCREEN
+    //this.game.input.onDown.add(gofull, this);//FULLSCREEN
 
     //var text = this.game.add.text(50, 50, "jeje", style);
 

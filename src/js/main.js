@@ -1,7 +1,6 @@
 'use strict';
 
 //PREGUNTAS
-
 // Aún se deben controlar los sonidos
 
 var IntroScene = require('./scenes/intro_scene.js');
@@ -14,7 +13,6 @@ var CreditsScene = require('./scenes/credits_scene.js');
  var webFontLoading = {
   active: function() {
     var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
-    
     webFontLoading.game = game;
     game.state.add('boot', BootScene);
     game.state.add('preloader', PreloaderScene);
@@ -55,7 +53,6 @@ var PreloaderScene = {
     // enable crisp rendering
     this.game.renderer.renderSession.roundPixels = true;
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
-
     this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
     this.loadingBar.anchor.setTo(0, 0.5);
     this.load.setPreloadSprite(this.loadingBar);
@@ -78,6 +75,12 @@ var PreloaderScene = {
         //Items
         this.game.load.image('itemIcon','assets/images/interface/itemIcon.png');
         this.game.load.image('itemIcon2','assets/images/interface/itemIcon2.png');
+        //Stats Icons
+        this.game.load.image('damageIcon','assets/images/interface/damageIcon.png');
+        this.game.load.image('defenseIcon','assets/images/interface/defenseIcon.png');
+        this.game.load.image('speedIcon','assets/images/interface/speedIcon.png');
+        this.game.load.image('healthIcon','assets/images/interface/healthIcon.png');
+        this.game.load.image('perceptionIcon','assets/images/interface/perceptionIcon.png');
       //BACKGROUNDS
       this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
@@ -106,7 +109,7 @@ var PreloaderScene = {
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 
-      PreloaderScene.game.state.start('intro');
+      PreloaderScene.game.state.start('combat');
   }
 
 };
@@ -115,3 +118,70 @@ WebFont.load(webFontLoading);
 window.onload = function () {
   
 };
+
+// MIRAR COMO METER ESTO EN OTRO .JS Y EJECUTARLO DESDE AQUI.
+var Phaser = require('phaser');
+
+var Character = require('./characters/character');
+var Seeker = require('./characters/seeker');
+var Bar = require('./interface/bar');
+var CircleWithSectors = require('./interface/circleWithSectors');
+var HealthBar = require('./interface/healthBar');
+var ReactiveBar = require('./interface/reactiveBar');
+var ReactiveContinuousBar = require('./interface/reactiveContinuousBar');
+var ReactiveRichText = require('./interface/reactiveRichText');
+var RichText = require('./interface/richText');
+var ActionButton = require('./interface/actionButton');
+var SeekerCombatHUD = require('./interface/seekerCombatHUD');
+/**
+ * 
+ */
+Phaser.GameObjectFactory.prototype.character = function (x, y, name, stats, spriteSheet, emitter, group) {
+    if (group === undefined) { group = this.world; }
+    return group.add(new Character(this.game, x, y, name, stats, spriteSheet, emitter));
+}
+
+Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, spriteSheet, emitter, group) {
+    if (group === undefined) { group = this.world; }
+    return group.add(new Seeker(this.game, x, y, name, stats, spriteSheet, emitter));
+}
+
+Phaser.GameObjectFactory.prototype.bar = function (x, y, key, frame, parent = this.game.world) {
+    return new Bar(this.game, parent, x, y, key, frame);
+}
+
+Phaser.GameObjectFactory.prototype.circleWithSectors = function (x, y, radius, angles, colors, alphas, antiClockWise, segments, group) {
+    if (group === undefined) { group = this.world; }
+    return group.add(new CircleWithSectors(this.game, x, y, radius, angles, colors, alphas, antiClockWise, segments));
+}
+
+Phaser.GameObjectFactory.prototype.healthBar = function (x, y, character, voidKey, healKey, damageKey, healthKey, style, delay, speed, voidFrame = null, healFrame = null, damageFrame = null, healthFrame = null, parent = this.game.world) {
+    return new HealthBar(this.game, x, y, character, voidKey, healKey, damageKey, healthKey, style, delay, speed, voidFrame, healFrame, damageFrame, healthFrame, parent);
+}
+
+Phaser.GameObjectFactory.prototype.reactiveBar = function (parent, x, y, key, percentageFunction, functionContext, signal, frame) {
+    return new ReactiveBar(this.game, parent, x, y, key, percentageFunction, functionContext, signal, frame);
+}
+
+Phaser.GameObjectFactory.prototype.reactiveContinuousBar = function (parent, x, y, key, percentageFunction, functionContext, signal, decreaseDelay, increaseDelay, decreaseSpeed, increaseSpeed, frame = null) {
+    return new ReactiveContinuousBar(this.game, parent, x, y, key, percentageFunction, functionContext, signal, decreaseDelay, increaseDelay, decreaseSpeed, increaseSpeed, frame);
+}
+
+Phaser.GameObjectFactory.prototype.reactiveRichText = function (x, y, lineWidth, text, style, signal, group) {
+    if (group === undefined) { group = this.world; }
+    return group.add(new ReactiveRichText(this.game, x, y, lineWidth, text, style, group, signal));
+}
+
+Phaser.GameObjectFactory.prototype.richText = function (x, y, lineWidth, text, style = {}, group = this.game.world) {
+    return new RichText(this.game, x, y, lineWidth, text, style, group);
+}
+
+Phaser.GameObjectFactory.prototype.actionButton = function(x, y, buttondKey, barKey, callback, callbackArguments, callbackContext, percentageFunction, percentageFunctionContext, timeFunction, timeFunctionContext,
+    barSignal, totalRechargeSignal, backgroundTint, frameColorOver, frameColorOut, frameColorDown, frameColorDisabled, overFrame=null, outButtonFrame=null, downButtonFrame=null, upButtonFrame=null, barFrame=null, parent = this.game.world) {
+    return new ActionButton(this.game, parent, x, y, buttondKey, barKey, callback, callbackArguments, callbackContext, percentageFunction, percentageFunctionContext, timeFunction, timeFunctionContext,
+        barSignal, totalRechargeSignal, backgroundTint, frameColorOver, frameColorOut, frameColorDown, frameColorDisabled, overFrame, outButtonFrame, downButtonFrame, upButtonFrame, barFrame);
+}
+
+Phaser.GameObjectFactory.prototype.seekerCombatHUD = function(x, y, seeker, enemy, parent = this.game.world) {
+    return new SeekerCombatHUD(this.game, parent, x, y, seeker, enemy);
+}

@@ -1,12 +1,11 @@
 {
   "version": "0.0.0",
-  "name": "CACOTAGORDA",
+  "name": "awesome-game",
   "author": "gituser",
   "license": "CC-BY-NC-SA-4.0",
   "repository": "gituser/awesome-game",
   "dependencies": {
-    "@pixi/filter-pixelate": "^2.5.0",
-    "browser-sync": "^2.26.3",
+    "browser-sync": "*",
     "browserify": "*",
     "del": "*",
     "gulp": "*",
@@ -17,10 +16,6 @@
     "phaser": "2.6.0",
     "vinyl-source-stream": "*",
     "watchify": "*",
-    "webfontloader": "^1.6.28",
-    "webfonts-loader": "^4.1.0"
-  },
-  "devDependencies": {
-    "webfont": "^8.1.4"
+    "webfontloader": "^1.6.28"
   }
 }

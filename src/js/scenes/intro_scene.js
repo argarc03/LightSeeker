@@ -1,6 +1,5 @@
 'use strict';
 
-
 var IntroScene = {
   MainMenuScene: function () {
     this.game.state.start('mainmenu');
