@@ -1,87 +1,83 @@
 'use strict';
 
-require('./buttonMenu');
+var ButtonMenu = require('./buttonMenu');
+
+var OptionMenu = function (game, buttonsMenu, parent) {
+    Phaser.Group.call(this, game, parent);
+
+    buttonsMenu.forEach(element => {
+        let b = this.add(new ButtonMenu(this.game, ...element.slice(0, element.length - 1)));
+        b.onInputOver.add(this.over, this, [b]);
+        b.input.useHandCursor = false;
+    }, this);
+    buttonsMenu.forEach(element => {
+        let child = this.children.find(function (element2) { return element2.name === element[0] });
+
+        child.leftButton =
+            this.children.find(function (element2) { return element2.name === element[element.length - 1].leftButton });
+        child.rightButton =
+            this.children.find(function (element2) { return element2.name === element[element.length - 1].rightButton });
+        child.upButton =
+            this.children.find(function (element2) { return element2.name === element[element.length - 1].upButton });
+        child.downButton =
+            this.children.find(function (element2) { return element2.name === element[element.length - 1].downButton });
+    }, this);
+    this.currentButton = this.children[0]; //currentButton no está bien asignado
+}
+
+OptionMenu.prototype = Object.create(Phaser.Group.prototype);
+OptionMenu.prototype.constructor = OptionMenu;
 
 
-class OptionMenu extends Phaser.Group {
-    constructor(game, buttonsMenu, parent) {
-        super(game, parent);
-
-        buttonsMenu.forEach(element => {
-            let b = this.add(new ButtonMenu(this.game, ...element.slice(0, element.length - 1)));
-            b.onInputOver.add(this.over, this, [b]);
-            b.input.useHandCursor = false;
-        }, this);
-        console.log('NOOOOOOOOO', this.children[0]);
-        buttonsMenu.forEach(element => {
-            let child = this.children.find(function (element2) { return element2.name === element[0] });
-
-            child.leftButton =
-                this.children.find(function (element2) { return element2.name === element[element.length - 1].leftButton });
-            child.rightButton =
-                this.children.find(function (element2) { return element2.name === element[element.length - 1].rightButton });
-            child.upButton =
-                this.children.find(function (element2) { return element2.name === element[element.length - 1].upButton });
-            child.downButton =
-                this.children.find(function (element2) { return element2.name === element[element.length - 1].downButton });
-        }, this);
-        console.log('SIIIIIII', this.children[0]);
-        this.currentButton = this.children[0]; //currentButton no está bien asignado
+OptionMenu.prototype.goLeft = function() {
+    if (this.currentButton.goLeft() !== undefined) {
+        this.currentButton.onInputOut.dispatch();
+        this.currentButton = this.currentButton.goLeft();
+        this.currentButton.onInputOver.dispatch();
     }
-
-    goLeft() {
-        if (this.currentButton.goLeft() !== undefined) {
-            this.currentButton.onInputOut.dispatch();
-            this.currentButton = this.currentButton.goLeft();
-            this.currentButton.onInputOver.dispatch();
-        }
+}
+OptionMenu.prototype.goRight = function() {
+    if (this.currentButton.goRight() !== undefined) {
+        this.currentButton.onInputOut.dispatch();
+        this.currentButton = this.currentButton.goRight();
+        this.currentButton.onInputOver.dispatch();
     }
-    goRight() {
-        if (this.currentButton.goRight() !== undefined) {
-            this.currentButton.onInputOut.dispatch();
-            this.currentButton = this.currentButton.goRight();
-            this.currentButton.onInputOver.dispatch();
-        }
+}
+OptionMenu.prototype.goUp = function() {
+    if (this.currentButton.goUp() !== undefined) {
+        this.currentButton.onInputOut.dispatch();
+        this.currentButton = this.currentButton.goUp();
+        this.currentButton.onInputOver.dispatch();
     }
-    goUp() {
-        if (this.currentButton.goUp() !== undefined) {
-            this.currentButton.onInputOut.dispatch();
-            this.currentButton = this.currentButton.goUp();
-            this.currentButton.onInputOver.dispatch();
-        }
-    }
-    goDown() {
-        if (this.currentButton.goDown() !== undefined) {
-            this.currentButton.onInputOut.dispatch();
-            this.currentButton = this.currentButton.goDown();
-            this.currentButton.onInputOver.dispatch();
-        }
-    }
-
-    over(button) {
-        if (this.children.includes(button) && this.currentButton !== button) {
-            this.currentButton.onInputOut.dispatch();
-            this.currentButton = button;
-        }
-    }
-
-    select() {
-        this.currentButton.select();
-    }
-    back() {
-        this.buttons.forEach(element => {
-            element.deactivate();
-        });
-    }
-
-    enter() {
-        this.buttons.forEach(element => {
-            element.activate();
-        });
+}
+OptionMenu.prototype.goDown = function() {
+    if (this.currentButton.goDown() !== undefined) {
+        this.currentButton.onInputOut.dispatch();
+        this.currentButton = this.currentButton.goDown();
+        this.currentButton.onInputOver.dispatch();
     }
 }
 
-Phaser.GameObjectFactory.prototype.optionMenu = function (buttonsMenu, group) {
-    if (group === undefined) { group = this.world; }
-    return group.add(new OptionMenu(this.game, buttonsMenu, group));
+OptionMenu.prototype.over = function(button) {
+    if (this.children.includes(button) && this.currentButton !== button) {
+        this.currentButton.onInputOut.dispatch();
+        this.currentButton = button;
+    }
 }
+
+OptionMenu.prototype.select = function() {
+    this.currentButton.select();
+}
+OptionMenu.prototype.back = function() {
+    this.buttons.forEach(element => {
+        element.deactivate();
+    });
+}
+
+OptionMenu.prototype.enter = function() {
+    this.buttons.forEach(element => {
+        element.activate();
+    });
+}
+
+module.exports = OptionMenu;
