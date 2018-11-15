@@ -8,7 +8,7 @@ var MainMenuScene = require('./scenes/mainmenu_scene.js');
 var CombatScene = require('./scenes/combat_scene.js');
 var EventScene = require('./scenes/event_scene.js');
 var CreditsScene = require('./scenes/credits_scene.js');
-
+var SettingsScene = require('./scenes/settings_scene.js');
 
  var webFontLoading = {
   active: function() {
@@ -21,6 +21,7 @@ var CreditsScene = require('./scenes/credits_scene.js');
     game.state.add('combat', CombatScene);
     game.state.add('event', EventScene);
     game.state.add('credits', CreditsScene);
+    game.state.add('settings', SettingsScene);
     game.state.start('boot');
   },
   custom: {
@@ -58,11 +59,13 @@ var PreloaderScene = {
     this.load.setPreloadSprite(this.loadingBar);
     // TODO: load here the assets for the game
     //IMAGES
+        this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
       //INTERFACE
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         //Cursor
         this.game.load.image('cursor','assets/images/interface/cursor.png');
         this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
+        this.game.load.image('selectCursor','assets/images/interface/selectCursor.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');
@@ -81,13 +84,16 @@ var PreloaderScene = {
         this.game.load.image('speedIcon','assets/images/interface/speedIcon.png');
         this.game.load.image('healthIcon','assets/images/interface/healthIcon.png');
         this.game.load.image('perceptionIcon','assets/images/interface/perceptionIcon.png');
+        //Buttons
+        this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
       //BACKGROUNDS
-      this.game.load.image('imagenmenu', 'temporal%20images/Village.jpg');
+      this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
       this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
+      this.game.load.spritesheet('crystalShines','assets/images/particles/crystalShines.png',3,3);
       //CHARACTERS
         //Seeker
         this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
@@ -99,10 +105,13 @@ var PreloaderScene = {
       this.load.audio('attacking', ['assets/sounds/attacking.wav']);
       this.load.audio('preAttacking', ['assets/sounds/preAttacking.wav']);
       this.load.audio('blocking', ['assets/sounds/blocking.wav']);
+      this.load.audio('button', ['assets/sounds/buttonPressed.wav']);
       //Music
       this.load.audio('boss', ['assets/music/bosstheme.wav']);
       this.load.audio('firetheme', ['assets/music/firetheme.wav']);
-
+      this.load.audio('shoptheme', ['assets/music/shoptheme.wav']);
+      this.load.audio('watertheme', ['assets/music/watertheme.wav']);
+      this.load.audio('credits', ['assets/music/creditstheme.wav']);
 
   },
 
@@ -119,6 +128,19 @@ window.onload = function () {
   
 };
 
+var OptionMenu = require('./interface/optionMenu');
+var ButtonMenu = require('./interface/buttonMenu');
+
+Phaser.GameObjectFactory.prototype.optionMenu = function (buttonsMenu, group) {
+  if (group === undefined) { group = this.world; }
+  return group.add(new OptionMenu(this.game, buttonsMenu, group));
+}
+
+
+Phaser.GameObjectFactory.prototype.buttonMenu = function (name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
+  if (group === undefined) { group = this.world; }
+  return group.add(new ButtonMenu(this.game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
+}
 // MIRAR COMO METER ESTO EN OTRO .JS Y EJECUTARLO DESDE AQUI.
 var Phaser = require('phaser');
 

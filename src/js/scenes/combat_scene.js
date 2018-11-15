@@ -22,7 +22,7 @@ var CombatScene = {
   attackKey: function () {
     if (true) {
       this.seeker.attack(this.enemy);
-      this.game.add.audio('preAttacking',0.1).play();
+      this.game.add.audio('preAttacking', 0.1).play();
     }
   },
   blockKey: function () {
@@ -48,6 +48,7 @@ var CombatScene = {
 
   create: function () {
 
+
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
     //render seeker //tope de nombre caracteres = 9
@@ -65,12 +66,27 @@ var CombatScene = {
     this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
     this.enemy.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]);
     this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
-    this.enemy.idle();
     this.seeker.idle();
-
+    this.enemy.idle();
     //interface
     this.game.add.seekerCombatHUD(0,0,this.seeker,this.enemy);
     
+
+    //transicion de entrada a combate
+    var filter = this.game.add.filter('Pixelate', 800, 600);
+    this.game.world.filters = [filter];
+    filter.sizeX=1000;
+    filter.sizeY = 1000;
+    var tween = this.game.add.tween(filter).to({ sizeX: 1, sizeY: 1 }, 2000, "Quart.easeOut").start();
+    tween.onComplete.add(function(){this.game.world.filters = null;
+    // Controls
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
+
+    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);},this);
 
     var style = require('../../assets/fonts/style.json');
 
@@ -92,46 +108,40 @@ var CombatScene = {
       ge.beginFill(0x000000);
       ge.drawRect(2 * i + 1, 0, 1, 1);
     }
-    // Controls
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
-    this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy, this);
-    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
-    this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
 
-    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);
-
-    // prueba texto
-
-    //this.game.input.onDown.add(gofull, this);//FULLSCREEN
+    //para ir a fullscreen pulsar F4
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
 
     //var text = this.game.add.text(50, 50, "jeje", style);
 
     //music
     var music = this.game.add.audio('firetheme', 0.1, true);
+    this.game.sound.stopAll();
     music.play();
 
     //prueba cursor
-     selector = this.game.add.sprite(50, 50, 'cursor');
+    selector = this.game.add.sprite(50, 50, 'cursor');
 
   },
   update: function () {
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
+  },
+
+  goFullscreen: function() {
+
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
+  
   }
 };
 
 
-function gofull() {
 
-  if (this.game.scale.isFullScreen) {
-    this.game.scale.stopFullScreen();
-  }
-  else {
-    this.game.scale.startFullScreen(false);
-  }
-
-}
 
 module.exports = CombatScene;
