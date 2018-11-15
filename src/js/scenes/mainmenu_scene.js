@@ -6,18 +6,40 @@ var selector;
 
 var MainMenuScene = {
   EventScene: function () {
-    this.game.state.start('event');
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function(){this.game.state.start('event');}, this);
   },
 
   CombatScene: function () {
-    this.game.state.start('combat');
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function(){this.game.state.start('combat');}, this);
   },
 
   CreditsScene: function () {
-    this.game.state.start('credits');
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function(){this.game.state.start('credits')}, this);
   },
 
+  SettingsScene: function () {
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function(){this.game.state.start('settings')}, this);
+  },
+
+
+
   create: function () {
+    //fadeIn
+    this.camera.flash('#000000');
+
+    
     var style = require('../../assets/fonts/style.json');
     //background
     this.game.add.image(0,0,'mainmenubackground');
@@ -32,14 +54,15 @@ var MainMenuScene = {
 
     //version
     var text = this.game.add.richText(176, 140, 80, "v 1.0", style);
-    //exit
+
+    //buttons
     // name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group
     var a = this.game.add.optionMenu([['botonDeAbajo',85,100,'button',this.EventScene,this,1,0,2,1,{up: 'botonDeArriba'}],
     ['botonDeArriba',85,60,'button',this.CombatScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
     ['botonCredits',125,60,'button',this.CreditsScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
-    ['botonShop',45,60,'button',this.CreditsScene,this,1,0,2,1,{down: 'botonDeAbajo'}]
+    ['botonSettings',45,60,'button',this.SettingsScene,this,1,0,2,1,{down: 'botonDeAbajo'}]
     ]);
-    console.log(a);
+    //console.log(a);
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
@@ -75,14 +98,12 @@ var MainMenuScene = {
   },
 
   goFullscreen: function() {
-
     if (this.game.scale.isFullScreen) {
       this.game.scale.stopFullScreen();
     }
     else {
       this.game.scale.startFullScreen(false);
     }
-  
   }
 };
 

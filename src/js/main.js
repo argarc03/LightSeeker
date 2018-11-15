@@ -9,7 +9,7 @@ var MainMenuScene = require('./scenes/mainmenu_scene.js');
 var CombatScene = require('./scenes/combat_scene.js');
 var EventScene = require('./scenes/event_scene.js');
 var CreditsScene = require('./scenes/credits_scene.js');
-
+var SettingsScene = require('./scenes/settings_scene.js');
 
  var webFontLoading = {
   active: function() {
@@ -22,6 +22,7 @@ var CreditsScene = require('./scenes/credits_scene.js');
     game.state.add('combat', CombatScene);
     game.state.add('event', EventScene);
     game.state.add('credits', CreditsScene);
+    game.state.add('settings', SettingsScene);
     game.state.start('boot');
   },
   custom: {
@@ -100,19 +101,20 @@ var PreloaderScene = {
       this.load.audio('attacking', ['assets/sounds/attacking.wav']);
       this.load.audio('preAttacking', ['assets/sounds/preAttacking.wav']);
       this.load.audio('blocking', ['assets/sounds/blocking.wav']);
+      this.load.audio('button', ['assets/sounds/buttonPressed.wav']);
       //Music
       this.load.audio('boss', ['assets/music/bosstheme.wav']);
       this.load.audio('firetheme', ['assets/music/firetheme.wav']);
       this.load.audio('shoptheme', ['assets/music/shoptheme.wav']);
       this.load.audio('watertheme', ['assets/music/watertheme.wav']);
-
+      this.load.audio('credits', ['assets/music/creditstheme.wav']);
 
   },
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 
-      PreloaderScene.game.state.start('mainmenu');
+      PreloaderScene.game.state.start('intro');
   }
 
 };
