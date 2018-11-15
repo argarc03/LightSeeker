@@ -73,12 +73,13 @@ var CombatScene = {
     
 
     //transicion de entrada a combate
+    /*
     var filter = this.game.add.filter('Pixelate', 800, 600);
     this.game.world.filters = [filter];
     filter.sizeX=1000;
     filter.sizeY = 1000;
     var tween = this.game.add.tween(filter).to({ sizeX: 1, sizeY: 1 }, 2000, "Quart.easeOut").start();
-    tween.onComplete.add(function(){this.game.world.filters = null;
+    tween.onComplete.add(function(){this.game.world.filters = null;*/
     // Controls
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);
@@ -86,7 +87,7 @@ var CombatScene = {
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
 
-    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);},this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);//},this);
 
     var style = require('../../assets/fonts/style.json');
 

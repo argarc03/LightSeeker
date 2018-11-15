@@ -128,19 +128,8 @@ window.onload = function () {
   
 };
 
-var OptionMenu = require('./interface/optionMenu');
-var ButtonMenu = require('./interface/buttonMenu');
-
-Phaser.GameObjectFactory.prototype.optionMenu = function (buttonsMenu, group) {
-  if (group === undefined) { group = this.world; }
-  return group.add(new OptionMenu(this.game, buttonsMenu, group));
-}
 
 
-Phaser.GameObjectFactory.prototype.buttonMenu = function (name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
-  if (group === undefined) { group = this.world; }
-  return group.add(new ButtonMenu(this.game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
-}
 // MIRAR COMO METER ESTO EN OTRO .JS Y EJECUTARLO DESDE AQUI.
 var Phaser = require('phaser');
 
@@ -157,6 +146,8 @@ var ActionButton = require('./interface/actionButton');
 var SeekerCombatHUD = require('./interface/seekerCombatHUD');
 var ScrollText = require('./interface/scrollText');
 var EventHUD = require('./interface/eventHUD');
+var OptionMenu = require('./interface/optionMenu');
+var ButtonMenu = require('./interface/buttonMenu');
 /**
  * 
  */
@@ -217,3 +208,14 @@ Phaser.GameObjectFactory.prototype.scrollText = function(x,y,width,height,text, 
 Phaser.GameObjectFactory.prototype.eventHUD = function(seeker, text, options, parent = this.game.world) {
     return new EventHUD(this.game, parent, seeker, text, options);
 }
+
+Phaser.GameObjectFactory.prototype.optionMenu = function (buttonsMenu, group) {
+    if (group === undefined) { group = this.world; }
+    return group.add(new OptionMenu(this.game, buttonsMenu, group));
+  }
+  
+  
+  Phaser.GameObjectFactory.prototype.buttonMenu = function (name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
+    if (group === undefined) { group = this.world; }
+    return group.add(new ButtonMenu(this.game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
+  }
