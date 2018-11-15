@@ -8,6 +8,7 @@ var ActionButton = function(game, parent, x, y, buttondKey, barKey, callbacks, c
     Phaser.Group.call(this, game, parent);
     this.button = this.add(new Phaser.Button(game, x, y, buttondKey, function(){}, this, overFrame, outButtonFrame, downButtonFrame, upButtonFrame));
     this.button.tint = backgroundTint;
+    this.button.input.useHandCursor = false;
     this.bar = this.add(new ReactiveBar(game, parent, x, y, barKey, percentageFunction, percentageFunctionContext, barSignal, barFrame));
     this.bar.maskAngle = -90;
     this.externalFrame = this.add(new Phaser.Graphics(game, x, y));

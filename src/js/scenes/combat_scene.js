@@ -50,7 +50,7 @@ var CombatScene = {
 
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
-    //render seeker
+    //render seeker //tope de nombre caracteres = 9
     this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(10, 3, 1, 20, 1), 'seekerAnimations');
     this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000);
