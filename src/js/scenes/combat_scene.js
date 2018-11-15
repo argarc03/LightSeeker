@@ -47,7 +47,8 @@ var CombatScene = {
   },
 
   create: function () {
-
+    //fadeIn
+    this.camera.flash('#000000');
 
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
