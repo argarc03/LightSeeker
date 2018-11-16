@@ -17,7 +17,6 @@ var SeekerActionFactory = require('./actionSeekerFactory.js');
 var Seeker = function (game, x, y, name, stats, spriteSheet) {
     Character.call(this, game, x, y, name, stats, spriteSheet);
     this.addAction = new SeekerActionFactory(this);
-    this.gems = 999;
 }
 
 Seeker.prototype = Object.create(Character.prototype);

@@ -3,7 +3,6 @@
 var ScrollText = require('./scrollText');
 var HealthBar = require('./healthBar');
 var ReactiveRichText = require('./reactiveRichText');
-var RichText = require('./richText');
 var textFunctions = require('./textFunctions');
 
 var EventHUD = function(game, parent, seeker, text, options) {
@@ -14,10 +13,10 @@ var EventHUD = function(game, parent, seeker, text, options) {
     }
     let style = require('../../assets/fonts/style.json');
     style.align = 'left';
-    this.text = this.add(new ScrollText(game, this,70,28,119,90, text, style));
-    this.frame = this.add(new Phaser.Sprite(game, 0, 0, 'eventinterface'));
-    this.healthBar = this.add(new HealthBar(game,78,1, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style, 100, 100,this));
-    
+    this.text = this.add(new ScrollText(game, this,0,0,150,100, text, style));
+
+    this.healthBar = this.add(new HealthBar(game,2,121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style, 100, 100,this));
+   
     var style2 = {"font": "Minecraft", "fill": "#000000", "fontSize": 10 };
     this.name = this.add(new ReactiveRichText(game,3,0,80,textFunctions.Fun(function() {
         return this.name;
@@ -38,35 +37,16 @@ var EventHUD = function(game, parent, seeker, text, options) {
         return this.stats.defense.toString();
     }, seeker), style2, this, seeker.stats.onDefenseChange));
 
-    this.speedIcon = this.add(new Phaser.Sprite(game,69,14,'speedIcon'));
-    this.speedNumber = this.add(new ReactiveRichText(game,81,13,11,textFunctions.Fun(function() {
+    this.speedIcon = this.add(new Phaser.Sprite(game,13,24,'speedIcon'));
+    this.speedNumber = this.add(new ReactiveRichText(game,25,23,11,textFunctions.Fun(function() {
         return this.stats.speed.toString();
     }, seeker), style2, this, seeker.stats.onSpeedChange));
 
-    this.perceptionIcon = this.add(new Phaser.Sprite(game,88,14,'perceptionIcon'));
-    this.perceptionNumber = this.add(new ReactiveRichText(game,100,13,11,textFunctions.Fun(function() {
+    this.perceptionIcon = this.add(new Phaser.Sprite(game,38,24,'perceptionIcon'));
+    this.perceptionNumber = this.add(new ReactiveRichText(game,50,23,11,textFunctions.Fun(function() {
         return this.stats.perception.toString();
     }, seeker), style2, this, seeker.stats.onPerceptionChange));
-
-    this.gemIcon = this.add(new Phaser.Sprite(game, 68, 2, 'gemIcon'));
-    this.gemNumber = this.add(new ReactiveRichText(game, 50, 0, 15, textFunctions.Fun(function () {
-    return this.gems.toString();
-    }, seeker), style2, this, seeker.stats.onPerceptionChange));
-
-    this.option1back = this.add(new Phaser.Sprite(game,0,124,'optionBack'));
-    this.option2back = this.add(new Phaser.Sprite(game,100,124,'optionBack'));
-    this.option3back = this.add(new Phaser.Sprite(game,0,137,'optionBack'));
-    this.option4back = this.add(new Phaser.Sprite(game,100,137,'optionBack'));
-
-    this.option1 = this.add(new RichText(game,2,124,100,'1. Buscar', style));
-    this.option2 = this.add(new RichText(game,102,124,100,'2. No hacer nada', style));
-    this.option3 = this.add(new RichText(game,2,137,100,'3. Irse a la wea', style));
-    this.option4 = this.add(new RichText(game,102,137,100,'4. Inspeccionarlo', style));
-
-    this.imageFrame = this.add(new Phaser.Sprite(game,2,42,'eventImage'));
     
-
-
 }
 
 EventHUD.prototype = Object.create(Phaser.Group.prototype);
