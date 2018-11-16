@@ -16,8 +16,6 @@ Enemy.prototype.act = function() {
     this[this.actionPattern.currentAction](this.seeker);
     this.game.time.events.add(this[this.actionPattern.currentAction].totalTime()*1000, this.act, this);
     this.actionPattern.nextAction;
-    console.log(this.actionPattern.currentAction,this[this.actionPattern.currentAction].totalTime());
-    console.log(this);
 }
 
 module.exports = Enemy;

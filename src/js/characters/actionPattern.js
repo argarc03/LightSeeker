@@ -19,7 +19,7 @@ ActionPattern.prototype.actionNumber = function (number) {
     number = (this._currentIndex + number) % this._totalActions;
     let i = number;
     let j = 0;
-    while (i > this._pattern[j].repetitions) {
+    while (i >= this._pattern[j].repetitions) {
         i -= this._pattern[j].repetitions;
         j++;
     }

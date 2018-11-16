@@ -33,10 +33,7 @@ var TimeCalculations = {
         }
     },
     totalIdleTime: function(){
-        if(this.animations.currentAnim.name == 'idle'){
-            return (this.animations._anims.idle._frames.length)/this.stats.frameRate;
-        } else
-            return NaN;
+        return (this.animations._anims.idle._frames.length)/this.stats.frameRate;
     },
     currentIdleTime: function(){
         if(this.animations.currentAnim.name == 'idle'){

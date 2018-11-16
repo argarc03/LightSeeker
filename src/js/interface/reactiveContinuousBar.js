@@ -18,7 +18,6 @@ ReactiveContinuousBar.prototype.constructor = ReactiveContinuousBar;
 
 ReactiveContinuousBar.prototype.changePercentage = function() {
     if (this.percentageFunction() > this.percentage) {
-        console.log('sube');
         if (!this.increasing) {
             if (this.timer !== null) {
                 this.timer.stops(true);
@@ -30,7 +29,6 @@ ReactiveContinuousBar.prototype.changePercentage = function() {
             this.timer.start();
         }
     } else {
-        console.log('baja');
         if (!this.decreasing) {
             if (this.timer !== null) {
                 this.timer.stops(true);
