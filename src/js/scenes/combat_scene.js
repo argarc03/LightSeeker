@@ -51,7 +51,7 @@ var CombatScene = {
     this.camera.flash('#000000');
 
     //render background
-    var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
+    var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
     //render seeker //tope de nombre caracteres = 9
     this.seeker = this.game.add.seeker(0, -8, '99', new Stats(10, 3, 1, 20, 1), 'seekerAnimations');
     this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);

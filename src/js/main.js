@@ -1,7 +1,8 @@
 'use strict';
 
 //PREGUNTAS
-// Aún se deben controlar los sonidos
+// - ¿Hay alguna manera para evitar la carga repetida? Quiero que, cuando tenga absolutamente todo cargado, se de a start.
+//   y poner pantalla de carga(sin conocer porcentaje jeje).
 
 var IntroScene = require('./scenes/intro_scene.js');
 var MainMenuScene = require('./scenes/mainmenu_scene.js');
@@ -13,6 +14,7 @@ var SettingsScene = require('./scenes/settings_scene.js');
  var webFontLoading = {
   active: function() {
     var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
+    
     webFontLoading.game = game;
     game.state.add('boot', BootScene);
     game.state.add('preloader', PreloaderScene);
@@ -22,6 +24,7 @@ var SettingsScene = require('./scenes/settings_scene.js');
     game.state.add('event', EventScene);
     game.state.add('credits', CreditsScene);
     game.state.add('settings', SettingsScene);
+
     game.state.start('boot');
   },
   custom: {
@@ -54,14 +57,17 @@ var PreloaderScene = {
     // enable crisp rendering
     this.game.renderer.renderSession.roundPixels = true;
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
-    this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
+    this.loadingBar = this.game.add.sprite(0, 0, 'preloader_bar');
     this.loadingBar.anchor.setTo(0, 0.5);
     this.load.setPreloadSprite(this.loadingBar);
     // TODO: load here the assets for the game
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
       //INTERFACE
+        this.game.load.image('eventImage','assets/images/interface/eventImage.png');
+        //HUDs
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
+        this.game.load.image('eventinterface','assets/images/interface/eventinterfaceback.png');
         //Cursor
         this.game.load.image('cursor','assets/images/interface/cursor.png');
         this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
@@ -84,11 +90,14 @@ var PreloaderScene = {
         this.game.load.image('speedIcon','assets/images/interface/speedIcon.png');
         this.game.load.image('healthIcon','assets/images/interface/healthIcon.png');
         this.game.load.image('perceptionIcon','assets/images/interface/perceptionIcon.png');
+        this.game.load.image('gemIcon','assets/images/interface/gemIcon.png');
         //Buttons
         this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
+        this.game.load.image('optionBack','assets/images/interface/optionback.png');
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
+      this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
@@ -112,13 +121,14 @@ var PreloaderScene = {
       this.load.audio('shoptheme', ['assets/music/shoptheme.wav']);
       this.load.audio('watertheme', ['assets/music/watertheme.wav']);
       this.load.audio('credits', ['assets/music/creditstheme.wav']);
+      this.load.audio('mainmenu', ['assets/music/mainmenutheme.wav']);
 
   },
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 
-      PreloaderScene.game.state.start('combat');
+      PreloaderScene.game.state.start('event');
   }
 
 };
