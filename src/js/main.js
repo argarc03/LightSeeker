@@ -3,7 +3,8 @@
 //PREGUNTAS
 // - ¿Cómo meter filtros? (Pixelate) (Antes se podía..)
 // - ¿Cómo hacer que se ejecute entero directamente un .js en el main?
-// - 
+// - ¿Hay alguna manera para evitar la carga repetida? Quiero que, cuando tenga absolutamente todo cargado, se de a start.
+//   y poner pantalla de carga(sin conocer porcentaje jeje).
 
 var IntroScene = require('./scenes/intro_scene.js');
 var MainMenuScene = require('./scenes/mainmenu_scene.js');

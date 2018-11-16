@@ -13,7 +13,7 @@ var EventHUD = function(game, parent, seeker, text, options) {
     }
     let style = require('../../assets/fonts/style.json');
     style.align = 'left';
-    this.text = this.add(new ScrollText(game, this,80,26,150,80, text, style));
+    this.text = this.add(new ScrollText(game, this,80,26,110,80, text, style));
     this.frame = this.add(new Phaser.Sprite(game, 0, 0, 'eventinterface'));
     this.healthBar = this.add(new HealthBar(game,78,1, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style, 100, 100,this));
     
