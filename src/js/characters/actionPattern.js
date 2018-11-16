@@ -24,15 +24,15 @@ ActionPattern.prototype.actionNumber = function (number) {
         j++;
     }
     if (typeof this._pattern[j].action === 'string') {
-        return this._pattern[j];
+        return this._pattern[j].action;
     } else if (typeof this._pattern[j].action === 'function') {
-        return this._pattern[j](this._character, this._seeker);
+        return this._pattern[j].action(this._character, this._seeker);
     }
 }
 
 Object.defineProperty(ActionPattern.prototype, 'currentAction', {
     get: function () {
-        return this._currentAction = this.actionNumber(0).action;
+        return this._currentAction = this.actionNumber(0);
     }
 });
 
