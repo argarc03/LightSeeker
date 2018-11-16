@@ -1,16 +1,46 @@
 'use strict'
 
-var ActionPattern = function(pattern, seeker, thisCaracter) {
-    this.nextAction = function () {
-        var action = this.actions[pattern[this.doneActions]]
-        this.doneActions = (this.doneActions) % pattern.length;
-        return action;
-    }
-    this.doneActions = 0; 
-}//(number){
-
-ActionPattern.prototype.nextAction = function() {
-    return null;
+var ActionPattern = function (pattern, seeker, character) {
+    this._currentAction = 'unknown';
+    this._pattern = pattern;
+    this._seeker = seeker;
+    this._character = character;
+    this._currentIndex = 0;
+    this._totalActions = 0;
+    this._pattern.forEach(element => {
+        if (typeof element.repetitions === 'undefined') {
+            element.repetitions = 1;
+        }
+        this._totalActions += element.repetitions;
+    }, this);
 }
+
+ActionPattern.prototype.actionNumber = function (number) {
+    number = (this._currentIndex + number) % this._totalActions;
+    let i = number;
+    let j = 0;
+    while (i > this._pattern[j].repetitions) {
+        i -= this._pattern[j].repetitions;
+        j++;
+    }
+    if (typeof this._pattern[j].action === 'string') {
+        return this._pattern[j];
+    } else if (typeof this._pattern[j].action === 'function') {
+        return this._pattern[j](this._character, this._seeker);
+    }
+}
+
+Object.defineProperty(ActionPattern.prototype, 'currentAction', {
+    get: function () {
+        return this._currentAction = this.actionNumber(0).action;
+    }
+});
+
+Object.defineProperty(ActionPattern.prototype, 'nextAction', {
+    get: function () {
+        this._currentIndex = (this._currentIndex + 1) % this._totalActions;
+        return this.currentAction;
+    }
+});
 
 module.exports = ActionPattern;

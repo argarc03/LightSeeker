@@ -9,7 +9,7 @@ var hpPercentage = function() {
     return this.hp / this.stats.health * 100;
 }
 
-var HealthBar = function(game, x, y, character, voidKey, healKey, damageKey, healthKey, style, delay, speed, voidFrame, healFrame, damageFrame, healthFrame, parent) {
+var HealthBar = function(game, x, y, character, voidKey, healKey, damageKey, healthKey, frameKey, style, delay, speed, voidFrame, healFrame, damageFrame, healthFrame, parent) {
     Phaser.Group.call(this, game, parent);
 
     this.voidBar = this.add(new Bar(game, this, x, y, voidKey, voidFrame));
@@ -19,6 +19,7 @@ var HealthBar = function(game, x, y, character, voidKey, healKey, damageKey, hea
     this.hpText = this.add(new ReactiveRichText(game, x, y-2, this.voidBar.width, [textFunction.VariableNumber(function () { return this.hp }, character, speed),
         '/',
         textFunction.VariableNumber(function () { return this.stats.health }, character, 1000)], style, this, [character.onHpChange, character.stats.onHealthChange]));
+        this.frame = this.add(new Phaser.Sprite(game,x-1,y-1,frameKey));
 }
 
 HealthBar.prototype = Object.create(Phaser.Group.prototype);

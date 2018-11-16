@@ -10,12 +10,17 @@ var IntroScene = {
   },
 
 
-  appear(object, duration){
+  appear(object, duration, callback, callbackContext){
     object.alpha = 0;
 
     var tween = this.game.add.tween(object).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true);
+    var tween2;
     tween.onComplete.add(function(){this.game.time.events.add(Phaser.Timer.SECOND * duration,
-       function(){this.game.add.tween(object).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true)}, this);},this);
+       function(){
+         tween2 = this.game.add.tween(object).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
+         tween2.onComplete.add(callback, callbackContext);
+        }, this);},this);
+    
   },
   
   create: function () {
@@ -24,8 +29,9 @@ var IntroScene = {
 
 
 
-    this.appear(this.game.add.richText(40, 80, 80, "ERASE UNA VEZ...", style),2);
-    this.appear(this.game.add.richText(80, 80, 80, "UNA ALDEA...", style),2);
+    this.appear(this.game.add.richText(40, 80, 80, "ERASE UNA VEZ...", style),2,
+      this.appear(this.game.add.richText(80, 80, 80, "UNA ALDEA...", style),2), this
+      );
     
 
     //espera a que acabe intro

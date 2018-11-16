@@ -46,7 +46,6 @@ ReactiveContinuousBar.prototype.changePercentage = function() {
 
 ReactiveContinuousBar.prototype.reChangePercentage = function() {
     if (this.increasing) {
-        console.log('SUBE');
         if (this.percentage < this.percentageFunction()) {
             this.timer = this.game.time.create();
             if (this.vertical)
@@ -61,7 +60,6 @@ ReactiveContinuousBar.prototype.reChangePercentage = function() {
             this.timer = null;
         }
     } else if (this.decreasing) {
-        console.log('BAJA');
         if (this.percentage > this.percentageFunction()) {
             this.timer = this.game.time.create();
             if (this.vertical)

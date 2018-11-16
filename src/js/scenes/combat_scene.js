@@ -53,7 +53,7 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
     //render seeker //tope de nombre caracteres = 9
-    this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(10, 3, 1, 20, 1), 'seekerAnimations');
+    this.seeker = this.game.add.seeker(0, -8, '99', new Stats(10, 3, 1, 20, 1), 'seekerAnimations');
     this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000);
     this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000);
@@ -61,27 +61,28 @@ var CombatScene = {
     this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
     //render enemy
 
-    this.enemy = this.game.add.character(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations');
+    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').normal);
     this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
     this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
     this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
     this.enemy.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]);
     this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
     this.seeker.idle();
-    this.enemy.idle();
+    this.enemy.act();
     //interface
     this.game.add.seekerCombatHUD(0,0,this.seeker,this.enemy);
     
 
     //transicion de entrada a combate
-    /*
-    var filter = this.game.add.filter('Pixelate', 800, 600);
+    
+    /*var filter = this.game.add.filter('Pixelate', 800, 600);
     this.game.world.filters = [filter];
     filter.sizeX=1000;
     filter.sizeY = 1000;
     var tween = this.game.add.tween(filter).to({ sizeX: 1, sizeY: 1 }, 2000, "Quart.easeOut").start();
-    tween.onComplete.add(function(){this.game.world.filters = null;*/
+    tween.onComplete.add(function(){this.game.world.filters = null;
     // Controls
+    */
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy, this);

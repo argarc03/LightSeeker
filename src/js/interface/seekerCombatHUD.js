@@ -34,7 +34,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     
     this.blockButton.callbacks.push(this.attackButton.deactivate.bind(this.attackButton));
     this.attackButton.callbacks.push(this.blockButton.deactivate.bind(this.blockButton));
-    this.healthBar = this.add(new HealthBar(game,2,121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style, 100, 100,this));
+    this.healthBar = this.add(new HealthBar(game,2,121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 100, 100,this));
    
     var style2 = {"font": "Minecraft", "fill": "#000000", "fontSize": 10 };
     this.name = this.add(new ReactiveRichText(game,3,0,80,textFunctions.Fun(function() {
