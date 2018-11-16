@@ -84,7 +84,7 @@ var MainMenuScene = {
 
 
     //music
-    var music = this.game.add.audio('shoptheme', 0.1, true);
+    var music = this.game.add.audio('mainmenu', 0.1, true);
     this.game.sound.stopAll();
     music.play();
 

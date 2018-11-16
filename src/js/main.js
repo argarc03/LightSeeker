@@ -1,7 +1,9 @@
 'use strict';
 
 //PREGUNTAS
-// Aún se deben controlar los sonidos
+// - ¿Cómo meter filtros? (Pixelate) (Antes se podía..)
+// - ¿Cómo hacer que se ejecute entero directamente un .js en el main?
+// - 
 
 var IntroScene = require('./scenes/intro_scene.js');
 var MainMenuScene = require('./scenes/mainmenu_scene.js');
@@ -61,7 +63,9 @@ var PreloaderScene = {
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
       //INTERFACE
+        //HUDs
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
+        this.game.load.image('eventinterface','assets/images/interface/eventinterfaceback.png');
         //Cursor
         this.game.load.image('cursor','assets/images/interface/cursor.png');
         this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
@@ -84,11 +88,13 @@ var PreloaderScene = {
         this.game.load.image('speedIcon','assets/images/interface/speedIcon.png');
         this.game.load.image('healthIcon','assets/images/interface/healthIcon.png');
         this.game.load.image('perceptionIcon','assets/images/interface/perceptionIcon.png');
+        this.game.load.image('gemIcon','assets/images/interface/gemIcon.png');
         //Buttons
         this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
+      this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
@@ -112,13 +118,14 @@ var PreloaderScene = {
       this.load.audio('shoptheme', ['assets/music/shoptheme.wav']);
       this.load.audio('watertheme', ['assets/music/watertheme.wav']);
       this.load.audio('credits', ['assets/music/creditstheme.wav']);
+      this.load.audio('mainmenu', ['assets/music/mainmenutheme.wav']);
 
   },
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 
-      PreloaderScene.game.state.start('combat');
+      PreloaderScene.game.state.start('event');
   }
 
 };
