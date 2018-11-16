@@ -63,6 +63,8 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
 ActionFactory.prototype.die = function(framesDying) {
     this.character.animations.add('dying', framesDying, true);
     this.character.die = Action.die;
+    this.character.onDeathComplete = new Phaser.Signal();
+    this.character.animations._anims.dying.onComplete.add(this.character.onDeathComplete.dispatch, this.character.onDeathComplete);
 }
 
 module.exports = ActionFactory;

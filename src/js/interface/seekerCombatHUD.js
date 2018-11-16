@@ -4,6 +4,18 @@ var HealthBar = require('./healthBar');
 var ReactiveRichText = require('./reactiveRichText');
 var textFunctions = require('./textFunctions');
 
+var deactivateActionButton = function() {
+  this.button.onInputOver.removeAll();
+  this.button.onInputOut.removeAll();
+  this.button.onInputDown.removeAll();
+  this.button.onInputUp.removeAll();
+  this._rechargeEvent.active = false;
+  this.text.visible = false;
+  this.bar.percentageFunction = function(){return 0;};
+  this.bar.percentage = 0;
+  this.deactivate()
+};
+
 var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     Phaser.Group.call(this, game, parent);
     this.x = x;
@@ -34,6 +46,10 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     
     this.blockButton.callbacks.push(this.attackButton.deactivate.bind(this.attackButton));
     this.attackButton.callbacks.push(this.blockButton.deactivate.bind(this.blockButton));
+    seeker.onDeath.add(deactivateActionButton, this.blockButton);
+    seeker.onDeath.add(deactivateActionButton, this.attackButton);
+    enemy.onDeath.add(deactivateActionButton, this.blockButton);
+    enemy.onDeath.add(deactivateActionButton, this.attackButton);
     this.healthBar = this.add(new HealthBar(game,2,121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 100, 100,this));
    
     var style2 = {"font": "Minecraft", "fill": "#000000", "fontSize": 10 };

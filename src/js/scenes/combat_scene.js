@@ -61,35 +61,35 @@ var CombatScene = {
     this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
     //render enemy
 
-    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').boss);
+    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').normal);
     this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
     this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
     this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
     this.enemy.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]);
     this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
-    this.seeker.idle();
-    this.enemy.act();
+    
     //interface
     this.game.add.seekerCombatHUD(0,0,this.seeker,this.enemy);
-    
 
     //transicion de entrada a combate
     
-    /*var filter = this.game.add.filter('Pixelate', 800, 600);
+    var filter = this.game.add.filter('Pixelate', 800, 600);
     this.game.world.filters = [filter];
     filter.sizeX=1000;
     filter.sizeY = 1000;
     var tween = this.game.add.tween(filter).to({ sizeX: 1, sizeY: 1 }, 2000, "Quart.easeOut").start();
     tween.onComplete.add(function(){this.game.world.filters = null;
     // Controls
-    */
+    this.seeker.idle();
+    this.enemy.act();
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
 
-    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);//},this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);
+  },this);
 
     var style = require('../../assets/fonts/style.json');
 
@@ -111,7 +111,8 @@ var CombatScene = {
       ge.beginFill(0x000000);
       ge.drawRect(2 * i + 1, 0, 1, 1);
     }
-
+    this.seeker.onDeathComplete.add(this.MainMenuScene, this);
+    this.enemy.onDeathComplete.add(this.MainMenuScene, this);
     //para ir a fullscreen pulsar F4
     this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
 
