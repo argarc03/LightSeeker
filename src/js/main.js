@@ -1,8 +1,6 @@
 'use strict';
 
 //PREGUNTAS
-// - ¿Cómo meter filtros? (Pixelate) (Antes se podía..)
-// - ¿Cómo hacer que se ejecute entero directamente un .js en el main?
 // - ¿Hay alguna manera para evitar la carga repetida? Quiero que, cuando tenga absolutamente todo cargado, se de a start.
 //   y poner pantalla de carga(sin conocer porcentaje jeje).
 
@@ -16,6 +14,7 @@ var SettingsScene = require('./scenes/settings_scene.js');
  var webFontLoading = {
   active: function() {
     var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
+    
     webFontLoading.game = game;
     game.state.add('boot', BootScene);
     game.state.add('preloader', PreloaderScene);
@@ -25,6 +24,7 @@ var SettingsScene = require('./scenes/settings_scene.js');
     game.state.add('event', EventScene);
     game.state.add('credits', CreditsScene);
     game.state.add('settings', SettingsScene);
+
     game.state.start('boot');
   },
   custom: {
@@ -57,13 +57,14 @@ var PreloaderScene = {
     // enable crisp rendering
     this.game.renderer.renderSession.roundPixels = true;
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
-    this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
+    this.loadingBar = this.game.add.sprite(0, 0, 'preloader_bar');
     this.loadingBar.anchor.setTo(0, 0.5);
     this.load.setPreloadSprite(this.loadingBar);
     // TODO: load here the assets for the game
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
       //INTERFACE
+        this.game.load.image('eventImage','assets/images/interface/eventImage.png');
         //HUDs
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         this.game.load.image('eventinterface','assets/images/interface/eventinterfaceback.png');
@@ -92,6 +93,7 @@ var PreloaderScene = {
         this.game.load.image('gemIcon','assets/images/interface/gemIcon.png');
         //Buttons
         this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
+        this.game.load.image('optionBack','assets/images/interface/optionback.png');
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
