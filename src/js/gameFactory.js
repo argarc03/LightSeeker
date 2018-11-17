@@ -16,6 +16,8 @@ var ScrollText = require('./interface/scrollText');
 var EventHUD = require('./interface/eventHUD');
 var OptionMenu = require('./interface/optionMenu');
 var ButtonMenu = require('./interface/buttonMenu');
+var WindowFrame = require('./interface/windowFrame');
+var FramedButton = require('./interface/framedButton');
 /**
  * 
  */
@@ -65,10 +67,16 @@ fun = function (Phaser) {
         return new RichText(this.game, x, y, lineWidth, text, style, group);
     }
 
-    Phaser.GameObjectFactory.prototype.actionButton = function (x, y, buttondKey, barKey, callback, callbackArguments, callbackContext, percentageFunction, percentageFunctionContext, timeFunction, timeFunctionContext,
-        barSignal, totalRechargeSignal, backgroundTint, frameColorOver, frameColorOut, frameColorDown, frameColorDisabled, overFrame = null, outButtonFrame = null, downButtonFrame = null, upButtonFrame = null, barFrame = null, parent = this.game.world) {
-        return new ActionButton(this.game, parent, x, y, buttondKey, barKey, callback, callbackArguments, callbackContext, percentageFunction, percentageFunctionContext, timeFunction, timeFunctionContext,
-            barSignal, totalRechargeSignal, backgroundTint, frameColorOver, frameColorOut, frameColorDown, frameColorDisabled, overFrame, outButtonFrame, downButtonFrame, upButtonFrame, barFrame);
+    Phaser.GameObjectFactory.prototype.actionButton = function (x, y, buttonKey, frameKey, barKey, callbacks, percentageFunction, percentageFunctionContext,
+        timeFunction, timeFunctionContext, barSignal, totalRechargeSignal,
+        overButtonFrame = 0, outButtonFrame = 0, downButtonFrame = 0, upButtonFrame = 0, disabledButtonFrame = 0,
+        overFrameFrame = 0, outFrameFrame = 0, downFrameFrame = 0, upFrameFrame = 0, disabledFrameFrame = 0,
+        frameColorOver = 0, frameColorOut = 0, frameColorDown = 0, frameColorUp = 0, frameColorDisabled = 0, barFrame = 0, parent = this.game.world) {
+        return new ActionButton(parent, this.game, x, y, buttonKey, frameKey, barKey, callbacks, percentageFunction, percentageFunctionContext,
+            timeFunction, timeFunctionContext, barSignal, totalRechargeSignal,
+            overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
+            overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame,
+            frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled, barFrame);
     }
 
     Phaser.GameObjectFactory.prototype.seekerCombatHUD = function (x, y, seeker, enemy, parent = this.game.world) {
@@ -93,6 +101,22 @@ fun = function (Phaser) {
         if (group === undefined) { group = this.world; }
         return group.add(new ButtonMenu(this.game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
     }
+
+    Phaser.GameObjectFactory.prototype.windowFrame = function (x, y, width, height, key, parent = this.world) {
+        return new WindowFrame( this.game, parent, x, y, width, height, key );
+    }
+
+    Phaser.GameObjectFactory.prototype.framedButton = function(x, y, buttonKey, frameKey, callbacks, 
+        frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
+        overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
+        overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame, parent = this.world){
+            return new FramedButton(parent, this.game,x, y, buttonKey, frameKey, callbacks, 
+                frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
+                overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
+                overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame)
+        }
+
+    
 }
 
 module.exports = fun;

@@ -22,7 +22,8 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     this.y = y;
     let style = require('../../assets/fonts/style.json');
     this.frame = this.add(new Phaser.Sprite(game,0,0,'interface'));
-    this.blockButton = this.add(new ActionButton(game, this, 44, 132, 'blockIcon', 'blockIcon', [seeker.block], [], seeker, function () {
+    this.blockButton = this.add(new ActionButton(this, game, 44, 132, 'blockIcon', 'actionFrame','blockIcon', [{callback: seeker.block, context: seeker, arguments: []}], 
+    function () {
         return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
       }, seeker, function() {
         let a = this.block.timeToCoolDown()/1000;
@@ -33,7 +34,8 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
         }
       },seeker, seeker.coolDown.block.onWhile, seeker.coolDown.block.onEnd, 0x676767 ,0xffffff, 0x000000, 0x222222, 0x676767));
 
-    this.attackButton = this.add(new ActionButton(game, this, 25, 132, 'attackIcon', 'attackIcon', [seeker.attack], [enemy], seeker, function () {
+    this.attackButton = this.add(new ActionButton(this, game, 25, 132, 'attackIcon', 'actionFrame','attackIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}], 
+    function () {
         return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
       }, seeker, function() {
         let a = this.attack.timeToCoolDown()/1000;
@@ -42,14 +44,16 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
         } else {
           return a.toFixed(1).toString();
         }
-      },seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767 ,0xffffff, 0x000000, 0x222222, 0x676767));
+      },seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767 ,0xffffff, 0x000000, 0x222222, 0x676767, this));
     
-    this.blockButton.callbacks.push(this.attackButton.deactivate.bind(this.attackButton));
-    this.attackButton.callbacks.push(this.blockButton.deactivate.bind(this.blockButton));
+    this.blockButton._callbacks.push({callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
+    this.blockButton._callbacks.push({callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
+    this.attackButton._callbacks.push({callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
+    this.attackButton._callbacks.push({callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
     seeker.onDeath.add(deactivateActionButton, this.blockButton);
     seeker.onDeath.add(deactivateActionButton, this.attackButton);
-    enemy.onDeath.add(deactivateActionButton, this.blockButton);
-    enemy.onDeath.add(deactivateActionButton, this.attackButton);
+    enemy.onDeath.add(this.attackButton.deactivate, this.blockButton);
+    enemy.onDeath.add(this.blockButton.deactivate, this.attackButton);
     this.healthBar = this.add(new HealthBar(game,2,121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 100, 100,this));
    
     var style2 = {"font": "Minecraft", "fill": "#000000", "fontSize": 10 };
@@ -81,6 +85,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     this.perceptionNumber = this.add(new ReactiveRichText(game,50,23,11,textFunctions.Fun(function() {
         return this.stats.perception.toString();
     }, seeker), style2, this, seeker.stats.onPerceptionChange));
+    console.log('esto esta bien');
     
 }
 SeekerCombatHUD.prototype = Object.create(Phaser.Group.prototype);

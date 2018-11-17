@@ -63,6 +63,7 @@ var PreloaderScene = {
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
       //INTERFACE
+        this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         //Cursor
         this.game.load.image('cursor','assets/images/interface/cursor.png');
@@ -88,6 +89,7 @@ var PreloaderScene = {
         this.game.load.image('perceptionIcon','assets/images/interface/perceptionIcon.png');
         //Buttons
         this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
+        this.game.load.image('actionFrame', 'assets/images/interface/actionFrame.png');
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');

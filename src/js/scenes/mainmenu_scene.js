@@ -64,8 +64,7 @@ var MainMenuScene = {
     ]);
     //console.log(a);
 
-    //prueba cursor
-    selector = this.game.add.sprite(50, 50, 'cursor');
+    
     
     //mainmenuoptionsscene
     //new run/continue run
@@ -88,7 +87,8 @@ var MainMenuScene = {
     this.game.sound.stopAll();
     music.play();
 
-    
+    selector = this.game.add.sprite(50, 50, 'cursor');
+
   },
 
   update: function () {

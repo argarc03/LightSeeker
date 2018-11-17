@@ -53,7 +53,7 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
     //render seeker //tope de nombre caracteres = 9
-    this.seeker = this.game.add.seeker(0, -8, '99', new Stats(10, 3, 1, 20, 1), 'seekerAnimations');
+    this.seeker = this.game.add.seeker(0, -8, '99', new Stats(1, 3, 1, 20, 1), 'seekerAnimations');
     this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000);
     this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000);
@@ -61,7 +61,7 @@ var CombatScene = {
     this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
     //render enemy
 
-    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').normal);
+    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').boss);
     this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
     this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
     this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
@@ -93,9 +93,6 @@ var CombatScene = {
 
     var style = require('../../assets/fonts/style.json');
 
-    
-    var textMonster = this.game.add.richText(120, 60, 50, textFunctions.Color('#FF0000', textFunctions.Tremble(1,5,1,'GRAAHH!!')), style);
-    var textSeeker = this.game.add.richText(0, 60, 50, textFunctions.Color('#000000', textFunctions.Tremble(0.1,1,1,'Are you a spider?')), style);
     var g = this.game.add.graphics(1, 0);
     for (let i = 0; i < 75; i++) {
       g.beginFill(0xffffff);
@@ -116,8 +113,6 @@ var CombatScene = {
     //para ir a fullscreen pulsar F4
     this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
 
-    //var text = this.game.add.text(50, 50, "jeje", style);
-
     //music
     var music = this.game.add.audio('firetheme', 0.1, true);
     this.game.sound.stopAll();
@@ -125,7 +120,7 @@ var CombatScene = {
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
-
+    console.log('esto esta bien');
   },
   update: function () {
     //prueba cursor
