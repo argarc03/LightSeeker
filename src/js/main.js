@@ -65,6 +65,7 @@ var PreloaderScene = {
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
       //INTERFACE
+        this.game.load.spritesheet('logo', 'assets/images/interface/logo.png', 61, 69);
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
         //HUDs
@@ -138,7 +139,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('combat');
+      PreloaderScene.game.state.start('intro');
   }
 
 };
