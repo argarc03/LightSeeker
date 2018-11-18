@@ -18,10 +18,11 @@ var EventHUD = function(game, parent, seeker, text, options) {
     var style2 = {"font": "Minecraft", "fill": "#000000", "fontSize": 10 };
 
     var style3 = {"font": "Minecraft", "fill": "#FFFFFF", "fontSize": 10, "align": 'center'};
+    var style4 = {"font": "Minecraft", "fill": "#000000", "fontSize": 10, "align": 'center'};
 
     this.text = this.add(new ScrollText(game, this,74,32,119,85, text, style2));
     this.frame = this.add(new Phaser.Sprite(game, 0, 0, 'eventinterface'));
-    this.healthBar = this.add(new HealthBar(game,79,2, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style3, 100, 100,this));
+    this.healthBar = this.add(new HealthBar(game, 79, 2, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style3, 1000, 100, this));
 
     this.name = this.add(new ReactiveRichText(game,3,-1,80,textFunctions.Fun(function() {
         return this.name;
@@ -80,8 +81,8 @@ var EventHUD = function(game, parent, seeker, text, options) {
     this.imageFrame = this.add(new Phaser.Sprite(game,2,42,'eventImage'));
 
     this.day = this.add(new ReactiveRichText(game, 26, 27, 40, textFunctions.Fun(function () {
-        return '100';//hay que
-        }, seeker), style3, this, seeker.stats.onPerceptionChange));
+        return '1';//hay que
+        }, seeker), style4, this, seeker.stats.onPerceptionChange));
 
     this.game.add.optionMenu([['pauseButton',190,2,'pauseButton',this.EventScene,this,{}]]);
 

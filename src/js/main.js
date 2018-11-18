@@ -139,7 +139,7 @@ var PreloaderScene = {
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
 
-      PreloaderScene.game.state.start('intro');
+      PreloaderScene.game.state.start('event');
   }
 
 };
@@ -149,6 +149,3 @@ window.onload = function () {
   
 
 };
-
-
-// MIRAR COMO METER ESTO EN OTRO .JS Y EJECUTARLO DESDE AQUI.
