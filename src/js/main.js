@@ -103,6 +103,7 @@ var PreloaderScene = {
         this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
         this.game.load.image('actionFrame', 'assets/images/interface/actionFrame.png');
         this.game.load.image('optionBack','assets/images/interface/optionback.png');
+        this.game.load.image('optionFrame','assets/images/interface/optionFrame.png');
         this.game.load.image('pauseButton','assets/images/interface/pauseButton.png');
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
@@ -137,8 +138,9 @@ var PreloaderScene = {
   },
 
   create: function () {
+    this
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('combat');
+      PreloaderScene.game.state.start('event');
   }
 
 };

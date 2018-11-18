@@ -6,6 +6,7 @@ var ReactiveRichText = require('./reactiveRichText');
 var RichText = require('./richText');
 var textFunctions = require('./textFunctions');
 var Slider = require('./slider');
+var  FramedButton = require('./framedButton');
 
 var EventHUD = function(game, parent, seeker, text, options) {
     Phaser.Group.call(this, game, parent);
@@ -68,15 +69,28 @@ var EventHUD = function(game, parent, seeker, text, options) {
     return this.gems.toString();//hay que cambiarlo
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
-    this.option1back = this.add(new Phaser.Sprite(game,0,122,'optionBack'));
-    this.option2back = this.add(new Phaser.Sprite(game,101,122,'optionBack'));
-    this.option3back = this.add(new Phaser.Sprite(game,0,137,'optionBack'));
-    this.option4back = this.add(new Phaser.Sprite(game,101,137,'optionBack'));
+    this.option1back = this.add(new FramedButton(this, game, 0,122,'optionBack', 'optionFrame', [],
+        0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
+    this.option2back = this.add(new FramedButton(this, game, 101,122,'optionBack', 'optionFrame', [],
+        0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
+    this.option3back = this.add(new FramedButton(this, game, 0,137,'optionBack', 'optionFrame', [],
+        0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
+    this.option4back = this.add(new FramedButton(this, game, 101,137,'optionBack', 'optionFrame', [],
+        0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
+    this.option1back.deactivate();
+    this.option2back.deactivate();
+    this.option3back.deactivate();
+    this.option4back.deactivate();
+        
 
     this.option1 = this.add(new RichText(game,2,122,100,options[0], style));
     this.option2 = this.add(new RichText(game,103,122,100,options[1], style));
     this.option3 = this.add(new RichText(game,2,137,100,options[2], style));
     this.option4 = this.add(new RichText(game,103,137,100,options[3], style));
+    this.option1.visible = false;
+    this.option2.visible = false;
+    this.option3.visible = false;
+    this.option4.visible = false;
 
     this.imageFrame = this.add(new Phaser.Sprite(game,2,42,'eventImage'));
 
@@ -87,10 +101,20 @@ var EventHUD = function(game, parent, seeker, text, options) {
     this.game.add.optionMenu([['pauseButton',190,2,'pauseButton',this.EventScene,this,{}]]);
 
     
-    this.topScroll = this.add(new Slider(game, this, 194,35,'sliderBackground', 'slider',80,20,3));
-    this.topScroll.onChange.add(function(percentage){console.log(percentage), this});
-    this.topScroll.onBegin.add(function(){console.log('Hola')}, this);
-    this.topScroll.onEnd.add(function(){console.log('Adios')}, this);
+    this.topScroll = this.add(new Slider(game, this, 194,35,'sliderBackground', 'slider',80,50,3));
+    this.topScroll.onChange.add(function(percentage){this.text.move(percentage);}, this);
+    this.topScroll.onEnd.add(function(){
+        this.option1back.activate();
+        this.option2back.activate();
+        this.option3back.activate();
+        //this.option4back.activate();
+        this.option1.visible = true;
+        this.option2.visible = true;
+        this.option3.visible = true;
+        this.option4.visible = true;
+    },this);
+    //this.topScroll.onBegin.add(function(){console.log('Hola')}, this);
+    //this.topScroll.onEnd.add(function(){console.log('Adios')}, this);
 
     //this.topScroll.events.onInputDown();
 

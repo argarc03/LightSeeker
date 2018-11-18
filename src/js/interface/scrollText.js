@@ -22,14 +22,16 @@ var ScrollText = function(game, parent,x,y,width,height,text, style) {
 ScrollText.prototype = Object.create(Phaser.Group.prototype);
 ScrollText.prototype.constructor = ScrollText;
 
-ScrollText.prototype.scrollMove = function(number) {
-    this.text.y+=number;
-    if(this.text.y > 0 ) {
+ScrollText.prototype.move = function(percentage) {
+    this.text.y = -percentage*(this.text.height - this.maxHeight)/100;
+    if(this.text.y >= 0 ) {
         this.text.y = 0;
         this.onReachBegin.dispatch();
-    } else if(this.text.y < this.maxHeight - this.text.height) {
+    } else if(this.text.y <= this.maxHeight - this.text.height) {
         this.text.y = this.maxHeight - this.text.height;
         this.onReachEnd.dispatch();
     }
+    console.log(this.maxHeight,this.text.y);
+    
 }
 module.exports = ScrollText;
