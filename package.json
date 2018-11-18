@@ -5,6 +5,7 @@
   "license": "CC-BY-NC-SA-4.0",
   "repository": "gituser/awesome-game",
   "dependencies": {
+    "@pixi/filter-pixelate": "^2.5.0",
     "browser-sync": "*",
     "browserify": "*",
     "del": "*",

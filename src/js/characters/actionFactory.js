@@ -18,6 +18,8 @@ var ActionFactory = function (character) {
 ActionFactory.prototype.idle = function(frames) {
     this.character.animations.add('idle', frames, true);
     this.character.idle = Action.idle;
+    this.character.idle.totalTime = TimeCalculations.totalIdleTime.bind(this.character);
+    this.character.idle.currentTime = TimeCalculations.currentIdleTime.bind(this.character);
 }
 
 /**
@@ -31,8 +33,8 @@ ActionFactory.prototype.attack = function(framesPreAttacking, framesAttacking) {
     this.character.animations.add('attacking', framesAttacking, true);
     this.character._preAttacking = Action.preAttacking;
     this.character._attacking = Action.attacking;
-    this.character.attack.totalTime = TimeCalculations.totalAttackTime;
-    this.character.attack.currentTime = TimeCalculations.currentAttackTime;
+    this.character.attack.totalTime = TimeCalculations.totalAttackTime.bind(this.character);
+    this.character.attack.currentTime = TimeCalculations.currentAttackTime.bind(this.character);
 }
 
 /**
@@ -50,8 +52,8 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
     this.character._blocking = Action.blocking;
     this.character._loop = Action.loop;
     this.character._postBlocking = Action.postBlocking;
-    this.character.block.totalTime = TimeCalculations.totalBlockTime;
-    this.character.currentTime = TimeCalculations.currentBlockTime;
+    this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
+    this.character.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
 }
 
 /**
@@ -61,6 +63,8 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
 ActionFactory.prototype.die = function(framesDying) {
     this.character.animations.add('dying', framesDying, true);
     this.character.die = Action.die;
+    this.character.onDeathComplete = new Phaser.Signal();
+    this.character.animations._anims.dying.onComplete.add(this.character.onDeathComplete.dispatch, this.character.onDeathComplete);
 }
 
 module.exports = ActionFactory;

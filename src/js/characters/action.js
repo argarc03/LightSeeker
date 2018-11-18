@@ -57,14 +57,14 @@ var Action = {
         this.isBlocking = true;
         this.animations.play('blocking', this.stats.frameRate, true);
         this.animations._anims.blocking.onLoop.add(this._loop, this);
-        this.animations._anims.blocking.onComplete.add(this._postBlocking, this);
     },
     /**
      * 
      */
     loop() {
-        if (this.animations._anims.blocking.loopCount >= (this.stats.blockingTime / this.animations._anims.blocking._frames.length * this.stats.frameRate / Phaser.Timer.SECOND))
-            this.animations._anims.blocking.loop = false;
+        if (this.animations._anims.blocking.loopCount >= (this.stats.blockingTime / this.animations._anims.blocking._frames.length * this.stats.frameRate / Phaser.Timer.SECOND)){
+            this._postBlocking();
+        }
     },
     /**
      * 

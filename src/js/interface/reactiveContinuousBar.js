@@ -18,7 +18,6 @@ ReactiveContinuousBar.prototype.constructor = ReactiveContinuousBar;
 
 ReactiveContinuousBar.prototype.changePercentage = function() {
     if (this.percentageFunction() > this.percentage) {
-        console.log('sube');
         if (!this.increasing) {
             if (this.timer !== null) {
                 this.timer.stops(true);
@@ -30,7 +29,6 @@ ReactiveContinuousBar.prototype.changePercentage = function() {
             this.timer.start();
         }
     } else {
-        console.log('baja');
         if (!this.decreasing) {
             if (this.timer !== null) {
                 this.timer.stops(true);
@@ -46,7 +44,6 @@ ReactiveContinuousBar.prototype.changePercentage = function() {
 
 ReactiveContinuousBar.prototype.reChangePercentage = function() {
     if (this.increasing) {
-        console.log('SUBE');
         if (this.percentage < this.percentageFunction()) {
             this.timer = this.game.time.create();
             if (this.vertical)
@@ -61,7 +58,6 @@ ReactiveContinuousBar.prototype.reChangePercentage = function() {
             this.timer = null;
         }
     } else if (this.decreasing) {
-        console.log('BAJA');
         if (this.percentage > this.percentageFunction()) {
             this.timer = this.game.time.create();
             if (this.vertical)

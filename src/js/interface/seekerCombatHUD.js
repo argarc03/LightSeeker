@@ -4,6 +4,18 @@ var HealthBar = require('./healthBar');
 var ReactiveRichText = require('./reactiveRichText');
 var textFunctions = require('./textFunctions');
 
+var deactivateActionButton = function() {
+  this.button.onInputOver.removeAll();
+  this.button.onInputOut.removeAll();
+  this.button.onInputDown.removeAll();
+  this.button.onInputUp.removeAll();
+  this._rechargeEvent.active = false;
+  this.text.visible = false;
+  this.bar.percentageFunction = function(){return 0;};
+  this.bar.percentage = 0;
+  this.deactivate()
+};
+
 var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   Phaser.Group.call(this, game, parent);
   this.x = x;
@@ -32,6 +44,20 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
       return a.toFixed(1).toString();
     }
   }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+    this.blockButton._callbacks.push({callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
+    this.blockButton._callbacks.push({callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
+    this.attackButton._callbacks.push({callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
+    this.attackButton._callbacks.push({callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
+    seeker.onDeath.add(deactivateActionButton, this.blockButton);
+    seeker.onDeath.add(deactivateActionButton, this.attackButton);
+    enemy.onDeath.add(this.attackButton.deactivate, this.blockButton);
+    enemy.onDeath.add(this.blockButton.deactivate, this.attackButton);
+    this.healthBar = this.add(new HealthBar(game,2,121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100,this));
+   
+    var style2 = {"font": "Minecraft", "fill": "#000000", "fontSize": 10 };
+    this.name = this.add(new ReactiveRichText(game,3,0,80,textFunctions.Fun(function() {
+        return this.name;
+    }, seeker), style2, this, seeker.onNameChange));
 
   this.blockButton.callbacks.push(this.attackButton.deactivate.bind(this.attackButton));
   this.attackButton.callbacks.push(this.blockButton.deactivate.bind(this.blockButton));
