@@ -12,7 +12,7 @@ var ActionButton = function(game, parent, x, y, buttondKey, barKey, callbacks, c
     this.bar = this.add(new ReactiveBar(game, parent, x, y, barKey, percentageFunction, percentageFunctionContext, barSignal, barFrame));
     this.bar.maskAngle = -90;
     this.externalFrame = this.add(new Phaser.Graphics(game, x, y));
-    this.text = this.add(new ReactiveRichText(game,x,y+2,this.button.width, textFunction.Fun(timeFunction, timeFunctionContext),{"font": "Minecraft",
+    this.text = this.add(new ReactiveRichText(game,x+1,y+2,this.button.width, textFunction.Fun(timeFunction, timeFunctionContext),{"font": "Minecraft",
     "fill": "#fff",
     "fontSize": 10,
     "align":"center"},this,[barSignal]));

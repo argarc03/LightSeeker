@@ -22,7 +22,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     }
   }, seeker, seeker.coolDown.block.onWhile, seeker.coolDown.block.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
-  this.attackButton = this.add(new ActionButton(game, this, 25, 132, 'attackIcon', 'attackIcon', [seeker.attack], [enemy], seeker, function () {
+  this.attackButton = this.add(new ActionButton(game, this, x+25, y+132, 'attackIcon', 'attackIcon', [seeker.attack], [enemy], seeker, function () {
     return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
   }, seeker, function () {
     let a = this.attack.timeToCoolDown() / 1000;
@@ -38,7 +38,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style, 100, 100, this));
 
   var style2 = { "font": "Minecraft", "fill": "#000000", "fontSize": 10 };
-  this.name = this.add(new ReactiveRichText(game, 3, 0, 80, textFunctions.Fun(function () {
+  this.name = this.add(new ReactiveRichText(game, 3, -1, 80, textFunctions.Fun(function () {
     return this.name;
   }, seeker), style2, this, seeker.onNameChange));
 
@@ -67,11 +67,18 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     return this.stats.perception.toString();
   }, seeker), style2, this, seeker.stats.onPerceptionChange));
 
-  this.gemIcon = this.add(new Phaser.Sprite(game, 68, 2, 'gemIcon'));
-  this.gemNumber = this.add(new ReactiveRichText(game, 50, 0, 15, textFunctions.Fun(function () {
+  this.gemIcon = this.add(new Phaser.Sprite(game, 68, 1, 'gemIcon'));
+  this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 15, textFunctions.Fun(function () {
     return this.gems.toString();
   }, seeker), style2, this, seeker.stats.onPerceptionChange));
+
+  this.day = this.add(new ReactiveRichText(game, 95, -1, 15, textFunctions.Fun(function () {
+    return this.stats.perception.toString();
+  }, seeker), style2, this, seeker.stats.onPerceptionChange));
+
+  this.game.add.optionMenu([['pauseButton',190,2,'pauseButton',this.EventScene,this,{}]]);
 }
+
 SeekerCombatHUD.prototype = Object.create(Phaser.Group.prototype);
 SeekerCombatHUD.prototype.constructor = SeekerCombatHUD;
 

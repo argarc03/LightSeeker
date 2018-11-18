@@ -68,9 +68,13 @@ var PreloaderScene = {
         //HUDs
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         this.game.load.image('eventinterface','assets/images/interface/eventinterfaceback.png');
+        //HUDs scroll
+        this.game.load.spritesheet('sliderBackground','assets/images/interface/sliderbackground.png',6,5);
+        this.game.load.spritesheet('slider','assets/images/interface/slider.png',6,3);
         //Cursor
         this.game.load.image('cursor','assets/images/interface/cursor.png');
         this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
+        this.game.load.image('handCursor','assets/images/interface/handCursor.png');
         this.game.load.image('selectCursor','assets/images/interface/selectCursor.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
@@ -91,13 +95,17 @@ var PreloaderScene = {
         this.game.load.image('healthIcon','assets/images/interface/healthIcon.png');
         this.game.load.image('perceptionIcon','assets/images/interface/perceptionIcon.png');
         this.game.load.image('gemIcon','assets/images/interface/gemIcon.png');
+        this.game.load.image('villageGemIcon','assets/images/interface/villageGemIcon.png');
+        this.game.load.image('populationIcon','assets/images/interface/populationIcon.png');
         //Buttons
         this.game.load.spritesheet('button','assets/images/interface/button.png',32,32);
         this.game.load.image('optionBack','assets/images/interface/optionback.png');
+        this.game.load.image('pauseButton','assets/images/interface/pauseButton.png');
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
+      this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
