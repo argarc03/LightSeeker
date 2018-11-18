@@ -21,10 +21,6 @@ var EventHUD = function(game, parent, seeker, text, options) {
     this.text = this.add(new ScrollText(game, this,74,32,119,85, text, style2));
     this.frame = this.add(new Phaser.Sprite(game, 0, 0, 'eventinterface'));
     this.healthBar = this.add(new HealthBar(game,79,2, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style3, 100, 100,this));
-    
-    
-    
-    
 
     this.name = this.add(new ReactiveRichText(game,3,-1,80,textFunctions.Fun(function() {
         return this.name;
@@ -75,10 +71,10 @@ var EventHUD = function(game, parent, seeker, text, options) {
     this.option3back = this.add(new Phaser.Sprite(game,0,137,'optionBack'));
     this.option4back = this.add(new Phaser.Sprite(game,101,137,'optionBack'));
 
-    this.option1 = this.add(new RichText(game,2,122,100,'1. Buscar', style));
-    this.option2 = this.add(new RichText(game,103,122,100,'2. No hacer nada', style));
-    this.option3 = this.add(new RichText(game,2,137,100,'3. Irse a la wea', style));
-    this.option4 = this.add(new RichText(game,103,137,100,'4. Inspeccionarlo', style));
+    this.option1 = this.add(new RichText(game,2,122,100,options[0], style));
+    this.option2 = this.add(new RichText(game,103,122,100,options[1], style));
+    this.option3 = this.add(new RichText(game,2,137,100,options[2], style));
+    this.option4 = this.add(new RichText(game,103,137,100,options[3], style));
 
     this.imageFrame = this.add(new Phaser.Sprite(game,2,42,'eventImage'));
 
