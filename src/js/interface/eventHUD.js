@@ -22,7 +22,7 @@ var EventHUD = function(game, parent, seeker, text, options) {
     this.text = this.add(new ScrollText(game, this,74,32,119,85, text, style2));
     this.frame = this.add(new Phaser.Sprite(game, 0, 0, 'eventinterface'));
     this.healthBar = this.add(new HealthBar(game,79,2, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style3, 100, 100,this));
-    
+
     this.name = this.add(new ReactiveRichText(game,3,-1,80,textFunctions.Fun(function() {
         return this.name;
     }, seeker), style2, this, seeker.onNameChange));
@@ -85,11 +85,17 @@ var EventHUD = function(game, parent, seeker, text, options) {
 
     this.game.add.optionMenu([['pauseButton',190,2,'pauseButton',this.EventScene,this,{}]]);
 
+    
     this.topScroll = this.add(new Slider(game, this, 194,35,'sliderBackground', 'slider',80,20,3));
     this.topScroll.onChange.add(function(percentage){console.log(percentage), this});
     this.topScroll.onBegin.add(function(){console.log('Hola')}, this);
     this.topScroll.onEnd.add(function(){console.log('Adios')}, this);
-    this.topScroll.move(50);
+
+    //this.topScroll.events.onInputDown();
+
+    //this.topScroll.move(this.game.input.y);
+
+
 }
 
 EventHUD.prototype = Object.create(Phaser.Group.prototype);

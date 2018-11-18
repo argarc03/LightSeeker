@@ -10,22 +10,22 @@ var IntroScene = {
   },
 
 
-  appear(object, duration){
+  appear(object, duration, delay){
     object.alpha = 0;
 
-    var tween = this.game.add.tween(object).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true);
-    tween.onComplete.add(function(){this.game.time.events.add(Phaser.Timer.SECOND * duration,
-       function(){this.game.add.tween(object).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true)}, this);},this);
+    var tween = this.game.add.tween(object).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, delay);
+    tween.onComplete.add(function(){this.game.add.tween(object).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, duration)}
+       , this);
   },
   
   create: function () {
     var style = require('../../assets/fonts/style.json');
 
+    'LA LUZ DE LA ESPERANZA SE HA EXTINGUIDO......Y SE TE HA ENCOMENDADO EL DEBER DE VOLVER A AVIVARLO...LA ALDEA TE NECESITA..'
 
 
-
-    this.appear(this.game.add.richText(40, 80, 80, "ERASE UNA VEZ...", style),2);
-    this.appear(this.game.add.richText(80, 80, 80, "UNA ALDEA...", style),2);
+    this.appear(this.game.add.richText(40, 80, 80, "CUENTA LA LEYENDA...", style),2000);
+    this.appear(this.game.add.richText(80, 80, 80, "QUE HACE MUCHO TIEMPO", style),2000, 4000);
     
 
     //espera a que acabe intro
