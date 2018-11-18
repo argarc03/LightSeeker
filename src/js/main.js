@@ -166,6 +166,7 @@ var ScrollText = require('./interface/scrollText');
 var EventHUD = require('./interface/eventHUD');
 var OptionMenu = require('./interface/optionMenu');
 var ButtonMenu = require('./interface/buttonMenu');
+var SliderImage = require('./interface/sliderImage');
 /**
  * 
  */
@@ -236,4 +237,8 @@ Phaser.GameObjectFactory.prototype.optionMenu = function (buttonsMenu, group) {
   Phaser.GameObjectFactory.prototype.buttonMenu = function (name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
     if (group === undefined) { group = this.world; }
     return group.add(new ButtonMenu(this.game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
+  }
+
+  Phaser.GameObjectFactory.prototype.sliderImage = function (x, y, key, height, parent = this.game.world) {
+    return group.add(new SliderImage(this.game, parent, x, y, key, height));
   }
