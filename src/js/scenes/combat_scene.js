@@ -111,7 +111,7 @@ var CombatScene = {
     this.seeker.onDeathComplete.add(this.MainMenuScene, this);
     this.enemy.onDeathComplete.add(this.MainMenuScene, this);
     //para ir a fullscreen pulsar F4
-    this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
 
     //music
     var music = this.game.add.audio('firetheme', 0.1, true);

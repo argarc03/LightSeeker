@@ -49,7 +49,7 @@ var EventScene = {
 
 
     //para ir a fullscreen pulsar F4
-    this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
 
     //Controles para cambiar de escenas
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
