@@ -12,8 +12,9 @@ var EventHUD = function(game, parent, seeker, text, options) {
         options[element].callback;
     }
     let style = require('../../assets/fonts/style.json');
-    style.align = 'left';
+    style.align = 'center';
     this.text = this.add(new ScrollText(game, this,0,0,150,100, text, style));
+    console.log(this.text);
 
     this.healthBar = this.add(new HealthBar(game,2,121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', style, 100, 100,this));
    

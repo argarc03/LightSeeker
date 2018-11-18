@@ -118,9 +118,10 @@ var CombatScene = {
     this.game.sound.stopAll();
     music.play();
 
+    this.game.add.infoWindow(50, 50, 50, 60, 'infoWindow',  'Damelo Todo \n\nPapito', {align: 'right'});
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
-    console.log('esto esta bien');
+    
   },
   update: function () {
     //prueba cursor

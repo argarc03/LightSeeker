@@ -18,6 +18,7 @@ var OptionMenu = require('./interface/optionMenu');
 var ButtonMenu = require('./interface/buttonMenu');
 var WindowFrame = require('./interface/windowFrame');
 var FramedButton = require('./interface/framedButton');
+var InfoWindow = require('./interface/infoWindow');
 /**
  * 
  */
@@ -110,13 +111,16 @@ fun = function (Phaser) {
         frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
         overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
         overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame, parent = this.world){
-            return new FramedButton(parent, this.game,x, y, buttonKey, frameKey, callbacks, 
-                frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
-                overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
-                overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame)
-        }
+            
+        return new FramedButton(parent, this.game,x, y, buttonKey, frameKey, callbacks, 
+            frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
+            overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
+            overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame)
+    }
 
-    
+    Phaser.GameObjectFactory.prototype.infoWindow = function(x, y, width, height, windowKey,  text, style, parent = this.world){
+        return new InfoWindow(parent,this.game,x,y,width,height,windowKey,text,style);
+    }
 }
 
 module.exports = fun;
