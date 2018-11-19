@@ -12,6 +12,7 @@ LightSeeker
 ### - Colossal bosses who will test your skills
 
 ## Fights with a renovated [Active Time Battle](https://www.giantbomb.com/active-time-battle/3015-95/) style!
+<p align="center"><img src="https://user-images.githubusercontent.com/36244271/48739165-670ac580-ec53-11e8-966c-dde36f070989.PNG" width="500" height="350"></p>
 
 Attack or block at the right moment! Because you need to restore your actions.
 Watch the enemy’s moves carefully.
@@ -19,7 +20,7 @@ Watch the enemy’s moves carefully.
 Be wary. Each enemy involve a different challenge.
 
 ## Forge your fate with your decisions!
-<p align="center"><img src="https://user-images.githubusercontent.com/33768598/45785240-d3754280-bc6b-11e8-93ad-7af6ebbeb003.jpg" width="500" height="300"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/33768598/45785240-d3754280-bc6b-11e8-93ad-7af6ebbeb003.jpg" width="500" height="350"></p>
 
 All of your choices have consequences. Choose wisely. You can be awarded with __Light Gems__ or punished with dangerous situations where only your wisdom can save yourself.
 
