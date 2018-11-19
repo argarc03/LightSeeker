@@ -87,7 +87,9 @@ var CombatScene = {
     this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
-
+    this.game.input.keyboard.addKey(Phaser.Keyboard.J).onDown.add(function(){
+      this.seeker.heal(3);
+    }, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);
   },this);
 

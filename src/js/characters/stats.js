@@ -81,6 +81,12 @@ Object.defineProperty(Stats.prototype, 'health',{
     }
 });
 
+Object.defineProperty(Stats.prototype, 'maxHp',{
+    get: function() {
+        return this._health
+    }
+});
+
 Object.defineProperty(Stats.prototype, 'perception',{
     get: function() {
         return this._perception
