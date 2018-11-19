@@ -56,6 +56,10 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
     this.character.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
 }
 
+ActionFactory.prototype.useObjects = function() {
+    this.character.utilize = Action.utilize;
+}
+
 /**
  * 
  * @param {number[]|string[]} framesDying 

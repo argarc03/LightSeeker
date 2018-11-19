@@ -12,6 +12,8 @@ var ReactiveRichText = require('./interface/reactiveRichText');
 var RichText = require('./interface/richText');
 var ActionButton = require('./interface/actionButton');
 var SeekerCombatHUD = require('./interface/seekerCombatHUD');
+var EnemyCombatHUD = require('./interface/enemyCombatHUD');
+var CombatHUD = require('./interface/combatHUD');
 var ScrollText = require('./interface/scrollText');
 var EventHUD = require('./interface/eventHUD');
 var OptionMenu = require('./interface/optionMenu');
@@ -28,9 +30,9 @@ fun = function (Phaser) {
         return group.add(new Character(this.game, x, y, name, stats, spriteSheet, emitter));
     }
 
-    Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, spriteSheet, emitter, group) {
+    Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, objects, spriteSheet, emitter, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Seeker(this.game, x, y, name, stats, spriteSheet, emitter));
+        return group.add(new Seeker(this.game, x, y, name, stats, objects, spriteSheet, emitter));
     }
 
     Phaser.GameObjectFactory.prototype.enemy = function (x, y, name, stats, spriteSheet, seeker, pattern, group) {
@@ -82,6 +84,14 @@ fun = function (Phaser) {
 
     Phaser.GameObjectFactory.prototype.seekerCombatHUD = function (x, y, seeker, enemy, parent = this.game.world) {
         return new SeekerCombatHUD(this.game, parent, x, y, seeker, enemy);
+    }
+
+    Phaser.GameObjectFactory.prototype.enemyCombatHUD = function (x, y, seeker, enemy, parent = this.game.world) {
+        return new EnemyCombatHUD(this.game, parent, x, y, seeker, enemy);
+    }
+
+    Phaser.GameObjectFactory.prototype.combatHUD = function (x, y, seeker, enemy, parent = this.game.world) {
+        return new CombatHUD(this.game, parent, x, y, seeker, enemy);
     }
 
     Phaser.GameObjectFactory.prototype.scrollText = function (x, y, width, height, text, style, parent = this.game.world) {

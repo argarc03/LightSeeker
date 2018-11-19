@@ -23,7 +23,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   let style = require('../../assets/fonts/style.json');
   var style2 = { font: 'Minecraft', fill: '#000000', fontSize: 10 };
   var style3 = { font: 'Minecraft', fill: '#000000', fontSize: 10, align: 'center' };
-  this.frame = this.add(new Phaser.Sprite(game, x, y, 'interface'));
+
 
   this.blockButton = this.add(new ActionButton(this, game, 44, 132, 'blockIcon', 'actionFrame','blockIcon', [{callback: seeker.block, context: seeker, arguments: []}], 
     function () {
@@ -56,8 +56,6 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   seeker.onDeath.add(deactivateActionButton, this.attackButton);
   enemy.onDeath.add(this.attackButton.deactivate, this.blockButton);
   enemy.onDeath.add(this.blockButton.deactivate, this.attackButton);
-
-  
 
   this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
 

@@ -80,6 +80,26 @@ var Action = {
     die() {
         this.onDeath.dispatch();
         this.animations.play('dying', this.frameRate, false);
+    },
+
+    /**
+     * 
+     */
+    utilize(object, target) {
+        let item;
+        if(typeof object === 'string') {
+            item = this.objects.find(function(element){
+                return element.name = object;
+            });
+        } else {
+            item = item.objects[object];
+        }
+        if( item && item.active && item.quantity > 0) {
+            item.utilize.call(this, target);
+            if(item.consume()) {
+                item.destroy();
+            }
+        }
     }
 }
 

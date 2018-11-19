@@ -72,6 +72,7 @@ SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlockin
     this.character.block.coolDownTime = selfCoolDown;
 }
 
+
 SeekerActionFactory.prototype.die = function (framesDying) {
     ActionFactory.prototype.die.call(this, framesDying);
 }
