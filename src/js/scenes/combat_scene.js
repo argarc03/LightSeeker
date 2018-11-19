@@ -54,7 +54,7 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
     //render seeker //tope de nombre caracteres = 9
-    this.seeker = this.game.add.seeker(0, -8, '99', new Stats(1, 3, 1, 20, 1), 
+    this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(1, 3, 1, 20, 1), 
       [new Item('Heal Potion', 'Restores 10hp','itemIcon',true,function(){
         this.hurt(10); 
       }, 1, function() {

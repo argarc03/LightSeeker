@@ -8,7 +8,7 @@ var EnemyCombatHUD = function (game, parent, x, y, seeker, enemy) {
     
     let style = require('../../assets/fonts/style.json');
     this.healthBar = this.add(new HealthBar(game, 119, 121, enemy, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
-    this._actionBar = this.add(new ActionBar(game, this, 87,121,enemy,'actionsBarFrame'));
+    this._actionBar = this.add(new ActionBar(game, this, 87,122,enemy,'actionsBarFrame'));
 }
 
 

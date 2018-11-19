@@ -19,7 +19,7 @@ var ActionButton = function (parent, game, x, y, buttonKey, frameKey, barKey, ca
     this._bar.maskAngle = -90;
     this.moveUp(this._frame);
 
-    this._text = this.add(new ReactiveRichText(game, 0, 2, this._button.width, textFunction.Fun(timeFunction, timeFunctionContext), {
+    this._text = this.add(new ReactiveRichText(game, 1, 2, this._button.width, textFunction.Fun(timeFunction, timeFunctionContext), {
         "font": "Minecraft",
         "fill": "#fff",
         "fontSize": 10,
