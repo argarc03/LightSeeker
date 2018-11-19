@@ -104,22 +104,22 @@ fun = function (Phaser) {
     }
 
     Phaser.GameObjectFactory.prototype.windowFrame = function (x, y, width, height, key, parent = this.world) {
-        return new WindowFrame( this.game, parent, x, y, width, height, key );
+        return new WindowFrame(this.game, parent, x, y, width, height, key);
     }
 
-    Phaser.GameObjectFactory.prototype.framedButton = function(x, y, buttonKey, frameKey, callbacks, 
+    Phaser.GameObjectFactory.prototype.framedButton = function (x, y, buttonKey, frameKey, callbacks,
         frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
         overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
-        overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame, parent = this.world){
-            
-        return new FramedButton(parent, this.game,x, y, buttonKey, frameKey, callbacks, 
+        overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame, parent = this.world) {
+
+        return new FramedButton(parent, this.game, x, y, buttonKey, frameKey, callbacks,
             frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
             overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
             overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame)
     }
 
-    Phaser.GameObjectFactory.prototype.infoWindow = function(x, y, width, height, windowKey,  text, style, parent = this.world){
-        return new InfoWindow(parent,this.game,x,y,width,height,windowKey,text,style);
+    Phaser.GameObjectFactory.prototype.infoWindow = function (x, y, width, height, windowKey, text, style, parent = this.world) {
+        return new InfoWindow(parent, this.game, x, y, width, height, windowKey, text, style);
     }
 }
 

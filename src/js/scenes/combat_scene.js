@@ -117,8 +117,7 @@ var CombatScene = {
     var music = this.game.add.audio('firetheme', 0.1, true);
     this.game.sound.stopAll();
     music.play();
-
-    this.game.add.infoWindow(50, 50, 50, 60, 'infoWindow',  'Damelo Todo \n\nPapito', {align: 'right'});
+    this.game.add.infoWindow(50, 50, 50, 60, 'infoWindow',  'Damelo Todo \n\nPapito', {align: 'left'});
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
     

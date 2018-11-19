@@ -3,10 +3,10 @@
 var SliderImage = require('./sliderImage');
 
 
-var Slider = function (game, parent, _x, _y, keyContiner, keySlider, height, sliderHeight, offsetSlider) {
+var Slider = function (game, parent, x, y, keyContiner, keySlider, height, sliderHeight, offsetSlider) {
     Phaser.Group.call(this, game, parent);
-    this.x = _x;
-    this.y = _y;
+    this.x = x;
+    this.y = y;
     this._container = this.add(new SliderImage(game, this, 0, 0, keyContiner, height));
     this._slider = this.add(new SliderImage(game, this, 0, offsetSlider, keySlider, sliderHeight));
     

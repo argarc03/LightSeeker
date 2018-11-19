@@ -57,7 +57,6 @@ RichText.prototype.write = function () {
             }
             this.indexFirstParragraphLetter = this.children.length + 1;
         } else if (this.align === 'right') {
-            console.log('H')
             let tmpwidth = 0;
             for (let j = this.indexFirstParragraphLetter; j < this.children.length; j++) {
                 tmpwidth += this.getChildAt(j).width;
@@ -65,9 +64,7 @@ RichText.prototype.write = function () {
             tmpwidth = (this.lineWidth - tmpwidth);
             if (this.getChildAt(this.children.length - 1).text === ' ') { tmpwidth += this.getChildAt(this.children.length - 1).width }
             for (let j = this.indexFirstParragraphLetter; j < this.children.length; j++) {
-                console.log('H', this.getChildAt(j).x);
                 this.getChildAt(j).x += tmpwidth;
-                console.log('U', this.getChildAt(j).x);
             }
             this.indexFirstParragraphLetter = this.children.length + 1;
         }

@@ -25,7 +25,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   var style3 = { font: 'Minecraft', fill: '#000000', fontSize: 10, align: 'center' };
   this.frame = this.add(new Phaser.Sprite(game, x, y, 'interface'));
 
-  this.blockButton = this.add(new ActionButton(this, game, x + 44, y + 132, 'blockIcon', 'actionFrame','blockIcon', [{callback: seeker.block, context: seeker, arguments: []}], 
+  this.blockButton = this.add(new ActionButton(this, game, 44, 132, 'blockIcon', 'actionFrame','blockIcon', [{callback: seeker.block, context: seeker, arguments: []}], 
     function () {
       return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
     }, seeker, function () {
@@ -37,7 +37,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     }
   }, seeker, seeker.coolDown.block.onWhile, seeker.coolDown.block.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
-  this.attackButton = this.add(new ActionButton(this, game, x + 25, y + 132, 'attackIcon', 'actionFrame','attackIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
+  this.attackButton = this.add(new ActionButton(this, game, 25, 132, 'attackIcon', 'actionFrame','attackIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
    function () {
       return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
     }, seeker, function () {
@@ -56,47 +56,47 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   seeker.onDeath.add(deactivateActionButton, this.attackButton);
   enemy.onDeath.add(this.attackButton.deactivate, this.blockButton);
   enemy.onDeath.add(this.blockButton.deactivate, this.attackButton);
-  this.healthBar = this.add(new HealthBar(game, x + 2, y + 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
+  this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
 
-  this.name = this.add(new ReactiveRichText(game, x + 3, y - 1, 80, textFunctions.Fun(function () {
+  this.name = this.add(new ReactiveRichText(game, 3, -1, 80, textFunctions.Fun(function () {
     return this.name;
   }, seeker), style2, this, seeker.onNameChange));
 
-  this.healthIcon = this.add(new Phaser.Sprite(game, x + 3, y + 14, 'healthIcon'));
-  this.healthNumber = this.add(new ReactiveRichText(game, x + 15, y + 13, 11, textFunctions.Fun(function () {
+  this.healthIcon = this.add(new Phaser.Sprite(game, 3, 14, 'healthIcon'));
+  this.healthNumber = this.add(new ReactiveRichText(game, 15, 13, 11, textFunctions.Fun(function () {
     return this.stats.health.toString();
   }, seeker), style2, this, seeker.stats.onHealthChange));
 
-  this.damageIcon = this.add(new Phaser.Sprite(game, x + 27, y + 14, 'damageIcon'));
-  this.damageNumber = this.add(new ReactiveRichText(game, x + 39, y + 13, 11, textFunctions.Fun(function () {
+  this.damageIcon = this.add(new Phaser.Sprite(game, 27, 14, 'damageIcon'));
+  this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 11, textFunctions.Fun(function () {
     return this.stats.damage.toString();
   }, seeker), style2, this, seeker.stats.onDamageChange));
 
-  this.defenseIcon = this.add(new Phaser.Sprite(game, x + 51, y + 14, 'defenseIcon'));
-  this.defenseNumber = this.add(new ReactiveRichText(game, x + 63, y + 13, 11, textFunctions.Fun(function () {
+  this.defenseIcon = this.add(new Phaser.Sprite(game, 51, 14, 'defenseIcon'));
+  this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 11, textFunctions.Fun(function () {
     return this.stats.defense.toString();
   }, seeker), style2, this, seeker.stats.onDefenseChange));
 
-  this.speedIcon = this.add(new Phaser.Sprite(game, x + 13, y + 24, 'speedIcon'));
-  this.speedNumber = this.add(new ReactiveRichText(game, x + 25, y + 23, 11, textFunctions.Fun(function () {
+  this.speedIcon = this.add(new Phaser.Sprite(game, 13, 24, 'speedIcon'));
+  this.speedNumber = this.add(new ReactiveRichText(game, 25, 23, 11, textFunctions.Fun(function () {
     return this.stats.speed.toString();
   }, seeker), style2, this, seeker.stats.onSpeedChange));
 
-  this.perceptionIcon = this.add(new Phaser.Sprite(game, x + 38, y + 24, 'perceptionIcon'));
-  this.perceptionNumber = this.add(new ReactiveRichText(game, x + 50, y + 23, 11, textFunctions.Fun(function () {
+  this.perceptionIcon = this.add(new Phaser.Sprite(game, 38, 24, 'perceptionIcon'));
+  this.perceptionNumber = this.add(new ReactiveRichText(game, 50, 23, 11, textFunctions.Fun(function () {
     return this.stats.perception.toString();
   }, seeker), style2, this, seeker.stats.onPerceptionChange));
 
-  this.gemIcon = this.add(new Phaser.Sprite(game, x + 68, y + 1, 'gemIcon'));
-  this.gemNumber = this.add(new ReactiveRichText(game, x + 50, y - 1, 15, textFunctions.Fun(function () {
+  this.gemIcon = this.add(new Phaser.Sprite(game, 68, 1, 'gemIcon'));
+  this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 15, textFunctions.Fun(function () {
     return this.gems.toString();
   }, seeker), style2, this, seeker.stats.onPerceptionChange));
 
-  this.day = this.add(new ReactiveRichText(game, x + 80, y - 1, 40, textFunctions.Fun(function () {
+  this.day = this.add(new ReactiveRichText(game, 80, -1, 40, textFunctions.Fun(function () {
     return this.stats.perception.toString();
   }, seeker), style3, this, seeker.stats.onPerceptionChange));
 
-  this.game.add.optionMenu([['pauseButton', x + 190,y + 2, 'pauseButton', this.EventScene, this, {}]]);
+  this.game.add.optionMenu([['pauseButton', 190, 2, 'pauseButton', this.EventScene, this, {}]]);
 }
 
 SeekerCombatHUD.prototype = Object.create(Phaser.Group.prototype);

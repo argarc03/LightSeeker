@@ -2,8 +2,10 @@
 
 var Bar = function (game, parent, x, y, key, frame = null) {
     Phaser.Group.call(this, game, parent);
-    this.bar = this.add(new Phaser.Sprite(game, x, y, key, frame));
-    this.mask = this.add(new Phaser.Graphics(game, x, y));
+    this.x = x;
+    this.y = y;
+    this.bar = this.add(new Phaser.Sprite(game, 0, 0, key, frame));
+    this.mask = this.add(new Phaser.Graphics(game, 0, 0));
     this.bar.mask = this.mask;
     this.mask.beginFill(0xffffff);
     this.mask.drawRect(0, 0, this.bar.width, this.bar.height);

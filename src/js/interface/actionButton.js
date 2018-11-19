@@ -15,11 +15,11 @@ var ActionButton = function (parent, game, x, y, buttonKey, frameKey, barKey, ca
          overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
          overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame);
     this._button.tint = 0x5c5c5c;
-    this._bar = this.add(new ReactiveBar(game, parent, x, y, barKey, percentageFunction, percentageFunctionContext, barSignal, barFrame));
+    this._bar = this.add(new ReactiveBar(game, parent, 0, 0, barKey, percentageFunction, percentageFunctionContext, barSignal, barFrame));
     this._bar.maskAngle = -90;
     this.moveUp(this._frame);
 
-    this._text = this.add(new ReactiveRichText(game, x, y + 2, this._button.width, textFunction.Fun(timeFunction, timeFunctionContext), {
+    this._text = this.add(new ReactiveRichText(game, 0, 2, this._button.width, textFunction.Fun(timeFunction, timeFunctionContext), {
         "font": "Minecraft",
         "fill": "#fff",
         "fontSize": 10,
