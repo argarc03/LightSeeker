@@ -20,7 +20,7 @@ Watch the enemy’s moves carefully.
 Be wary. Each enemy involve a different challenge.
 
 ## Forge your fate with your decisions!
-<p align="center"><img src="https://user-images.githubusercontent.com/33768598/45785240-d3754280-bc6b-11e8-93ad-7af6ebbeb003.jpg" width="500" height="350"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/36244271/48739344-fdd78200-ec53-11e8-9421-6eb0996c5c75.PNG" width="500" height="350"></p>
 
 All of your choices have consequences. Choose wisely. You can be awarded with __Light Gems__ or punished with dangerous situations where only your wisdom can save yourself.
 
