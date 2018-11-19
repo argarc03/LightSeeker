@@ -4,11 +4,6 @@
 LightSeeker 
 =====
 
-Awesome game by
-[gituser](https://github.com/gituser).
-
-Initial scaffolding generated with [generator-gamejam](https://github.com/belen-albeza/generator-gamejam/).
-
 ## Get inside the subterranean galleries of Spiliag in search of the Light Gems!
 ### Each new quest you get into will be completely different thanks to our procedural generation system:
 
@@ -16,13 +11,7 @@ Initial scaffolding generated with [generator-gamejam](https://github.com/belen-
 ### - Unique enemies randomly generated
 ### - Colossal bosses who will test your skills
 
-This games uses [gulp](http://gulpjs.com/) for building and tasks automation.
-
-You can install gulp with npm:
-
 ## Fights with a renovated [Active Time Battle](https://www.giantbomb.com/active-time-battle/3015-95/) style!
-
-### Build
 
 Attack or block at the right moment! Because you need to restore your actions.
 Watch the enemy’s moves carefully.
@@ -35,11 +24,6 @@ Be wary. Each enemy involve a different challenge.
 All of your choices have consequences. Choose wisely. You can be awarded with __Light Gems__ or punished with dangerous situations where only your wisdom can save yourself.
 
 ## Bring your loot to keep The Village safe or improve your skills!
-
-```
-npm install -g http-server
-http-server dist
-```
 
 In your adventure you can go back and save the __Light Gems__, but there is a price. Proceed if you can or die trying. A new __LightSeeker__ will be chosen and you must guide him to glory.
 
@@ -59,18 +43,3 @@ In LightSeeker you take the control of a Lightseeker, the chosen by the __Great 
 
 Developed by __Turing's Song Studios__ ([Arturo García Cárdenas](https://github.com/argarc03) y [Carlos Durán Domínguez](https://github.com/CarlosDuranDominguez))
 <p align="center"><img src="https://user-images.githubusercontent.com/36244271/45879847-408cf300-bda6-11e8-8e9d-d22890c375c0.png" width="200" height="200"></p>
-
-```
-gulp run
-```
-
-
-
-
-
-You can deploy to **Github Pages** with the `deploy:ghpages` task, which will build the project and then push the `dist` folder in the `gh-pages` branch.
-
-```
-gulp deploy:ghpages
-```
-
