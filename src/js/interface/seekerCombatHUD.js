@@ -5,14 +5,14 @@ var ReactiveRichText = require('./reactiveRichText');
 var textFunctions = require('./textFunctions');
 
 var deactivateActionButton = function () {
-  this.button.onInputOver.removeAll();
-  this.button.onInputOut.removeAll();
-  this.button.onInputDown.removeAll();
-  this.button.onInputUp.removeAll();
+  this._button.onInputOver.removeAll();
+  this._button.onInputOut.removeAll();
+  this._button.onInputDown.removeAll();
+  this._button.onInputUp.removeAll();
   this._rechargeEvent.active = false;
-  this.text.visible = false;
-  this.bar.percentageFunction = function () { return 0; };
-  this.bar.percentage = 0;
+  this._text.visible = false;
+  this._bar.percentageFunction = function () { return 0; };
+  this._bar.percentage = 0;
   this.deactivate()
 };
 
