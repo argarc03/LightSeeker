@@ -97,6 +97,16 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     return this.stats.perception.toString();
   }, seeker), style3, this, seeker.stats.onPerceptionChange));
 
+  this.villageGemIcon = this.add(new Phaser.Image(game, 110-3, 18, 'villageGemIcon'));
+    this.villageGemNumber = this.add(new ReactiveRichText(game, 90-3, 16, 15, textFunctions.Fun(function () {
+    return this.gems.toString();//hay que cambiarlo
+    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
+
+    this.populationIcon = this.add(new Phaser.Image(game, 110-3, 28, 'populationIcon'));
+    this.populationNumber = this.add(new ReactiveRichText(game, 90-3, 26, 15, textFunctions.Fun(function () {
+    return this.gems.toString();//hay que cambiarlo
+    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
+
   this.game.add.optionMenu([['pauseButton', 190, 2, 'pauseButton', this.EventScene, this, {}]]);
 }
 

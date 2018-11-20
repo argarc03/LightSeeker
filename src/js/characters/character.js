@@ -10,7 +10,7 @@ var ActionFactory = require('./actionFactory');
 var ParticleFactory = require('./particleFactory.js');
 
 /**
- * A Character is an instance...
+ * A Character is an instance...jeje
 */
 
 /**
