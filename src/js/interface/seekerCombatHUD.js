@@ -3,6 +3,7 @@ var ActionButton = require('./actionButton');
 var HealthBar = require('./healthBar');
 var ReactiveRichText = require('./reactiveRichText');
 var textFunctions = require('./textFunctions');
+var FramedButton = require('./framedButton')
 
 var deactivateActionButton = function () {
   this._button.onInputOver.removeAll();
@@ -48,6 +49,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
       return a.toFixed(1).toString();
     }
   }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+
   this.blockButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
   this.blockButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
   this.attackButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
@@ -56,6 +58,9 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   seeker.onDeath.add(deactivateActionButton, this.attackButton);
   enemy.onDeath.add(this.attackButton.deactivate, this.blockButton);
   enemy.onDeath.add(this.blockButton.deactivate, this.attackButton);
+
+  this.item1Button = this.add(new FramedButton(this, game, 3,130, seeker.items[0].key,'itemFrame', [{callback:function(){seeker.use(0);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+  seeker.items[0].onUse.add(this.item1Button.deactivate, this.item1Button);
 
   this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
 
