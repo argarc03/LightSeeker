@@ -20,7 +20,6 @@ var Seeker = function (game, x, y, name, stats, items, spriteSheet) {
     this.addAction = new SeekerActionFactory(this);
     this.gems = 999;
     this.items = items;
-    console.log(items);
 }
 
 Seeker.prototype = Object.create(Character.prototype);

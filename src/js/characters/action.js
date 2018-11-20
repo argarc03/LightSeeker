@@ -89,11 +89,11 @@ var Action = {
         let item;
         if(typeof object === 'string') {
             item = this.items.findIndex(function(element){
-                return element.name = object;
+                return element.name === object;
             });
             object = item;
         }
-        
+
         if( object >= 0 && object < 2) {
             item = this.items[object];
             item.use.call(this, this, target);

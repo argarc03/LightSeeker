@@ -55,16 +55,19 @@ var CombatScene = {
     var combatbackground = this.game.add.sprite(0, 0, 'combatbackground');
     //render seeker //tope de nombre caracteres = 9
     this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(1, 3, 1, 20, 1), 
-      [new Item('Heal Potion', 'Restores 10hp','itemIcon',function(){
-        this.heal(3); 
-      })], 'seekerAnimations');
+      [new Item('Heal Potion', 'Restores 10hp','itemIcon',function(character, enemy){
+        enemy.heal(3); 
+      }),
+      new Item('Hurt Potion', 'Deals 10 damage','itemIcon2',function(){
+        this.hurt(3); 
+      }),
+    ], 'seekerAnimations');
     this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000);
     this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000);
     this.seeker.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]);
     this.seeker.addAction.useObjects();
     this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
-      console.log(this.seeker.items);
     //render enemy
 
     this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').boss);

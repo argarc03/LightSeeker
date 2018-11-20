@@ -3,8 +3,8 @@
 var _use = function(use, that) {
     var that;
     var cuse = use;
-    return function() {
-        use.apply(this);
+    return function(character, enemy) {
+        use.call(this, character, enemy);
         that.onUse.dispatch();
     }
 }
@@ -16,7 +16,6 @@ var Item = function(name, description, key, use) {
     this.onUse = new Phaser.Signal();
     this.use = _use(use, this);
     
-    console.log(arguments)
 }
 
 Item.prototype.destroy = function() {

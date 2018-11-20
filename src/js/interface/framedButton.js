@@ -1,6 +1,6 @@
 
 var changeFrameFrame = function (frame) {
-    console.log(frame);
+
     this._frame.tint = this['_frameColor' + frame];
     frame = this['_' + frame.toLowerCase() + 'FrameFrame'];
     if (typeof frame === 'number') {

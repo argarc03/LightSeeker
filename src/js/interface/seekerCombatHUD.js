@@ -59,9 +59,16 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   enemy.onDeath.add(this.attackButton.deactivate, this.blockButton);
   enemy.onDeath.add(this.blockButton.deactivate, this.attackButton);
 
-  this.item1Button = this.add(new FramedButton(this, game, 3,130, seeker.items[0].key,'itemFrame', [{callback:function(){seeker.use(0);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
-  seeker.items[0].onUse.add(this.item1Button.deactivate, this.item1Button);
-  seeker.items[0].onUse.add(function() { this.item1Button._button.key = 'emptyItem';}, this);
+  var object1 = seeker.items[0];
+  var object2 = seeker.items[1];
+  
+  this.item1Button = this.add(new FramedButton(this, game, 3,139, seeker.items[0].key,'itemFrame', [{callback:function(){seeker.use(object1.name, enemy);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+  object1.onUse.add(this.item1Button.deactivate, this.item1Button);
+  object1.onUse.add(function() { this.item1Button._button.loadTexture('emptyItem');}, this);
+
+  this.item2Button = this.add(new FramedButton(this, game, 14,139, seeker.items[1].key,'itemFrame', [{callback:function(){seeker.use(object2.name, enemy);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+  object2.onUse.add(this.item2Button.deactivate, this.item2Button);
+  object2.onUse.add(function() { this.item2Button._button.loadTexture('emptyItem');}, this);
 
 
   this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
