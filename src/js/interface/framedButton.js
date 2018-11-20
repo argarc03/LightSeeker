@@ -1,5 +1,6 @@
 
 var changeFrameFrame = function (frame) {
+    console.log(frame);
     this._frame.tint = this['_frameColor' + frame];
     frame = this['_' + frame.toLowerCase() + 'FrameFrame'];
     if (typeof frame === 'number') {
@@ -90,8 +91,8 @@ FramedButton.prototype._up = function () {
     if (this._button.input.enabled) {
         changeFrameFrame.call(this, 'Up');
         if (this._button.input.checkPointerOver(this.game.input.activePointer)) {
-            this._do();
             changeFrameFrame.call(this, 'Over');
+            this._do();
         } else {
             changeFrameFrame.call(this, 'Out');
         }

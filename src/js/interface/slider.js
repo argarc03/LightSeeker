@@ -26,8 +26,8 @@ var Slider = function (game, parent, x, y, keyContiner, keySlider, height, slide
             this.onEnd.dispatch();
         }
         this._slider.x = this._drag.x;
-        this._slider.y = this._drag.y-this._offset;
-        this.onChange.dispatch((this._slider.y - this._container.y) / (this._container.height - 2 * this._offset - this._slider.height) * 100);
+        this._slider.y = this._drag.y;
+        this.onChange.dispatch((this._slider.y - this._offset) / (this._container.height - 2 * this._offset - this._slider.height) * 100);
     }, this);
     this.onBegin = new Phaser.Signal();
     this.onEnd = new Phaser.Signal();
@@ -40,12 +40,15 @@ Slider.prototype.constructor = Slider;
 Slider.prototype.move = function (movement) {
     this._slider.y += movement * (this._container.height - 2 * this._offset - this._slider.height) / 100;
     if (this._slider.y <= this._container.y) {
+        this._drag.y = this._offset;
         this.onBegin.dispatch();
         this._slider.y = this._container.y;
     } else if (this._slider.y >= this._container.y + this._container.height - 2 * this._offset - this._slider.height) {
+        this._drag.y=this._offset + this._container.height - 2 * this._offset - this._slider.height;
         this.onEnd.dispatch();
         this._slider.y = this._container.y + this._container.height - 2 * this._offset - this._slider.height;
     }
+    this._drag.y = this._slider.y +this._offset;
     this.onChange.dispatch((this._slider.y - this._container.y) / (this._container.height - 2 * this._offset - this._slider.height) * 100);
 }
 

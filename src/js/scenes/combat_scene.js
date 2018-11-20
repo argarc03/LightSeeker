@@ -56,7 +56,7 @@ var CombatScene = {
     //render seeker //tope de nombre caracteres = 9
     this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(1, 3, 1, 20, 1), 
       [new Item('Heal Potion', 'Restores 10hp','itemIcon',true,function(){
-        this.hurt(10000); 
+        this.hurt(10); 
       }, 1, function() {
         this.quantity--;
         return this.quantity <= 0;
@@ -70,7 +70,7 @@ var CombatScene = {
 
     //render enemy
 
-    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').normal);
+    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Big Spider', new Stats(10, 1, 1, 10, 1), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').boss);
     this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
     this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
     this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
@@ -97,7 +97,7 @@ var CombatScene = {
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.J).onDown.add(function(){
-      this.seeker.utilize('Heal Potion');
+      this.seeker.heal(3);
     }, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);
   },this);
@@ -128,7 +128,7 @@ var CombatScene = {
     var music = this.game.add.audio('firetheme', 0.1, true);
     this.game.sound.stopAll();
     music.play();
-    this.game.add.infoWindow(50, 50, 62, 52, 'infoWindow',  'Vitalidad\n Determina tu salud.', {align: 'left'});
+    this.game.add.infoWindow(50, 50, 50, 60, 'infoWindow',  'Damelo Todo \n\nPapito', {align: 'left'});
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
     

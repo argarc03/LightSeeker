@@ -30,14 +30,13 @@ var RichText = function (game, x, y, lineWidth, text, style, parent) {
     };
     this.lineWidth = lineWidth;
     this.lineHeight = this.styleLast.fontSize;
-    this.write(text);
+    this.write();
 }
 
 RichText.prototype = Object.create(Phaser.Group.prototype);
 RichText.prototype.constructor = RichText;
 
 RichText.prototype.write = function () {
-
     this.indexFirstParragraphLetter = 0;
     this.removeAll(true);
     this.xLast = 0;
@@ -180,5 +179,13 @@ RichText.prototype.reWrite = function (proto) {
         }
     }
 }
+
+Object.defineProperty(RichText.prototype, 'text',{
+    set: function(text) {
+        this._protoText = text;
+        this.write();
+        
+    }
+});
 
 module.exports = RichText;
