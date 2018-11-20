@@ -61,6 +61,8 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
 
   this.item1Button = this.add(new FramedButton(this, game, 3,130, seeker.items[0].key,'itemFrame', [{callback:function(){seeker.use(0);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
   seeker.items[0].onUse.add(this.item1Button.deactivate, this.item1Button);
+  seeker.items[0].onUse.add(function() { this.item1Button._button.key = 'emptyItem';}, this);
+
 
   this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
 
