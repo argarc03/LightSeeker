@@ -72,6 +72,7 @@ var PreloaderScene = {
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
         this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
+        this.game.load.image('emptyItem','assets/images/interface/emptyItem.png');
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarShadow','assets/images/interface/actionsBarShadow.png');
