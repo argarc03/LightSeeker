@@ -15,11 +15,12 @@ var Item = require('./item');
  * @param {Stats} stats -
  * @param {string} spriteSheet -
 */
-var Seeker = function (game, x, y, name, stats, objects, spriteSheet) {
+var Seeker = function (game, x, y, name, stats, items, spriteSheet) {
     Character.call(this, game, x, y, name, stats, spriteSheet);
     this.addAction = new SeekerActionFactory(this);
     this.gems = 999;
-    this.objects = objects;
+    this.items = items;
+    console.log(items);
 }
 
 Seeker.prototype = Object.create(Character.prototype);

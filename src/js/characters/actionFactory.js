@@ -57,7 +57,7 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
 }
 
 ActionFactory.prototype.useObjects = function() {
-    this.character.utilize = Action.utilize;
+    this.character.use = Action.use;
 }
 
 /**

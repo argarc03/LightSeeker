@@ -85,20 +85,19 @@ var Action = {
     /**
      * 
      */
-    utilize(object, target) {
+    use(object, target) {
         let item;
         if(typeof object === 'string') {
-            item = this.objects.find(function(element){
+            item = this.items.findIndex(function(element){
                 return element.name = object;
             });
-        } else {
-            item = item.objects[object];
+            object = item;
         }
-        if( item && item.active && item.quantity > 0) {
-            item.utilize.call(this, target);
-            if(item.consume()) {
-                item.destroy();
-            }
+        
+        if( object >= 0 && object < 2) {
+            item = this.items[object];
+            item.use.call(this, this, target);
+            this.items.splice(object,1);
         }
     }
 }

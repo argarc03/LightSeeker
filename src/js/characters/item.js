@@ -1,13 +1,22 @@
 'use strict'
 
-var Item = function(name, description, key, active, utilize, quantity, consume) {
+var _use = function(use, that) {
+    var that;
+    var cuse = use;
+    return function() {
+        use.apply(this);
+        that.onUse.dispatch();
+    }
+}
+
+var Item = function(name, description, key, use) {
     this.name = name;
     this.description = description;
     this.key = key;
-    this.active = active;
-    this.utilize = utilize;
-    this.quantity = quantity;
-    this.consume = consume;
+    this.onUse = new Phaser.Signal();
+    this.use = _use(use, this);
+    
+    console.log(arguments)
 }
 
 Item.prototype.destroy = function() {
