@@ -71,7 +71,13 @@ var PreloaderScene = {
       //INTERFACE
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
+        this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
+        //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
+        this.game.load.image('actionsBarShadow','assets/images/interface/actionsBarShadow.png');
+        this.game.load.image('blockBar','assets/images/interface/blockBar.png');
+        this.game.load.image('attackBar','assets/images/interface/attackBar.png');
+        this.game.load.image('unknownBar','assets/images/interface/unknownBar.png');
         //HUDs
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         this.game.load.image('eventinterface','assets/images/interface/eventinterfaceback.png');
