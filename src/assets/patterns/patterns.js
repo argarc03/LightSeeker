@@ -8,7 +8,7 @@ var bossPattern = function(character, seeker) {
 };
 
 var patterns = {
-    normal: [ {action: "attack", repetitions: 2}, {action: "block"}, {action: "idle", repetitions: 5} ],
+    normal: [ {action: "idle", repetitions: 5}, {action: "attack"}, {action: "idle", repetitions: 4},  {action: "block"}],
     anormal: [{action: "idle"}],
     boss: [{action: bossPattern}]
 }

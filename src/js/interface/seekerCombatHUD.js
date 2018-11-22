@@ -50,18 +50,9 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     }
   }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
-  this.blockButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
-  this.blockButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
-  this.attackButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
-  this.attackButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
-  seeker.onDeath.add(deactivateActionButton, this.blockButton);
-  seeker.onDeath.add(deactivateActionButton, this.attackButton);
-  enemy.onDeath.add(this.attackButton.deactivate, this.blockButton);
-  enemy.onDeath.add(this.blockButton.deactivate, this.attackButton);
-
   var object1 = seeker.items[0];
   var object2 = seeker.items[1];
-  
+
   this.item1Button = this.add(new FramedButton(this, game, 3,139, seeker.items[0].key,'itemFrame', [{callback:function(){seeker.use(object1.name, enemy);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
   object1.onUse.add(this.item1Button.deactivate, this.item1Button);
   object1.onUse.add(function() { this.item1Button._button.loadTexture('emptyItem');}, this);
@@ -70,6 +61,18 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   object2.onUse.add(this.item2Button.deactivate, this.item2Button);
   object2.onUse.add(function() { this.item2Button._button.loadTexture('emptyItem');}, this);
 
+  this.blockButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
+  this.blockButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
+  this.attackButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
+  this.attackButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
+  seeker.onDeath.add(deactivateActionButton, this.blockButton);
+  seeker.onDeath.add(deactivateActionButton, this.attackButton);
+  seeker.onDeath.add(this.item1Button.deactivate, this.item1Button);
+  seeker.onDeath.add(this.item2Button.deactivate, this.item2Button);
+  enemy.onDeath.add(deactivateActionButton, this.blockButton);
+  enemy.onDeath.add(deactivateActionButton, this.attackButton);
+  enemy.onDeath.add(this.item1Button.deactivate, this.item1Button);
+  enemy.onDeath.add(this.item2Button.deactivate, this.item2Button);
 
   this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
 
@@ -83,9 +86,8 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   }, seeker), style2, this, seeker.stats.onHealthChange));
 
   this.damageIcon = this.add(new Phaser.Sprite(game, 27, 14, 'damageIcon'));
-  this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 11, textFunctions.Fun(function () {
-    return this.stats.damage.toString();
-  }, seeker), style2, this, seeker.stats.onDamageChange));
+  this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 11, textFunctions.VariableNumber(function () { return this.stats.damage;}
+  , seeker, 100), style2, this, [seeker.stats.onDamageChange]));
 
   this.defenseIcon = this.add(new Phaser.Sprite(game, 51, 14, 'defenseIcon'));
   this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 11, textFunctions.Fun(function () {
@@ -113,12 +115,12 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
 
   this.villageGemIcon = this.add(new Phaser.Image(game, 110-3, 18, 'villageGemIcon'));
     this.villageGemNumber = this.add(new ReactiveRichText(game, 90-3, 16, 15, textFunctions.Fun(function () {
-    return this.gems.toString();//hay que cambiarlo
+    return this.totalGems.toString();//hay que cambiarlo
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
     this.populationIcon = this.add(new Phaser.Image(game, 110-3, 28, 'populationIcon'));
     this.populationNumber = this.add(new ReactiveRichText(game, 90-3, 26, 15, textFunctions.Fun(function () {
-    return this.gems.toString();//hay que cambiarlo
+    return this.population.toString();//hay que cambiarlo
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
   this.game.add.optionMenu([['pauseButton', 190, 2, 'pauseButton', this.EventScene, this, {}]]);

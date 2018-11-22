@@ -18,7 +18,9 @@ var Item = require('./item');
 var Seeker = function (game, x, y, name, stats, items, spriteSheet) {
     Character.call(this, game, x, y, name, stats, spriteSheet);
     this.addAction = new SeekerActionFactory(this);
-    this.gems = 999;
+    this.gems = 42;
+    this.population = 103;
+    this.totalGems = 569;
     this.items = items;
 }
 
