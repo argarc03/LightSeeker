@@ -9,7 +9,7 @@ var EnemyCombatHUD = function (game, parent, x, y, seeker, enemy) {
     Phaser.Group.call(this, game, parent);
     this.x = x;
     this.y = y;
-    let style = require('../../assets/fonts/style.json');
+    var style = { "font": "Minecraft", "fill": "#FFFFFF", "fontSize": 10, "align": 'center' };
 
     var style2 = {"font": "Minecraft", "fill": "#000000", "fontSize": 10 };
 

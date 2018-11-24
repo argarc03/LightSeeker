@@ -6,6 +6,7 @@ var ReactiveRichText = require('./reactiveRichText');
 var textFunctions = require('./textFunctions');
 var Slider = require('./slider');
 var FramedButton = require('./framedButton');
+var RichText = require('./richText');
 
 var EventHUD = function (game, parent, seeker, text, options) {
     Phaser.Group.call(this, game, parent);
@@ -112,7 +113,6 @@ var EventHUD = function (game, parent, seeker, text, options) {
 
     this.game.add.optionMenu([['pauseButton', 190, 2, 'pauseButton', this.EventScene, this, {}]]);
 
-    console.log(this);
 }
 
 EventHUD.prototype = Object.create(Phaser.Group.prototype);

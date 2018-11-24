@@ -21,7 +21,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
   Phaser.Group.call(this, game, parent);
   this.x = x;
   this.y = y;
-  let style = require('../../assets/fonts/style.json');
+  let style = { "font": "Minecraft", "fill": "#FFFFFF", "fontSize": 10, "align": 'center' };
   var style2 = { font: 'Minecraft', fill: '#000000', fontSize: 10 };
   var style3 = { font: 'Minecraft', fill: '#000000', fontSize: 10, align: 'center' };
 
@@ -80,8 +80,8 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     return this.name;
   }, seeker), style2, this, seeker.onNameChange));
 
-    this.defenseIcon = this.add(new Phaser.Sprite(game,51,14,'defenseIcon'));
-    this.defenseNumber = this.add(new ReactiveRichText(game,63,13,11,textFunctions.Fun(function() {
+    this.defenseIcon = this.add(new Phaser.Sprite(game,3,14,'healthIcon'));
+    this.defenseNumber = this.add(new ReactiveRichText(game,15,13,11,textFunctions.Fun(function() {
         return this.stats.defense.toString();
     }, seeker), style2, this, seeker.stats.onDefenseChange));
 

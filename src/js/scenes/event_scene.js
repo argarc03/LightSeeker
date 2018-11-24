@@ -21,11 +21,6 @@ var EventScene = {
     this.game.add.sprite(0, 0, 'eventbackground');
 
     this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(10, 3, 1, 20, 1), 'seekerAnimations');
-    this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000);
-    this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000);
-    this.seeker.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]);
-    this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
 
     this.HUD = this.game.add.eventHUD(this.seeker, '"Brillos bajo tierra"\n\n Avanzando por los oscuros túneles, avistas un tenue brillo a lo lejos. Cuando te acercas, te das cuenta de que ese brillo sale de la tierra, emergiendo y flotando como si de polvo se tratase. La luz que emite es agradable y te resulta familiar.',
      [{text: '1. Excavar', callback: function(){console.log('Jeje, NO CAVO');
@@ -66,7 +61,6 @@ var EventScene = {
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
     //selector.loadTexture('infoCursor');
-    console.log(this);
   },
 
   update: function () {

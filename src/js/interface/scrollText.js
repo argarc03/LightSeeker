@@ -36,7 +36,6 @@ ScrollText.prototype.move = function(percentage) {
 
 Object.defineProperty(ScrollText.prototype, 'text',{
     set: function(text) {
-        console.log(this);
         this._text.text = text;
         this._text.y = 0;
     }
