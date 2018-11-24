@@ -70,7 +70,7 @@ var MainMenuScene = {
     //new run/continue run
 
     //para ir a fullscreen pulsar F4
-    this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
+    //this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
 
 
     //Controles para moverse entre botones
@@ -83,7 +83,7 @@ var MainMenuScene = {
 
 
     //music
-    var music = this.game.add.audio('shoptheme', 0.1, true);
+    var music = this.game.add.audio('mainmenutheme', 0.1, true);
     this.game.sound.stopAll();
     music.play();
 

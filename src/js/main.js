@@ -144,6 +144,7 @@ var PreloaderScene = {
       this.load.audio('shoptheme', ['assets/music/shoptheme.wav']);
       this.load.audio('watertheme', ['assets/music/watertheme.wav']);
       this.load.audio('credits', ['assets/music/creditstheme.wav']);
+      this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.wav']);
 
   },
 

@@ -33,9 +33,9 @@ var SettingsScene = {
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
 
     //music
-    /*var music = this.game.add.audio('shop', 0.1, true);
+    var music = this.game.add.audio('shoptheme', 0.1, true);
     this.game.sound.stopAll();
-    music.play();*/
+    music.play();
   },
   update: function(){
   //prueba cursor
