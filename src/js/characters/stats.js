@@ -46,8 +46,8 @@ Object.defineProperty(Stats.prototype, 'damage',{
         return this._damage;
     },
     set: function(value) {
-        this.onDamageChange.dispatch();
         this._damage = value;
+        this.onDamageChange.dispatch();
     }
 });
 
@@ -56,8 +56,8 @@ Object.defineProperty(Stats.prototype, 'defense',{
         return this._defense;
     },
     set: function(value) {
+        this._defense = value;
         this.onDefenseChange.dispatch();
-    this._defense = value;
     }
 });
 
@@ -66,8 +66,8 @@ Object.defineProperty(Stats.prototype, 'speed',{
         return this._speed;
     },
     set: function(value) {
+        this._speed = value;
         this.onSpeedChange.dispatch();
-    this._speed = value;
     }
 });
 
@@ -76,8 +76,14 @@ Object.defineProperty(Stats.prototype, 'health',{
         return this._health
     },
     set: function(value) {
+        this._health = value;
         this.onHealthChange.dispatch();
-    this._health = value;
+    }
+});
+
+Object.defineProperty(Stats.prototype, 'maxHp',{
+    get: function() {
+        return this._health
     }
 });
 
@@ -86,8 +92,8 @@ Object.defineProperty(Stats.prototype, 'perception',{
         return this._perception
     },
     set: function(value) {
+        this._perception = value;
         this.onPerceptionChange.dispatch();
-    this._perception = value;
     }
 });
 

@@ -80,6 +80,25 @@ var Action = {
     die() {
         this.onDeath.dispatch();
         this.animations.play('dying', this.frameRate, false);
+    },
+
+    /**
+     * 
+     */
+    use(object, target) {
+        let item;
+        if(typeof object === 'string') {
+            item = this.items.findIndex(function(element){
+                return element.name === object;
+            });
+            object = item;
+        }
+
+        if( object >= 0 && object < 2) {
+            item = this.items[object];
+            item.use.call(this, this, target);
+            this.items.splice(object,1);
+        }
     }
 }
 

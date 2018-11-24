@@ -10,7 +10,7 @@ var ActionFactory = require('./actionFactory');
 var ParticleFactory = require('./particleFactory.js');
 
 /**
- * A Character is an instance...
+ * A Character is an instance...jeje
 */
 
 /**
@@ -27,7 +27,7 @@ var Character = function (game, x, y, name, stats, spriteSheet) {
     this._name = name;
     this.onNameChange = new Phaser.Signal();
     this.stats = stats;
-    this.hp = stats.health;
+    this.hp = this.stats.maxHp;
     this.game = game;
     this.isBlocking = false;
     //Signals 
@@ -50,13 +50,18 @@ Character.prototype.hurt = function (damage) {
     damage = this.isBlocking ? this.stats.damagedNotBlocked(damage) : damage;
     this.game.camera.shake(damage / 200, damage * 20);
     this.hp = Math.max(0, this.hp - damage);
-    this.onHpChange.dispatch();
+    this.onHpChange.dispatch(-damage);
     if (damage > 0) {
         this._damaged(damage);
     }
     if (this.hp === 0) {
         this.die();
     }
+}
+
+Character.prototype.heal = function(heal) {
+    this.hp = Math.min(this.stats.maxHp,this.hp+heal);
+    this.onHpChange.dispatch(heal);
 }
 
 /**

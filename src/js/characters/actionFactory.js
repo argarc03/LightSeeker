@@ -56,6 +56,10 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
     this.character.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
 }
 
+ActionFactory.prototype.useObjects = function() {
+    this.character.use = Action.use;
+}
+
 /**
  * 
  * @param {number[]|string[]} framesDying 
@@ -63,6 +67,8 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
 ActionFactory.prototype.die = function(framesDying) {
     this.character.animations.add('dying', framesDying, true);
     this.character.die = Action.die;
+    this.character.onDeathComplete = new Phaser.Signal();
+    this.character.animations._anims.dying.onComplete.add(this.character.onDeathComplete.dispatch, this.character.onDeathComplete);
 }
 
 module.exports = ActionFactory;

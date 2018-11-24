@@ -12,11 +12,11 @@ var RichText = function (game, x, y, lineWidth, text, style, parent) {
     this.indexFirstParragraphLetter = 0;
     this.align = style.align === undefined ? 'left' : style.align;
     this.styleLast = {
-        font: style.font === undefined ? 'Arial' : style.font,
+        font: style.font === undefined ? 'Minecraft' : style.font,
         fontStyle: style.fontStyle === undefined ? 'normal' : style.fontStyle,
         fontVariant: style.fontVariant === undefined ? 'normal' : style.fontVariant,
         fontWeight: style.fontWeight === undefined ? 'normal' : style.fontWeight,
-        fontSize: style.fontSize === undefined ? '8px' : style.fontSize,
+        fontSize: style.fontSize === undefined ? 10 : style.fontSize,
         backgroundColor: style.backgroundColor === undefined ? null : style.backgroundColor,
         fill: style.fill === undefined ? '#000000' : style.fill,
         align: 'left',
@@ -30,41 +30,59 @@ var RichText = function (game, x, y, lineWidth, text, style, parent) {
     };
     this.lineWidth = lineWidth;
     this.lineHeight = this.styleLast.fontSize;
-    this.write(text);
+    this.write();
 }
 
 RichText.prototype = Object.create(Phaser.Group.prototype);
 RichText.prototype.constructor = RichText;
 
-RichText.prototype.write = function() {
-
+RichText.prototype.write = function () {
     this.indexFirstParragraphLetter = 0;
     this.removeAll(true);
     this.xLast = 0;
     this.yLast = 0;
     this.numberOfCharacters = 0;
     this.reWrite(this._protoText);
-    if (this.align === 'center') {
-        let tmpwidth = 0;
-        for (let j = this.indexFirstParragraphLetter; j < this.children.length; j++) {
-            tmpwidth += this.getChildAt(j).width;
+    if (this.children.length !== 0) {
+        if (this.align === 'center') {
+            let tmpwidth = 0;
+            for (let j = this.indexFirstParragraphLetter; j < this.children.length; j++) {
+                tmpwidth += this.getChildAt(j).width;
+            }
+            tmpwidth = (this.lineWidth - tmpwidth) / 2;
+            if (this.getChildAt(this.children.length - 1).text === ' ') { tmpwidth += this.getChildAt(this.children.length - 1).width / 2 }
+            for (let j = this.indexFirstParragraphLetter; j < this.children.length; j++) {
+                this.getChildAt(j).x += tmpwidth;
+            }
+            this.indexFirstParragraphLetter = this.children.length + 1;
+        } else if (this.align === 'right') {
+            let tmpwidth = 0;
+            for (let j = this.indexFirstParragraphLetter; j < this.children.length; j++) {
+                tmpwidth += this.getChildAt(j).width;
+            }
+            tmpwidth = (this.lineWidth - tmpwidth);
+            if (this.getChildAt(this.children.length - 1).text === ' ') { tmpwidth += this.getChildAt(this.children.length - 1).width }
+            for (let j = this.indexFirstParragraphLetter; j < this.children.length; j++) {
+                this.getChildAt(j).x += tmpwidth;
+            }
+            this.indexFirstParragraphLetter = this.children.length + 1;
         }
-        tmpwidth = (this.lineWidth - tmpwidth) / 2;
-        for (let j = this.indexFirstParragraphLetter; j < this.children.length; j++) {
-            this.getChildAt(j).x += tmpwidth;
-        }
-        this.indexFirstParragraphLetter = this.children.length + 1;
     }
 }
 
-RichText.prototype.reWrite = function(proto) {
+RichText.prototype.reWrite = function (proto) {
     if (typeof (proto) === 'string') {
         for (let i = 0; i < proto.length; i++) {
-            if (!(proto.charAt(i) === ' ' && this.xLast === 0)) {
-                let a = this.add(new Phaser.Text(this.game, this.xLast, this.yLast, proto.charAt(i), this.styleLast));
+            let a = this.add(new Phaser.Text(this.game, this.xLast, this.yLast, proto.charAt(i), this.styleLast));
+            if (proto.charAt(i) === '\n') {
+                this.xLast = 0;
+                this.yLast += this.lineHeight;
+                this.indexFirstParragraphLetter = i + 1;
+            } else if (!(proto.charAt(i) === ' ' && this.xLast === 0)) {
                 this.xLast += a.width;
                 if (this.xLast > this.lineWidth) {
                     if (a.text !== ' ') {
+                        i = Math.min(i, this.children.length - 1);
                         let index = i;
                         let temporalWidth = 0;
                         while (index >= 0 && this.getChildAt(index).text !== ' ') {
@@ -75,7 +93,7 @@ RichText.prototype.reWrite = function(proto) {
                             index = 0;
                         }
                         if (this.getChildAt(index).text === ' ') {
-                            index++;
+                            index = Math.min(index + 1, this.children.length - 1);
                         }
                         if (temporalWidth > this.lineWidth) {
                             this.xLast = this.getChildAt(index).x;
@@ -104,10 +122,21 @@ RichText.prototype.reWrite = function(proto) {
                                 tmpwidth += this.getChildAt(j).width;
                             }
                             tmpwidth = (this.lineWidth - tmpwidth) / 2;
+                            if (this.getChildAt(index - 1).text === ' ') { tmpwidth += this.getChildAt(index - 1).width / 2 }
                             for (let j = this.indexFirstParragraphLetter; j < index; j++) {
                                 this.getChildAt(j).x += tmpwidth;
                             }
-                            
+
+                        } else if (this.align === 'right') {
+                            let tmpwidth = 0;
+                            for (let j = this.indexFirstParragraphLetter; j < index; j++) {
+                                tmpwidth += this.getChildAt(j).width;
+                            }
+                            tmpwidth = (this.lineWidth - tmpwidth);
+                            if (index - 1 >= 0 && this.getChildAt(index - 1).text === ' ') { tmpwidth += this.getChildAt(index - 1).width }
+                            for (let j = this.indexFirstParragraphLetter; j < index; j++) {
+                                this.getChildAt(j).x += tmpwidth;
+                            }
                         }
                         this.indexFirstParragraphLetter = index;
                     } else {
@@ -116,11 +145,23 @@ RichText.prototype.reWrite = function(proto) {
                             for (let j = this.indexFirstParragraphLetter; j < i; j++) {
                                 tmpwidth += this.getChildAt(j).width;
                             }
+                            if (this.getChildAt(i - 1).text === ' ') { tmpwidth += this.getChildAt(i - 1).width / 2 }
                             tmpwidth = (this.lineWidth - tmpwidth) / 2;
                             for (let j = this.indexFirstParragraphLetter; j < i; j++) {
                                 this.getChildAt(j).x += tmpwidth;
                             }
-                           
+
+                        } else if (this.align === 'right') {
+                            let tmpwidth = 0;
+                            for (let j = this.indexFirstParragraphLetter; j < i; j++) {
+                                tmpwidth += this.getChildAt(j).width;
+                            }
+                            tmpwidth = (this.lineWidth - tmpwidth);
+                            if (i - 1 >= 0 && this.getChildAt(i - 1).text === ' ') { tmpwidth += this.getChildAt(i - 1).width }
+                            for (let j = this.indexFirstParragraphLetter; j < i; j++) {
+                                this.getChildAt(j).x += tmpwidth;
+                            }
+
                         }
                         this.indexFirstParragraphLetter = i + 1;
                         this.xLast = 0;
@@ -138,5 +179,13 @@ RichText.prototype.reWrite = function(proto) {
         }
     }
 }
+
+Object.defineProperty(RichText.prototype, 'text',{
+    set: function(text) {
+        this._protoText = text;
+        this.write();
+        
+    }
+});
 
 module.exports = RichText;

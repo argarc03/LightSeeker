@@ -3,11 +3,11 @@
 var ReactiveBar = require('./reactiveBar.js');
 
 var ReactiveContinuousBar = function (game, parent, x, y, key, percentageFunction, functionContext, signal, decreaseDelay, increaseDelay, decreaseSpeed, increaseSpeed, frame = null) {
-    ReactiveBar.call(this,game, parent, x, y, key, percentageFunction, functionContext, signal, frame);
+    ReactiveBar.call(this, game, parent, x, y, key, percentageFunction, functionContext, signal, frame);
     this.increasing = false;
     this.decreasing = false;
     this._decreaseDelay = decreaseDelay;
-    this._increaseSpeed = increaseDelay;
+    this._increaseDelay = increaseDelay;
     this._increaseSpeed = this.bar.width / increaseSpeed;
     this._decreaseSpeed = this.bar.width / decreaseSpeed;
     this.timer = null;
@@ -16,11 +16,11 @@ var ReactiveContinuousBar = function (game, parent, x, y, key, percentageFunctio
 ReactiveContinuousBar.prototype = Object.create(ReactiveBar.prototype);
 ReactiveContinuousBar.prototype.constructor = ReactiveContinuousBar;
 
-ReactiveContinuousBar.prototype.changePercentage = function() {
+ReactiveContinuousBar.prototype.changePercentage = function () {
     if (this.percentageFunction() > this.percentage) {
         if (!this.increasing) {
             if (this.timer !== null) {
-                this.timer.stops(true);
+                this.timer.stop(true);
             }
             this.decreasing = false;
             this.increasing = true;
@@ -31,7 +31,7 @@ ReactiveContinuousBar.prototype.changePercentage = function() {
     } else {
         if (!this.decreasing) {
             if (this.timer !== null) {
-                this.timer.stops(true);
+                this.timer.stop(true);
             }
             this.increasing = false;
             this.decreasing = true;
@@ -42,14 +42,11 @@ ReactiveContinuousBar.prototype.changePercentage = function() {
     }
 }
 
-ReactiveContinuousBar.prototype.reChangePercentage = function() {
+ReactiveContinuousBar.prototype.reChangePercentage = function () {
     if (this.increasing) {
         if (this.percentage < this.percentageFunction()) {
             this.timer = this.game.time.create();
-            if (this.vertical)
-                this.percentage += 100 / this.bar.height;
-            else
-                this.percentage += 100 / this.bar.width;
+            this.percentage += 100 / this.bar.width;
             this.timer.add(this._increaseSpeed, this.reChangePercentage, this);
             this.timer.start();
         } else {
@@ -60,10 +57,7 @@ ReactiveContinuousBar.prototype.reChangePercentage = function() {
     } else if (this.decreasing) {
         if (this.percentage > this.percentageFunction()) {
             this.timer = this.game.time.create();
-            if (this.vertical)
-                this.percentage -= 100 / this.bar.height;
-            else
-                this.percentage -= 100 / this.bar.width;
+            this.percentage -= 100 / this.bar.width;
             this.timer.add(this._decreaseSpeed, this.reChangePercentage, this);
             this.timer.start();
         } else {
