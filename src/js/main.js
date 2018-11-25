@@ -139,12 +139,12 @@ var PreloaderScene = {
       this.load.audio('blocking', ['assets/sounds/blocking.wav']);
       this.load.audio('button', ['assets/sounds/buttonPressed.wav']);
       //Music
-      this.load.audio('boss', ['assets/music/bosstheme.wav']);
-      this.load.audio('firetheme', ['assets/music/firetheme.wav']);
-      this.load.audio('shoptheme', ['assets/music/shoptheme.wav']);
-      this.load.audio('watertheme', ['assets/music/watertheme.wav']);
-      this.load.audio('credits', ['assets/music/creditstheme.wav']);
-      this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.wav']);
+      this.load.audio('boss', ['assets/music/bosstheme.mp3']);
+      this.load.audio('firetheme', ['assets/music/firetheme.mp3']);
+      this.load.audio('shoptheme', ['assets/music/shoptheme.mp3']);
+      this.load.audio('watertheme', ['assets/music/watertheme.mp3']);
+      this.load.audio('credits', ['assets/music/creditstheme.mp3']);
+      this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.mp3']);
 
   },
 
