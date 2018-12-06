@@ -25,16 +25,20 @@ var IntroScene = {
 
   create: function () {
     var style = require('../../assets/fonts/style.json');
-
-    //'LA LUZ DE LA ESPERANZA SE HA EXTINGUIDO......Y SE TE HA ENCOMENDADO EL DEBER DE VOLVER A AVIVARLO...LA ALDEA TE NECESITA..'
-
+    //color de background
+    this.game.stage.backgroundColor = "#31261a";
+    //stop music
+    this.game.sound.stopAll();
 
     //logo music
     var logomusic = this.game.add.audio('logo', 0.1, false);
-    this.game.sound.stopAll();
     logomusic.play();
 
-
+    //intro music
+    var intro = this.game.add.audio('intro', 0.1, false);
+    this.game.add.tween(intro).to( { }, 7500, "Linear", true, 7500).onStart.add(function(){ intro.play();}, this);
+    
+   
     this.appear(this.game.add.sprite(70, 30, 'logo')
       .animations.add('play', Array.apply(null, { length: 22 }).map(Function.call, Number))
       ._parent.play('play', 7)._parent, 4000);
@@ -45,27 +49,31 @@ var IntroScene = {
 
     var intro1 = this.game.add.sprite(20, 20, 'intro1');
     intro1.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-    this.appear(intro1, 3000, 17000, function(){intro1.play('play', 4)});
+    this.appear(intro1, 3000, 17000, function () { intro1.play('play', 4) });
     this.appear(this.game.add.richText(90, 50, 100, "...una gran bola de fuego alimentaba al mundo con sus rayos desde el cielo...", style), 3000, 17000);
-    
-    //var intro1 = this.game.add.sprite(20, 20, 'intro1');
-    //intro1.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-    //this.appear(intro1, 3000, 17000, function(){intro1.play('play', 4)});
+
+    var intro2 = this.game.add.sprite(130, 30, 'intro2');
+    intro2.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    this.appear(intro2, 3000, 24000, function () { intro2.play('play', 6) });
     this.appear(this.game.add.richText(10, 50, 100, "...y que las gemas de luz no eran necesarias para poder sobrevivir.", style), 3000, 24000);
 
-
-
+    var intro3 = this.game.add.sprite(30, 10, 'intro3');
+    intro3.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]);
+    this.appear(intro3, 9000, 32000, function () { intro3.play('play', 6) });
     this.appear(this.game.add.richText(25, 100, 150, "Tras la Gran Guerra, el suelo dónde alzamos nuestros reinos...", style), 3000, 32000);
     this.appear(this.game.add.richText(25, 132, 150, "...desapareció.", style), 3000, 38000);
 
-    this.appear(this.game.add.richText(30, 10, 150, "Los spilianos somos los únicos supervivientes. Hemos evolucionado para no ser los últimos, pero...", style), 3000, 46000);
-    this.appear(this.game.add.richText(30, 10, 150, "...las gemas de luz escasean en la aldea, y cada vez hay menos spilianos...", style), 3000, 54000);
+    var intro4 = this.game.add.sprite(30, 60, 'intro4');
+    intro4.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]);
+    this.appear(intro4, 11000, 46000, function () { intro4.play('play', 6) });
+    this.appear(this.game.add.richText(25, 10, 150, "Los spilianos somos los únicos supervivientes. Hemos evolucionado para no ser los últimos, pero...", style), 3000, 46000);
+    this.appear(this.game.add.richText(25, 10, 150, "...las gemas de luz escasean en la aldea, y cada vez hay menos spilianos...", style), 3000, 54000);
 
-    this.appear(this.game.add.richText(50, 50, 100, "Necesitamos tú ayuda. Has sido elegido por el Gran Cristal.", style), 3000, 62000);
+    this.appear(this.game.add.richText(50, 50, 100, "Necesitamos tu ayuda. Has sido elegido por el Gran Cristal.", style), 3000, 62000);
     this.appear(this.game.add.richText(50, 60, 100, "Porfavor... no nos falles...", style), 3000, 70000);
 
     //espera a que acabe intro
-    this.game.time.events.add(Phaser.Timer.SECOND * 78, this.MainMenuScene, this);
+    this.game.time.events.add(Phaser.Timer.SECOND * 80, this.MainMenuScene, this);
 
 
 
