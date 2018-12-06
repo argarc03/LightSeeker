@@ -129,11 +129,13 @@ var PreloaderScene = {
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
       this.game.load.spritesheet('shop','assets/images/backgrounds/shop.png',51,63);
       this.game.load.image('shopFrame', 'assets/images/backgrounds/shopFrame.png');
+      this.game.load.image('shines', 'assets/images/backgrounds/shines.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
       this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
       this.game.load.spritesheet('crystalShines','assets/images/particles/crystalShines.png',3,3);
+      this.game.load.spritesheet('smoke','assets/images/particles/smoke.png',4,4);
       //CHARACTERS
         //Seeker
         this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);

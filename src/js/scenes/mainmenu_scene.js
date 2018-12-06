@@ -39,25 +39,43 @@ var MainMenuScene = {
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
-
     
     var style = require('../../assets/fonts/style.json');
     //background
     this.game.add.image(0,0,'mainmenubackground');
+    this.game.add.image(0,0,'shines').alpha = 0.2;
     //great crystal shine particles
-    var emitter = this.game.add.emitter(100, 35, 100);
-    emitter.makeParticles('crystalShines',[0,1,2]);
-    emitter.setRotation(0, 0);
-    emitter.setAlpha(0.3, 0.8);
+    var emitterCrystal = this.game.add.emitter(100, 35,100);
+    emitterCrystal.makeParticles('crystalShines',[0,1,2]);
+    emitterCrystal.setRotation(0, 0);
+    emitterCrystal.setAlpha(0.3, 0.8);
     //emitter.setScale(0.5, 1);
-    emitter.gravity = 0;
-    emitter.flow(2000, 500, 5, -1);
+    emitterCrystal.gravity = 0;
+    emitterCrystal.flow(2000,100);
+
+    //smoke
+    /*var emitter = this.game.add.emitter(10, 100, 400);
+    emitter.makeParticles('smoke', [0,1,2]);
+    emitter.setRotation(0, 0);
+    emitter.setAlpha(0.1, 1, 3000);
+    //emitter.setScale(0.1, 1, 0.1, 1, 6000, Phaser.Easing.Quintic.Out);
+    emitter.gravity = -400;
+    emitter.start(false, 5000,1);
+    //emitter.emitX = 0;*/
+
 
     //version
-    var text = this.game.add.richText(176, 140, 80, "v 1.0", style);
+    this.game.add.richText(148, 139, 80, "v 1.0", style);
+
+    //textos de buttons
+    this.game.add.richText(10, 70, 80, "OPCIONES", style);
+    this.game.add.richText(28, 119, 80, "TIENDA", style);
+    this.game.add.richText(60, 39, 80, "NUEVA PARTIDA", style);
+    this.game.add.richText(120, 79, 80, "NUEVA BUSQUEDA", style);
+    this.game.add.richText(128, 20, 80, "CREDITOS", style);
 
     //buttons
-    //this.game.add.FramedButton(3,139, 'shop', 'shopFrame', [{callback:function(){this.SettingsScene();}, context:this, arguments:[]}]);
+    //this.game.add(new FramedButton(3,139, 'shop', 'shopFrame', [{callback:function(){this.SettingsScene();}, context:this, arguments:[]}]));
 
     var a = this.game.add.optionMenu([['botonDeAbajo',85,100,'button',this.EventScene,this,1,0,2,1,{up: 'botonDeArriba'}],
     ['botonDeArriba',85,60,'button',this.CombatScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
