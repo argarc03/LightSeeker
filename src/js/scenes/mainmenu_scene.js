@@ -1,6 +1,7 @@
 'use strict';
 
 var textFunctions = require('../interface/textFunctions');
+var FramedButton = require('../interface/framedButton')
 
 var selector;
 
@@ -56,8 +57,7 @@ var MainMenuScene = {
     var text = this.game.add.richText(176, 140, 80, "v 1.0", style);
 
     //buttons
-    
-    //this.shopButton = this.add(new ActionButton(this, game, x + 44, y + 132, 'blockIcon', 'actionFrame','blockIcon', 
+    //this.game.add.FramedButton(3,139, 'shop', 'shopFrame', [{callback:function(){this.SettingsScene();}, context:this, arguments:[]}]);
 
     var a = this.game.add.optionMenu([['botonDeAbajo',85,100,'button',this.EventScene,this,1,0,2,1,{up: 'botonDeArriba'}],
     ['botonDeArriba',85,60,'button',this.CombatScene,this,1,0,2,1,{down: 'botonDeAbajo'}],

@@ -128,7 +128,7 @@ var PreloaderScene = {
       this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
       this.game.load.spritesheet('shop','assets/images/backgrounds/shop.png',51,63);
-      this.game.load.image('shopMark', 'assets/images/backgrounds/shopMark.png');
+      this.game.load.image('shopFrame', 'assets/images/backgrounds/shopFrame.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
@@ -162,7 +162,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('intro');
+      PreloaderScene.game.state.start('mainmenu');
   }
 
 };
