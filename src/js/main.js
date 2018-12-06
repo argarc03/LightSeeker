@@ -64,6 +64,8 @@ var PreloaderScene = {
     // TODO: load here the assets for the game
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
+      //INTRO
+        this.game.load.spritesheet('intro1', 'assets/images/intro/intro1.png', 57, 107);
       //INTERFACE
         this.game.load.spritesheet('logo', 'assets/images/interface/logo.png', 61, 69);
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
@@ -134,6 +136,7 @@ var PreloaderScene = {
       this.load.audio('watertheme', ['assets/music/watertheme.wav']);
       this.load.audio('credits', ['assets/music/creditstheme.wav']);
       this.load.audio('mainmenu', ['assets/music/mainmenutheme.wav']);
+      this.load.audio('logo', ['assets/music/logo.mp3']);
 
   },
 

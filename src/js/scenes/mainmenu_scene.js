@@ -46,9 +46,9 @@ var MainMenuScene = {
     //great crystal shine particles
     var emitter = this.game.add.emitter(100, 35, 100);
     emitter.makeParticles('crystalShines',[0,1,2]);
-    emitter.setRotation(0, 90);
+    emitter.setRotation(0, 0);
     emitter.setAlpha(0.3, 0.8);
-    emitter.setScale(0.5, 1);
+    //emitter.setScale(0.5, 1);
     emitter.gravity = 0;
     emitter.flow(2000, 500, 5, -1);
 
