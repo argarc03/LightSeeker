@@ -67,7 +67,13 @@ var PreloaderScene = {
     // TODO: load here the assets for the game
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
+      //INTRO
+        this.game.load.spritesheet('intro1', 'assets/images/intro/intro1.png', 57, 107);
+        this.game.load.spritesheet('intro2', 'assets/images/intro/intro2.png', 57, 80);
+        this.game.load.spritesheet('intro3', 'assets/images/intro/intro3.png', 140, 80);
+        this.game.load.spritesheet('intro4', 'assets/images/intro/intro4.png', 140, 80);
       //INTERFACE
+        this.game.load.spritesheet('logo', 'assets/images/interface/logo.png', 61, 69);
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
         this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
@@ -121,6 +127,8 @@ var PreloaderScene = {
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
+      this.game.load.spritesheet('shop','assets/images/backgrounds/shop.png',51,63);
+      this.game.load.image('shopMark', 'assets/images/backgrounds/shopMark.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
@@ -144,14 +152,17 @@ var PreloaderScene = {
       this.load.audio('shoptheme', ['assets/music/shoptheme.mp3']);
       this.load.audio('watertheme', ['assets/music/watertheme.mp3']);
       this.load.audio('credits', ['assets/music/creditstheme.mp3']);
+      this.load.audio('mainmenu', ['assets/music/mainmenutheme.mp3']);
+      this.load.audio('intro', ['assets/music/introtheme.mp3']);
+      this.load.audio('logo', ['assets/music/logo.mp3']);
+      this.load.audio('credits', ['assets/music/creditstheme.mp3']);
       this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.mp3']);
 
   },
 
   create: function () {
-      this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
-
-      PreloaderScene.game.state.start('mainmenu');
+      this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+      PreloaderScene.game.state.start('intro');
   }
 
 };

@@ -46,9 +46,9 @@ var MainMenuScene = {
     //great crystal shine particles
     var emitter = this.game.add.emitter(100, 35, 100);
     emitter.makeParticles('crystalShines',[0,1,2]);
-    emitter.setRotation(0, 90);
+    emitter.setRotation(0, 0);
     emitter.setAlpha(0.3, 0.8);
-    emitter.setScale(0.5, 1);
+    //emitter.setScale(0.5, 1);
     emitter.gravity = 0;
     emitter.flow(2000, 500, 5, -1);
 
@@ -56,7 +56,9 @@ var MainMenuScene = {
     var text = this.game.add.richText(176, 140, 80, "v 1.0", style);
 
     //buttons
-    // name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group
+    
+    //this.shopButton = this.add(new ActionButton(this, game, x + 44, y + 132, 'blockIcon', 'actionFrame','blockIcon', 
+
     var a = this.game.add.optionMenu([['botonDeAbajo',85,100,'button',this.EventScene,this,1,0,2,1,{up: 'botonDeArriba'}],
     ['botonDeArriba',85,60,'button',this.CombatScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
     ['botonCredits',125,60,'button',this.CreditsScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
