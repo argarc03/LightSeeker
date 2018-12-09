@@ -27,7 +27,7 @@ var MainMenuScene = {
     emitterCrystal.gravity = 0;
     emitterCrystal.flow(2000,100);
 
-
+    this.game.add.image(4,1,'title');
 
     
 

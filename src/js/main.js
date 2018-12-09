@@ -127,7 +127,7 @@ var PreloaderScene = {
         this.game.load.image('pauseButton','assets/images/interface/pauseButton.png');
         this.game.load.spritesheet('shop','assets/images/interface/shop.png',51,64);
         this.game.load.spritesheet('shopFrame', 'assets/images/interface/shopFrame.png');
-        this.game.load.spritesheet('door', 'assets/images/interface/door.png',27,49);
+        this.game.load.spritesheet('door', 'assets/images/interface/door1.png',27,49);
         this.game.load.spritesheet('doorFrame', 'assets/images/interface/doorFrame.png');
         this.game.load.spritesheet('settings', 'assets/images/interface/settings.png',24,53);
         this.game.load.spritesheet('settingsFrame', 'assets/images/interface/settingsFrame.png');
