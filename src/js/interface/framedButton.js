@@ -20,9 +20,8 @@ var FramedButton = function (parent, game, x, y, buttonKey, frameKey, callbacks,
     Phaser.Group.call(this, game, parent);
     this.x = x;
     this.y = y;
-    this._button = this.add(new Phaser.Button(game, 0, 0, buttonKey, function () { }, null, overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame));
     this._frame = this.add(new Phaser.Image(game, 0, 0, frameKey));
-
+    this._button = this.add(new Phaser.Button(game, 0, 0, buttonKey, function () { }, null, overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame));
 
     this._pressed = false;
 

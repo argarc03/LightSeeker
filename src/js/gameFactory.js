@@ -21,6 +21,7 @@ var ButtonMenu = require('./interface/buttonMenu');
 var WindowFrame = require('./interface/windowFrame');
 var FramedButton = require('./interface/framedButton');
 var InfoWindow = require('./interface/infoWindow');
+var MainMenuHUD = require('./interface/mainMenuHUD');
 /**
  * 
  */
@@ -107,7 +108,6 @@ fun = function (Phaser) {
         return group.add(new OptionMenu(this.game, buttonsMenu, group));
     }
 
-
     Phaser.GameObjectFactory.prototype.buttonMenu = function (name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
         if (group === undefined) { group = this.world; }
         return group.add(new ButtonMenu(this.game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
@@ -130,6 +130,10 @@ fun = function (Phaser) {
 
     Phaser.GameObjectFactory.prototype.infoWindow = function (x, y, width, height, windowKey, text, style, parent = this.world) {
         return new InfoWindow(parent, this.game, x, y, width, height, windowKey, text, style);
+    }
+
+    Phaser.GameObjectFactory.prototype.mainMenuHUD = function (x, y, parent = this.game.world) {
+        return new MainMenuHUD(this.game, parent, x, y);
     }
 }
 

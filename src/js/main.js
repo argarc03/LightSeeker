@@ -14,6 +14,7 @@ var CombatScene = require('./scenes/combat_scene.js');
 var EventScene = require('./scenes/event_scene.js');
 var CreditsScene = require('./scenes/credits_scene.js');
 var SettingsScene = require('./scenes/settings_scene.js');
+var ShopScene = require('./scenes/shop_scene.js');
 
  var webFontLoading = {
   active: function() {
@@ -29,6 +30,7 @@ require('./gameFactory')(Phaser);
     game.state.add('event', EventScene);
     game.state.add('credits', CreditsScene);
     game.state.add('settings', SettingsScene);
+    game.state.add('shop', ShopScene);
     game.state.start('boot');
   },
   custom: {
@@ -78,6 +80,7 @@ var PreloaderScene = {
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
         this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
         this.game.load.image('emptyItem','assets/images/interface/emptyItem.png');
+        this.game.load.image('title','assets/images/interface/title.png');
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarShadow','assets/images/interface/actionsBarShadow.png');
@@ -122,13 +125,23 @@ var PreloaderScene = {
         this.game.load.image('optionBack','assets/images/interface/optionback.png');
         this.game.load.image('optionFrame','assets/images/interface/optionFrame.png');
         this.game.load.image('pauseButton','assets/images/interface/pauseButton.png');
+        this.game.load.spritesheet('shop','assets/images/interface/shop.png',51,64);
+        this.game.load.spritesheet('shopFrame', 'assets/images/interface/shopFrame.png');
+        this.game.load.spritesheet('door', 'assets/images/interface/door.png',27,49);
+        this.game.load.spritesheet('doorFrame', 'assets/images/interface/doorFrame.png');
+        this.game.load.spritesheet('settings', 'assets/images/interface/settings.png',24,53);
+        this.game.load.spritesheet('settingsFrame', 'assets/images/interface/settingsFrame.png');
+        this.game.load.spritesheet('tavern', 'assets/images/interface/tavern.png',47,23);
+        this.game.load.spritesheet('tavernFrame', 'assets/images/interface/tavernFrame.png');
+        this.game.load.spritesheet('crystal', 'assets/images/interface/crystal.png',39,65);
+        this.game.load.spritesheet('crystalFrame', 'assets/images/interface/crystalFrame.png');
+
+
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
-      this.game.load.spritesheet('shop','assets/images/backgrounds/shop.png',51,63);
-      this.game.load.image('shopFrame', 'assets/images/backgrounds/shopFrame.png');
       this.game.load.image('shines', 'assets/images/backgrounds/shines.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');

@@ -52,7 +52,7 @@ var CombatScene = {
     this.camera.flash('#000000');
 
     //render background
-    var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
+    var combatbackground = this.game.add.image(0, 0, 'watercombatbackground');
     //render seeker //tope de nombre caracteres = 9
     this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', new Stats(8, 3, 1, 20, 1),
       [new Item('Heal Potion', 'Restores 10hp', 'itemIcon', function (character, enemy) {
