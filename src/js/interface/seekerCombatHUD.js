@@ -50,6 +50,18 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     }
   }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
+  this.ultimateButton = this.add(new ActionButton(this, game, 64, 132, 'ultimateIcon', 'actionFrame','ultimateIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
+   function () {
+      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
+    }, seeker, function () {
+    let a = this.attack.timeToCoolDown() / 1000;
+    if (isNaN(a)) {
+      return '';
+    } else {
+      return a.toFixed(1).toString();
+    }
+  }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+
   var object1 = seeker.items[0];
   var object2 = seeker.items[1];
 

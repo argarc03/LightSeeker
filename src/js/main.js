@@ -96,8 +96,6 @@ var PreloaderScene = {
         //Cursor
         this.game.load.spritesheet('cursor','assets/images/interface/cursor.png',7,7);
         this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
-        this.game.load.image('handCursor','assets/images/interface/handCursor.png');
-        this.game.load.image('selectCursor','assets/images/interface/selectCursor.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');
@@ -107,9 +105,12 @@ var PreloaderScene = {
         //Action Icon
         this.game.load.image('attackIcon','assets/images/interface/attackIcon.png');
         this.game.load.image('blockIcon','assets/images/interface/blockIcon.png');
+        this.game.load.image('ultimateIcon','assets/images/interface/ultimateIcon.png');
         //Items
         this.game.load.image('itemIcon','assets/images/interface/itemIcon.png');
         this.game.load.image('itemIcon2','assets/images/interface/itemIcon2.png');
+
+        this.game.load.image('shopItemIcon','assets/images/interface/shopItemIcon.png');
         //Stats Icons
         this.game.load.image('damageIcon','assets/images/interface/damageIcon.png');
         this.game.load.image('defenseIcon','assets/images/interface/defenseIcon.png');

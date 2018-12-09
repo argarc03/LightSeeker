@@ -52,7 +52,7 @@ var CombatScene = {
     this.camera.flash('#000000');
 
     //render background
-    var combatbackground = this.game.add.image(0, 0, 'watercombatbackground');
+    var combatbackground = this.game.add.image(0, 0, 'combatbackground');
     //render seeker //tope de nombre caracteres = 9
     this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', new Stats(8, 3, 1, 20, 1),
       [new Item('Heal Potion', 'Restores 10hp', 'itemIcon', function (character, enemy) {
@@ -129,7 +129,7 @@ var CombatScene = {
       }, this);
       t.start();
     }, this);
-    //para ir a fullscreen pulsar F4
+    //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
 
     //music
