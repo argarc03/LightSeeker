@@ -94,7 +94,7 @@ var PreloaderScene = {
         this.game.load.spritesheet('sliderBackground','assets/images/interface/sliderbackground.png',6,5);
         this.game.load.spritesheet('slider','assets/images/interface/slider.png',6,3);
         //Cursor
-        this.game.load.image('cursor','assets/images/interface/cursor.png');
+        this.game.load.spritesheet('cursor','assets/images/interface/cursor.png',7,7);
         this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
         this.game.load.image('handCursor','assets/images/interface/handCursor.png');
         this.game.load.image('selectCursor','assets/images/interface/selectCursor.png');
@@ -127,7 +127,7 @@ var PreloaderScene = {
         this.game.load.image('pauseButton','assets/images/interface/pauseButton.png');
         this.game.load.spritesheet('shop','assets/images/interface/shop.png',51,64);
         this.game.load.spritesheet('shopFrame', 'assets/images/interface/shopFrame.png');
-        this.game.load.spritesheet('door', 'assets/images/interface/door1.png',27,49);
+        this.game.load.spritesheet('door', 'assets/images/interface/door.png',27,49);
         this.game.load.spritesheet('doorFrame', 'assets/images/interface/doorFrame.png');
         this.game.load.spritesheet('settings', 'assets/images/interface/settings.png',24,53);
         this.game.load.spritesheet('settingsFrame', 'assets/images/interface/settingsFrame.png');

@@ -17,8 +17,8 @@ var FramedButton = require('./framedButton')
   this.deactivate()
 };*/
 
-var MainMenuHUD = function (game, parent, x, y) {
-    Phaser.Group.call(this, game, parent);
+var MainMenuHUD = function (game, parent, x, y, selector) {
+    Phaser.Group.call(this, game, parent, selector);
     this.x = x;
     this.y = y;
     let style = { "font": "Minecraft", "fill": "#FFFFFF", "fontSize": 10, "align": 'center' };
@@ -60,13 +60,12 @@ var MainMenuHUD = function (game, parent, x, y) {
         this.game.camera.onFadeComplete.add(function () { this.game.state.start('shop') }, parent);
     };
 
-    this.creditsButton = this.add(new FramedButton(this, game, 153, 0, 'tavern', 'tavernFrame', [{ callback: function () { this.CreditsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767,1,0,1));
-    this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767,1,0,1));
-    this.settingsButton = this.add(new FramedButton(this, game, 0, 27, 'settings', 'settingsFrame', [{ callback: function () { this.SettingsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767,1,0,1));
-    this.doorButton = this.add(new FramedButton(this, game, 174, 39, 'door', 'doorFrame', [{ callback: function () { this.CombatScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767,1,0,1));
-    this.crystalButton = this.add(new FramedButton(this, game, 81, 9, 'crystal', 'crystalFrame', [{ callback: function () { ; }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767,1,0,1));
-
-
+    this.creditsButton = this.add(new FramedButton(this, game, 153, 0, 'tavern', 'tavernFrame', [{ callback: function () { this.CreditsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+    this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+    this.settingsButton = this.add(new FramedButton(this, game, 0, 27, 'settings', 'settingsFrame', [{ callback: function () { this.SettingsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+    this.doorButton = this.add(new FramedButton(this, game, 174, 39, 'door', 'doorFrame', [{ callback: function () { this.CombatScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+    this.crystalButton = this.add(new FramedButton(this, game, 81, 9, 'crystal', 'crystalFrame', [{ callback: function () { ; }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+    
     //version
     this.game.add.richText(148, 139, 80, "v 1.0", style);
 
@@ -78,59 +77,36 @@ var MainMenuHUD = function (game, parent, x, y) {
     this.game.add.richText(128, 20, 80, "CREDITOS", style);
 
 
+    this.shopButton.onInputOver.add(function(){selector.frame = 1;});
+    this.shopButton.onInputOut.add(function(){selector.frame = 0;});
+    this.shopButton.onInputDown.add(function(){selector.frame = 2;});
 
-    /*this.blockButton = this.add(new ActionButton(this, game, 44, 132, 'blockIcon', 'actionFrame','blockIcon', [{callback: seeker.block, context: seeker, arguments: []}], 
-      function () {
-        return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
-      }, seeker, function () {
-      let a = this.block.timeToCoolDown() / 1000;
-      if (isNaN(a)) {
-        return '';
-      } else {
-        return a.toFixed(1).toString();
-      }
-    }, seeker, seeker.coolDown.block.onWhile, seeker.coolDown.block.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
-  
-    this.attackButton = this.add(new ActionButton(this, game, 25, 132, 'attackIcon', 'actionFrame','attackIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
-     function () {
-        return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
-      }, seeker, function () {
-      let a = this.attack.timeToCoolDown() / 1000;
-      if (isNaN(a)) {
-        return '';
-      } else {
-        return a.toFixed(1).toString();
-      }
-    }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));*/
+    this.settingsButton.onInputOver.add(function(){selector.frame = 1;});
+    this.settingsButton.onInputOut.add(function(){selector.frame = 0;});
+    this.settingsButton.onInputDown.add(function(){selector.frame = 2;});
+
+    this.doorButton.onInputOver.add(function(){selector.frame = 1;});
+    this.doorButton.onInputOut.add(function(){selector.frame = 0;});
+    this.doorButton.onInputDown.add(function(){selector.frame = 2;});
+
+    this.crystalButton.onInputOver.add(function(){selector.frame = 1;});
+    this.crystalButton.onInputOut.add(function(){selector.frame = 0;});
+    this.crystalButton.onInputDown.add(function(){selector.frame = 2;});
+    //this.crystalButton.onInputUp.add(function(){selector.frame = 0;});
+
+    this.creditsButton.onInputOver.add(function(){selector.frame = 1;});
+    this.creditsButton.onInputOut.add(function(){selector.frame = 0;});
+    this.creditsButton.onInputDown.add(function(){selector.frame = 2;});
 
     //var object1 = seeker.items[0];
     //var object2 = seeker.items[1];
 
-    //object1.onUse.add(this.credits.deactivate, this.credits);
-    //object1.onUse.add(function() { this.credits._button.loadTexture('emptyItem');}, this);
 
 
 
 
     //this.item2Button = this.add(new FramedButton(this, game, 14,139, seeker.items[1].key,'itemFrame', [{callback:function(){seeker.use(object2.name, enemy);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
-
-
-    //object2.onUse.add(this.item2Button.deactivate, this.item2Button);
-    //object2.onUse.add(function() { this.item2Button._button.loadTexture('emptyItem');}, this);
-
-    /*this.blockButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
-    this.blockButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
-    this.attackButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
-    this.attackButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });*/
-    /*seeker.onDeath.add(deactivateActionButton, this.blockButton);
-    seeker.onDeath.add(deactivateActionButton, this.attackButton);
-    seeker.onDeath.add(this.credits.deactivate, this.credits);
-    seeker.onDeath.add(this.item2Button.deactivate, this.item2Button);
-    enemy.onDeath.add(deactivateActionButton, this.blockButton);
-    enemy.onDeath.add(deactivateActionButton, this.attackButton);
-    enemy.onDeath.add(this.credits.deactivate, this.credits);
-    enemy.onDeath.add(this.item2Button.deactivate, this.item2Button);*/
 
     //this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
 

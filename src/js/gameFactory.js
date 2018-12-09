@@ -132,8 +132,8 @@ fun = function (Phaser) {
         return new InfoWindow(parent, this.game, x, y, width, height, windowKey, text, style);
     }
 
-    Phaser.GameObjectFactory.prototype.mainMenuHUD = function (x, y, parent = this.game.world) {
-        return new MainMenuHUD(this.game, parent, x, y);
+    Phaser.GameObjectFactory.prototype.mainMenuHUD = function (x, y, selector, parent = this.game.world) {
+        return new MainMenuHUD(this.game, parent, x, y, selector);
     }
 }
 

@@ -49,6 +49,7 @@ var FramedButton = function (parent, game, x, y, buttonKey, frameKey, callbacks,
     this._button.onInputDown.add(this._down, this);
     this._button.onInputOut.add(this._out, this);
     this._button.onInputOver.add(this._over, this);
+    
     this._button.onInputUp.add(this._up, this);
 
     this._button.input.useHandCursor = false;
