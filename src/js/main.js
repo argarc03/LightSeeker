@@ -89,6 +89,7 @@ var PreloaderScene = {
         this.game.load.image('statPoint','assets/images/interface/statPoint.png');
         this.game.load.image('emptyStatPoint','assets/images/interface/emptyStatPoint.png');
         this.game.load.image('blockedIcon','assets/images/interface/blockedIcon.png');
+        this.game.load.image('textBox','assets/images/interface/textBox.png');
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarBack','assets/images/interface/actionsBarBack.png');
@@ -171,6 +172,9 @@ var PreloaderScene = {
         this.game.load.spritesheet('seekerBruteAnimations','assets/images/seeker/seekerBruteAnimations.png',80,120);
         this.game.load.spritesheet('seekerHarpyAnimations','assets/images/seeker/seekerHarpySiluette.png',80,120);
         this.game.load.spritesheet('seekerWarlockAnimations','assets/images/seeker/seekerWarlockSiluette.png',80,120);
+        this.game.load.spritesheet('seekerBruteSiluette','assets/images/seeker/seekerBruteSiluette.png',80,120);
+        this.game.load.spritesheet('seekerHarpySiluette','assets/images/seeker/seekerHarpySiluette.png',80,120);
+        this.game.load.spritesheet('seekerWarlockSiluette','assets/images/seeker/seekerWarlockSiluette.png',80,120);
         //Enemies
         this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
         this.game.load.spritesheet('fungiAnimations', 'assets/images/enemies/fungiAnimations.png',80,120);

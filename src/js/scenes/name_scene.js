@@ -48,9 +48,27 @@ var SettingsScene = {
 
 
     this.game.add.richText(0, 20, 200, 'NAME YOUR VESSEL', style);
-
+    this.game.add.image(40,100,'textBox').alpha = 0.8;
     //this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
-
+    this.hola = this.game.add.inputField(40,100,{
+      font: '10px Minecraft',
+      width: 150,
+      padding: 8,
+      borderWidth: 1,
+      borderColor: '#FFFFFF',
+      borderRadius: 6,
+      placeHolder: 'NOMBRE',
+      textAlign: 'center',
+      fillAlpha: 0,
+      width: 100,
+      height: 1,
+      selectionColor: '#FF00FF',
+      cursorColor : '#FFFFFF'
+    });
+    this.hola.text.style.fill = '#FFFFFF';
+    this.hola.domElement.setMax(10,0);
+    this.hola.cursor.y+=2;
+    this.hola.input.useHandCursor = false;
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
 
@@ -63,6 +81,7 @@ var SettingsScene = {
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
+    console.log(this.hola);
   }
 };
 

@@ -41,6 +41,8 @@ var CreationHUD = function (game, parent, x, y, exitFunction, context) {
     this.nextStateButton = this.add(new FramedButton(this, game, 150, 0, 'crystal', 'crystalFrame', [{ callback: exitFunction, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
     this.nextStateButtonText = this.add(new RichText(game,145,17,50,'INICIAR RITUAL',style3,this));
+    this.nextStateButton._button.input.pixelPerfectClick = true;
+    this.nextStateButton._button.input.pixelPerfectOver = true;
 
     this.rightArrowButton.scale.x *= -1;
 

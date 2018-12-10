@@ -46,9 +46,9 @@ ShowCase.prototype.rotate = function(direction) {
         let oldS = Object.keys(this._characters)[this._current];
         this._current = (this._current+newdirection)%Object.keys(this._characters).length;
         let newS = Object.keys(this._characters)[this._current];
-        this._image.loadTexture('seeker'+newS+'Animations');
+        this._image.loadTexture('seeker'+newS+'Siluette');
         this._image.x = direction > 0 ? -80 : 230;
-        this._reemplaceImage.loadTexture('seeker'+oldS+'Animations');
+        this._reemplaceImage.loadTexture('seeker'+oldS+'Siluette');
         this._reemplaceImage.x = 62;
         this.game.add.tween(this._image).to({x:[direction > 0 ? -80 : 230,62]}, 400,"Sine.easeInOut", true, 0);
         this.game.add.tween(this._reemplaceImage).to({x:[62,direction > 0 ? 230 : -80]}, 400,"Sine.easeInOut", true, 0).onComplete.
@@ -82,7 +82,7 @@ ShowCase.prototype.showCharacter = function(character) {
         this._blockText.text = '?????\n?????';
         this._ultimateIcon.loadTexture('blockedIcon');
         this._ultimateText.text = '?????\n?????';
-        this._image.loadTexture('seeker'+character+'Animations');
+        this._image.loadTexture('seeker'+character+'Siluette');
         this._healthMarker.currentPoints = 0;
         this._damageMarker.currentPoints = 0;
         this._defenseMarker.currentPoints = 0;
