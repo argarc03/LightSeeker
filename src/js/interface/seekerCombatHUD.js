@@ -56,6 +56,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
       else
         return '';
     }
+    
   }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x5c5c5c, 0xffffff, 0x000000, 0x222222, 0x676767, 0x676767));
 
   this.ultimateButton = this.add(new ActionButton(this, game, 64, 132, 'ultimateIcon', 'actionFrame','ultimateIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
