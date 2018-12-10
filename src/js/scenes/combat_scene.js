@@ -21,8 +21,7 @@ var CombatScene = {
   enemy: null,
   // Buttons functions
   attackKey: function () {
-    this.seeker.stop();
-    this.enemy.stop();
+    this.combatHUD._enemyHUD._actionBar.reUpdate();
   },
   blockKey: function () {
     this.seeker.start();
@@ -51,8 +50,8 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.image(0, 0, 'combatbackground');
     //render seeker //tope de nombre caracteres = 9
-    this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', {damage: 10, defense: 3, speed: 1, health: 20, perception: 1}, 
-      ['healthPotion'], 'seekerAnimations',
+    this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', {damage: 99, defense: 3, speed: 1, health: 20, perception: 1}, 
+      ['healthPotion','speedEnemyPotion'], 'seekerAnimations',
       {
         idle:[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
         attack:[[24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000],
@@ -63,7 +62,7 @@ var CombatScene = {
     this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
     //render enemy
 var a = require('../../assets/patterns/patterns');
-    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Lord Ragno', {damage: 0, defense: 10, speed: 1, health: 27, perception: 3}, 'spiderAnimations', 
+    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Lord Ragno', {damage: 5, defense: 10, speed: 1, health: 27, perception: 3}, 'spiderAnimations', 
     {
       idle:[[0, 1, 2, 3, 4, 5]],
       attack:[[24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]],
@@ -73,7 +72,7 @@ var a = require('../../assets/patterns/patterns');
     this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
 
     //interface
-    this.game.add.combatHUD(0, 0, this.seeker, this.enemy);
+    this.combatHUD = this.game.add.combatHUD(0, 0, this.seeker, this.enemy);
     //transicion de entrada a combate
 
     var filter = this.game.add.filter('Pixelate', 800, 600);
@@ -95,6 +94,8 @@ var a = require('../../assets/patterns/patterns');
         this.seeker.use('Heal Potion');
       }, this);
       this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);
+      this.combatHUD._enemyHUD._actionBar.reUpdate();
+      this.combatHUD._enemyHUD._actionBar._timer.start();
     }, this);
 
     var style = require('../../assets/fonts/style.json');

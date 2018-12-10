@@ -12,6 +12,9 @@ var Items = {
       speedPotion: new Item('Speed Potion', 'Increase speed slightly.', 'itemIcon2', function () {
         this.stats.tempSpeed+=3;
       }),
+      speedEnemyPotion: new Item('Speed Potion', 'Increase speed slightly.', 'itemIcon2', function (character, enemy) {
+        enemy.stats.tempSpeed+=0;
+      }),
 }
 
 module.exports = Items;

@@ -16,7 +16,7 @@ var TimeCalculations = {
     },
     totalBlockTime: function() {
         return ((this.animations._anims.preBlocking._frames.length + this.animations._anims.postBlocking._frames.length)
-            / this.stats.frameRate) + this.stats.blockingTime/1000;
+            / this.stats.frameRate) + this.stats.blockingTime/Phaser.Timer.SECOND;
     },
     currentBlockTime: function() {
         switch (this.animations.currentAnim.name) {
@@ -26,8 +26,9 @@ var TimeCalculations = {
                 return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.blocking._frames[0] + this.animations._anims.blocking.loopCount * this.animations._anims.blocking._frames.length
                     + this.animations._anims.preBlocking._frames.length) / this.stats.frameRate;
             case 'postBlocking':
-                return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.postBlocking._frames[0] + this.stats.blockingTime +
-                    this.animations._anims.preBlocking._frames.length) / this.stats.frameRate;
+                return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.postBlocking._frames[0] +
+                    this.animations._anims.preBlocking._frames.length) / this.stats.frameRate
+                    + this.stats.blockingTime/Phaser.Timer.SECOND;
             default:
                 return NaN;
         }

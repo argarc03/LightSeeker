@@ -53,7 +53,7 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
     this.character._loop = Action.loop;
     this.character._postBlocking = Action.postBlocking;
     this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
-    this.character.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
+    this.character.block.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
 }
 
 ActionFactory.prototype.useObjects = function() {

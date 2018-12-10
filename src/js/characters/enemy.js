@@ -24,11 +24,11 @@ Enemy.prototype = Object.create(Character.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.act = function() {
-    this[this.actionPattern.currentAction](this.seeker);
+    this[this.actionPattern.nextAction](this.seeker);
 
     this._lastActionEvent = this.patternTimer.add(this[this.actionPattern.currentAction].totalTime()*1000, this.act, this);
     this.patternTimer.start();
-    this.actionPattern.nextAction;
+    
 }
 
 Enemy.prototype.stop = function(){
