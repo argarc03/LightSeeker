@@ -1,0 +1,23 @@
+{
+    "Brute": {
+        "stats": {"health": 2, "damage":3, "defense":2, "speed":1, "perception":1},
+        "attack": {"name": "Golpetazo","description":"Realiza un fuerte golpe con su arma.", "icon": "attackIcon"},
+        "block": {"name": "Coraza","description":"Se protege con su hombrera.", "icon": "blockIcon"},
+        "ultimate": {"name": "Furia ancestral","description":"Aumenta su velocidad desatando su ira.", "icon": "ultimateIcon"},
+        "avaliable": true
+    },
+    "Harpy": {
+        "stats": {"health": 0, "damage":0, "defense":0, "speed":0, "perception":0},
+        "attack": {"name": "?????","description":"?????", "icon": "attackIcon"},
+        "block": {"name": "?????","description":"?????", "icon": "blockIcon"},
+        "ultimate": {"name": "?????","description":"?????", "icon": "ultimateIcon"},
+        "avaliable": false
+    },
+    "Warlock": {
+        "stats": {"health": 0, "damage":0, "defense":0, "speed":0, "perception":0},
+        "attack": {"name": "?????","description":"?????", "icon": "attackIcon"},
+        "block": {"name": "?????","description":"?????", "icon": "blockIcon"},
+        "ultimate": {"name": "?????","description":"?????", "icon": "ultimateIcon"},
+        "avaliable": false
+    }
+}

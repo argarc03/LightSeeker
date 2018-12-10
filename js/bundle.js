@@ -19,12 +19,59 @@ g,0<d.length&&(d=za[d[0]])&&(a.c[e]=d))}a.c[e]||(d=za[e])&&(a.c[e]=d);for(d=0;d<
 
 },{}],2:[function(require,module,exports){
 module.exports={
+    "Brute": {
+        "stats": {"health": 2, "damage":3, "defense":2, "speed":1, "perception":1},
+        "attack": {"name": "Golpetazo","description":"Realiza un fuerte golpe con su arma.", "icon": "attackIcon"},
+        "block": {"name": "Coraza","description":"Se protege con su hombrera.", "icon": "blockIcon"},
+        "ultimate": {"name": "Furia ancestral","description":"Aumenta su velocidad desatando su ira.", "icon": "ultimateIcon"},
+        "avaliable": true
+    },
+    "Harpy": {
+        "stats": {"health": 0, "damage":0, "defense":0, "speed":0, "perception":0},
+        "attack": {"name": "?????","description":"?????", "icon": "attackIcon"},
+        "block": {"name": "?????","description":"?????", "icon": "blockIcon"},
+        "ultimate": {"name": "?????","description":"?????", "icon": "ultimateIcon"},
+        "avaliable": false
+    },
+    "Warlock": {
+        "stats": {"health": 0, "damage":0, "defense":0, "speed":0, "perception":0},
+        "attack": {"name": "?????","description":"?????", "icon": "attackIcon"},
+        "block": {"name": "?????","description":"?????", "icon": "blockIcon"},
+        "ultimate": {"name": "?????","description":"?????", "icon": "ultimateIcon"},
+        "avaliable": false
+    }
+}
+},{}],3:[function(require,module,exports){
+module.exports={
     "font": "Minecraft",
     "fill": "#fff",
     "fontSize": 10,
     "align":"center"
 }
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
+'use strict'
+
+var Item = require('../../js/characters/item');
+
+var Items = {
+    healthPotion: new Item('Heal Potion', 'Restores 3hp.', 'itemIcon', function (character, enemy) {
+        this.heal(3);
+      }),
+      strengthPotion: new Item('Strenght Potion', 'Increase damage slightly.', 'itemIcon2', function () {
+        this.stats.tempDamage+=3;
+      }),
+      speedPotion: new Item('Speed Potion', 'Increase speed slightly.', 'itemIcon2', function () {
+        this.stats.tempSpeed+=3;
+      }),
+      speedEnemyPotion: new Item('Speed Potion', 'Increase speed slightly.', 'itemIcon2', function (character, enemy) {
+        enemy.stats.tempSpeed+=0;
+      }),
+}
+
+module.exports = Items;
+
+
+},{"../../js/characters/item":13}],5:[function(require,module,exports){
 'use strict'
 
 var bossPattern = function(character, seeker) { 
@@ -43,7 +90,7 @@ var patterns = {
 
 
 module.exports = patterns;
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict'
 /**
  * 
@@ -149,7 +196,7 @@ var Action = {
 }
 
 module.exports = Action;
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict'
 
 var Action = require('./action.js');
@@ -205,7 +252,7 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
     this.character._loop = Action.loop;
     this.character._postBlocking = Action.postBlocking;
     this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
-    this.character.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
+    this.character.block.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
 }
 
 ActionFactory.prototype.useObjects = function() {
@@ -224,7 +271,7 @@ ActionFactory.prototype.die = function(framesDying) {
 }
 
 module.exports = ActionFactory;
-},{"./action.js":4,"./timeCalculations.js":15}],6:[function(require,module,exports){
+},{"./action.js":6,"./timeCalculations.js":17}],8:[function(require,module,exports){
 'use strict'
 
 var ActionPattern = function (pattern, seeker, character) {
@@ -240,6 +287,7 @@ var ActionPattern = function (pattern, seeker, character) {
         }
         this._totalActions += element.repetitions;
     }, this);
+    this._character.patternTimer = this._character.game.time.create(false); 
 }
 
 ActionPattern.prototype.actionNumber = function (number) {
@@ -271,7 +319,7 @@ Object.defineProperty(ActionPattern.prototype, 'nextAction', {
 });
 
 module.exports = ActionPattern;
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict'
 
 var CoolDown = require('./coolDown');
@@ -283,6 +331,7 @@ var ActionFactory = require('./actionFactory');
 var SeekerActionFactory = function (character) {
     ActionFactory.call(this, character);
     this.character.coolDown = {};
+    this.character.coolDownTimer = this.character.game.time.create(false); 
 }
 
 SeekerActionFactory.prototype = Object.create(ActionFactory.prototype);
@@ -312,7 +361,7 @@ SeekerActionFactory.prototype.attack = function (framesPreAttacking, framesAttac
     this.character.attack.currentTime = TimeCalculations.currentAttackTime.bind(this.character);
     this.character.attack.totalTime = TimeCalculations.totalAttackTime.bind(this.character);
     this.character.attack.timeToCoolDown = function () {
-        let a = this.coolDown.attack.nextTick - Date.now();
+        let a = this.coolDown.attack.nextTick - this.coolDown.attack._now;
         return a<0?NaN:a;
     }.bind(this.character);
     this.character.attack.coolDownTime = selfCoolDown;
@@ -340,7 +389,7 @@ SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlockin
     this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
 
     this.character.block.timeToCoolDown = function () {
-        let a = this.coolDown.block.nextTick - Date.now();
+        let a = this.coolDown.block.nextTick - this.coolDown.block._now;
         return a<0?NaN:a;
     }.bind(this.character);
     this.character.block.coolDownTime = selfCoolDown;
@@ -352,7 +401,7 @@ SeekerActionFactory.prototype.die = function (framesDying) {
 }
 
 module.exports = SeekerActionFactory;
-},{"./action":4,"./actionFactory":5,"./coolDown":9,"./timeCalculations":15}],8:[function(require,module,exports){
+},{"./action":6,"./actionFactory":7,"./coolDown":11,"./timeCalculations":17}],10:[function(require,module,exports){
 /**
 * @author       Carlos Durán Domínguez <carduran@ucm.es>
 * @copyright    2018 Turing's Songs Studios© 
@@ -363,7 +412,7 @@ module.exports = SeekerActionFactory;
 
 var ActionFactory = require('./actionFactory');
 var ParticleFactory = require('./particleFactory.js');
-
+var Stats = require('./stats');
 /**
  * A Character is an instance...jeje
 */
@@ -376,13 +425,18 @@ var ParticleFactory = require('./particleFactory.js');
  * @param {string} name -
  * @param {Stats} stats -
  * @param {string} spriteSheet -
+ * @param {string, arguments} actions -
 */
-var Character = function (game, x, y, name, stats, spriteSheet) {
+var Character = function (game, x, y, name, stats, spriteSheet, actions) {
     Phaser.Sprite.call(this, game, x, y, spriteSheet)
     this._name = name;
     this.onNameChange = new Phaser.Signal();
-    this.stats = stats;
-    this.hp = this.stats.maxHp;
+    this.stats = new Stats(stats.damage,stats.defense,stats.speed,stats.health,stats.perception,stats.tempDamage,stats.tempDefense,stats.tempSpeed,stats.tempHealth,stats.tempPerception);
+    this.stats.onSpeedChange.add(function(){
+        this.animations.currentAnim.delay = 1000 /this.stats.frameRate;
+    }, this)
+    
+    this.hp = stats.currentHp===undefined?this.stats.maxHp:stats.currentHp;
     this.game = game;
     this.isBlocking = false;
     //Signals 
@@ -392,6 +446,10 @@ var Character = function (game, x, y, name, stats, spriteSheet) {
     //ref to Factories
     this.addAction = new ActionFactory(this);
     this.addParticle = new ParticleFactory(this);
+
+    for(var action in actions){
+        this.addAction[action](...actions[action]);
+    }
 }
 
 Character.prototype = Object.create(Phaser.Sprite.prototype);
@@ -454,7 +512,7 @@ Object.defineProperty(Character.prototype, 'name',{
 });
 
 module.exports = Character;
-},{"./actionFactory":5,"./particleFactory.js":12}],9:[function(require,module,exports){
+},{"./actionFactory":7,"./particleFactory.js":14,"./stats":16}],11:[function(require,module,exports){
 'use strict'
 
 var TimerAlterations = require('./timerAlterations');
@@ -467,7 +525,7 @@ var CoolDown = {
      * @param {number} time 
      */
     addAllTime(event) {
-        this.coolDown[event].nextTick = this[event].coolDownTime + Date.now();
+        this.coolDown[event].nextTick = this[event].coolDownTime + this.coolDown[event]._now;
         this.coolDown[event].start();
         this.coolDown[event].onStart.dispatch();
         for (let timer in this.coolDown) {
@@ -477,7 +535,7 @@ var CoolDown = {
                 } else {
                     this.coolDown[timer].start();
                     this.coolDown[timer].onStart.dispatch();
-                    this.coolDown[timer].nextTick = this.coolDown[event].global + Date.now();
+                    this.coolDown[timer].nextTick = this.coolDown[event].global + this.coolDown[event]._now;
                     CoolDown.signalEmiter.call(this, timer);
                 }
             }
@@ -485,9 +543,10 @@ var CoolDown = {
         }
     },
     signalEmiter(event) {
-        if (this.coolDown[event].nextTick > Date.now()) {
+        if (this.coolDown[event].nextTick > this.coolDown[event]._now) {
             this.coolDown[event].onWhile.dispatch();
-            this.game.time.events.add(this.frameRate, CoolDown.signalEmiter, this, event);
+            this.coolDownTimer.add(this.frameRate, CoolDown.signalEmiter, this, event);
+            this.coolDownTimer.start();
         } else {
             this.coolDown[event].stop();
             this.coolDown[event].onWhile.dispatch();
@@ -507,15 +566,15 @@ var CoolDown = {
 }
 
 module.exports = CoolDown;
-},{"./timerAlterations":16}],10:[function(require,module,exports){
+},{"./timerAlterations":18}],12:[function(require,module,exports){
 'use strict'
 
 var Character = require('./character');
 var ActionPattern = require('./actionPattern');
 
-var Enemy = function(game, x, y, name, stats, spriteSheet, seeker, pattern){
-    Character.call(this, game, x, y, name, stats, spriteSheet);
-    this.actionPattern = new ActionPattern(pattern, seeker, pattern);
+var Enemy = function(game, x, y, name, stats, spriteSheet, actions, seeker, pattern){
+    Character.call(this, game, x, y, name, stats, spriteSheet, actions);
+    this.actionPattern = new ActionPattern(pattern, seeker, this);
     this.seeker = seeker;
     this._lastActionEvent;
     this.seeker.onDeath.add(function(){
@@ -534,13 +593,25 @@ Enemy.prototype = Object.create(Character.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.act = function() {
-    this[this.actionPattern.currentAction](this.seeker);
-    this._lastActionEvent = this.game.time.events.add(this[this.actionPattern.currentAction].totalTime()*1000, this.act, this);
-    this.actionPattern.nextAction;
+    this[this.actionPattern.nextAction](this.seeker);
+
+    this._lastActionEvent = this.patternTimer.add(this[this.actionPattern.currentAction].totalTime()*1000, this.act, this);
+    this.patternTimer.start();
+    
+}
+
+Enemy.prototype.stop = function(){
+    this.patternTimer.pause();
+    this.animations.paused = true;
+}
+
+Enemy.prototype.start = function(){
+    this.patternTimer.resume();
+    this.animations.paused = false;
 }
 
 module.exports = Enemy;
-},{"./actionPattern":6,"./character":8}],11:[function(require,module,exports){
+},{"./actionPattern":8,"./character":10}],13:[function(require,module,exports){
 'use strict'
 
 var _use = function(use, that) {
@@ -566,7 +637,7 @@ Item.prototype.destroy = function() {
 }
 
 module.exports = Item;
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict'
 
 var ParticleFactory  = function (character) {
@@ -597,12 +668,13 @@ ParticleFactory.prototype.blood = function (x = this.character.width / 2, y = th
 }
 
 module.exports = ParticleFactory;
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 var Character = require('./character.js');
 var SeekerActionFactory = require('./actionSeekerFactory.js');
 var Item = require('./item');
+var Items = require('../../assets/items/items');
 /**
  * 
  */
@@ -615,32 +687,65 @@ var Item = require('./item');
  * @param {Stats} stats -
  * @param {string} spriteSheet -
 */
-var Seeker = function (game, x, y, name, stats, items, spriteSheet) {
+var Seeker = function (game, x, y, name, stats, items, spriteSheet, actions) {
     Character.call(this, game, x, y, name, stats, spriteSheet);
     this.addAction = new SeekerActionFactory(this);
+    
+    for(var action in actions){
+        this.addAction[action](...actions[action]);
+    }
     this.gems = 42;
     this.population = 103;
     this.totalGems = 569;
-    this.items = items;
+    this.items = new Array(6);
+    for(let i = 0; i < 6; i++){
+        this.items[i] = Items[items[i]];
+    }
+    this._timePaused = 0;
 }
 
 Seeker.prototype = Object.create(Character.prototype);
 Seeker.prototype.constructor = Seeker;
 
+Seeker.prototype.stop = function(){
+    for(let action in this.coolDown){
+        this.coolDown[action].pause();
+    }
+    this.coolDownTimer.pause();
+    this.animations.paused = true;
+    this._timePaused = Date.now();
+}
+
+Seeker.prototype.start = function(){
+    this._timePaused = Date.now() - this._timePaused;
+
+    for(let action in this.coolDown){
+        this.coolDown[action].nexTick+=this._timePaused;
+        this.coolDown[action].resume();
+    }
+    this.coolDownTimer.resume();
+    this.animations.paused = false;
+}
+
 module.exports = Seeker;
-},{"./actionSeekerFactory.js":7,"./character.js":8,"./item":11}],14:[function(require,module,exports){
+},{"../../assets/items/items":4,"./actionSeekerFactory.js":9,"./character.js":10,"./item":13}],16:[function(require,module,exports){
 'use strict'
 
-var Stats = function (damage, defense, speed, health, perception) {
+var Stats = function (damage, defense, speed, health, perception, tempDamage = undefined, tempDefense = undefined, tempSpeed = undefined, tempHealth = undefined, tempPerception = undefined) {
     this._damage = damage;
+    this._tempDamage = tempDamage===undefined?damage:tempDamage;
     this.onDamageChange = new Phaser.Signal();
     this._defense = defense;
+    this._tempDefense = tempDefense===undefined?defense:tempDefense;
     this.onDefenseChange = new Phaser.Signal();
     this._speed = speed;
+    this._tempSpeed = tempSpeed===undefined?speed:tempSpeed;
     this.onSpeedChange = new Phaser.Signal();
     this._health = health;
+    this._tempHealth = tempHealth===undefined?health:tempHealth;
     this.onHealthChange = new Phaser.Signal();
     this._perception = perception;
+    this._tempPerception = tempPerception===undefined?perception:tempPerception;
     this.onPerceptionChange = new Phaser.Signal();
 }
 
@@ -650,25 +755,41 @@ Stats.prototype.damagedNotBlocked = function(damage) {
 
 Object.defineProperty(Stats.prototype, 'frameRate',{
     get: function() {
-        return 10 * this.speed;
+        return 10 * this.tempSpeed;
     }
 });
 
 Object.defineProperty(Stats.prototype, 'realBlock',{
     get: function() {
-        return this.defense;
+        return this.tempDefense;
     }
 });
 
 Object.defineProperty(Stats.prototype, 'realDamage',{
     get: function() {
-        return this.damage;
+        return this.tempDamage;
     }
 });
 
 Object.defineProperty(Stats.prototype, 'blockingTime',{
     get: function() {
         return Phaser.Timer.SECOND;
+    }
+});
+
+Object.defineProperty(Stats.prototype, 'maxHp',{
+    get: function() {
+        return this._tempHealth
+    }
+});
+
+Object.defineProperty(Stats.prototype, 'tempDamage',{
+    get: function() {
+        return this._tempDamage;
+    },
+    set: function(value) {
+        this._tempDamage = value;
+        this.onDamageChange.dispatch();
     }
 });
 
@@ -682,6 +803,14 @@ Object.defineProperty(Stats.prototype, 'damage',{
     }
 });
 
+Stats.prototype.resetDamage = function() {
+    this.damage = this.tempDamage;
+};
+
+Stats.prototype.updateDamage = function() {
+    this.tempDamage = this.damage;
+};
+
 Object.defineProperty(Stats.prototype, 'defense',{
     get: function() {
         return this._defense;
@@ -691,6 +820,24 @@ Object.defineProperty(Stats.prototype, 'defense',{
         this.onDefenseChange.dispatch();
     }
 });
+
+Object.defineProperty(Stats.prototype, 'tempDefense',{
+    get: function() {
+        return this._tempDefense;
+    },
+    set: function(value) {
+        this._tempDefense = value;
+        this.onDefenseChange.dispatch();
+    }
+});
+
+Stats.prototype.resetDefense = function() {
+    this.defense = this.tempDefense;
+};
+
+Stats.prototype.updateDefense = function() {
+    this.tempDefense = this.defense;
+};
 
 Object.defineProperty(Stats.prototype, 'speed',{
     get: function() {
@@ -702,6 +849,24 @@ Object.defineProperty(Stats.prototype, 'speed',{
     }
 });
 
+Object.defineProperty(Stats.prototype, 'tempSpeed',{
+    get: function() {
+        return this._tempSpeed;
+    },
+    set: function(value) {
+        this._tempSpeed = value;
+        this.onSpeedChange.dispatch();
+    }
+});
+
+Stats.prototype.resetSpeed = function() {
+    this.speed = this.tempSpeed;
+};
+
+Stats.prototype.updateSpeed = function() {
+    this.tempSpeed = this.speed;
+};
+
 Object.defineProperty(Stats.prototype, 'health',{
     get: function() {
         return this._health
@@ -712,11 +877,24 @@ Object.defineProperty(Stats.prototype, 'health',{
     }
 });
 
-Object.defineProperty(Stats.prototype, 'maxHp',{
+Object.defineProperty(Stats.prototype, 'tempHealth',{
     get: function() {
-        return this._health
+        return this._tempHealth
+    },
+    set: function(value) {
+        this._tempHealth = value;
+        this.onHealthChange.dispatch();
     }
 });
+
+Stats.prototype.resetHealth = function() {
+    this.health = this.tempHealth;
+};
+
+Stats.prototype.updateHealth = function() {
+    this.tempHealth = this.health;
+};
+
 
 Object.defineProperty(Stats.prototype, 'perception',{
     get: function() {
@@ -728,8 +906,42 @@ Object.defineProperty(Stats.prototype, 'perception',{
     }
 });
 
+Object.defineProperty(Stats.prototype, 'tempPerception',{
+    get: function() {
+        return this._tempPerception
+    },
+    set: function(value) {
+        this._tempPerception = value;
+        this.onPerceptionChange.dispatch();
+    }
+});
+
+Stats.prototype.resetPerception = function() {
+    this.perception = this.tempPerception;
+};
+
+Stats.prototype.updatePerception = function() {
+    this.tempPerception = this.perception;
+};
+
+Stats.prototype.reset = function() {
+    this.resetDamage();
+    this.resetDefense();
+    this.resetHealth();
+    this.resetSpeed();
+    this.resetPerception();
+};
+
+Stats.prototype.update = function() {
+    this.updateDamage();
+    this.updateDefense();
+    this.updateHealth();
+    this.updateSpeed();
+    this.updatePerception();
+};
+
 module.exports = Stats;
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict'
 
 var TimeCalculations = {
@@ -748,7 +960,7 @@ var TimeCalculations = {
     },
     totalBlockTime: function() {
         return ((this.animations._anims.preBlocking._frames.length + this.animations._anims.postBlocking._frames.length)
-            / this.stats.frameRate) + this.stats.blockingTime/1000;
+            / this.stats.frameRate) + this.stats.blockingTime/Phaser.Timer.SECOND;
     },
     currentBlockTime: function() {
         switch (this.animations.currentAnim.name) {
@@ -758,8 +970,9 @@ var TimeCalculations = {
                 return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.blocking._frames[0] + this.animations._anims.blocking.loopCount * this.animations._anims.blocking._frames.length
                     + this.animations._anims.preBlocking._frames.length) / this.stats.frameRate;
             case 'postBlocking':
-                return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.postBlocking._frames[0] + this.stats.blockingTime +
-                    this.animations._anims.preBlocking._frames.length) / this.stats.frameRate;
+                return (this.animations._anims.preBlocking.currentFrame.index - this.animations._anims.postBlocking._frames[0] +
+                    this.animations._anims.preBlocking._frames.length) / this.stats.frameRate
+                    + this.stats.blockingTime/Phaser.Timer.SECOND;
             default:
                 return NaN;
         }
@@ -776,7 +989,7 @@ var TimeCalculations = {
 }
 
 module.exports = TimeCalculations;
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict'
 
 var TimerAlterations = {
@@ -787,7 +1000,7 @@ var TimerAlterations = {
 }
 
 module.exports = TimerAlterations;
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 // var Phaser = require('phaser');
 
 var Character = require('./characters/character');
@@ -811,23 +1024,25 @@ var ButtonMenu = require('./interface/buttonMenu');
 var WindowFrame = require('./interface/windowFrame');
 var FramedButton = require('./interface/framedButton');
 var InfoWindow = require('./interface/infoWindow');
+var MainMenuHUD = require('./interface/mainMenuHUD');
+var CreationHUD = require('./interface/creationHUD');
 /**
  * 
  */
 fun = function (Phaser) {
-    Phaser.GameObjectFactory.prototype.character = function (x, y, name, stats, spriteSheet, emitter, group) {
+    Phaser.GameObjectFactory.prototype.character = function (x, y, name, stats, spriteSheet, actions, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Character(this.game, x, y, name, stats, spriteSheet, emitter));
+        return group.add(new Character(this.game, x, y, name, stats, spriteSheet, actions));
     }
 
-    Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, objects, spriteSheet, emitter, group) {
+    Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, objects, spriteSheet, actions, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Seeker(this.game, x, y, name, stats, objects, spriteSheet, emitter));
+        return group.add(new Seeker(this.game, x, y, name, stats, objects, spriteSheet, actions));
     }
 
-    Phaser.GameObjectFactory.prototype.enemy = function (x, y, name, stats, spriteSheet, seeker, pattern, group) {
+    Phaser.GameObjectFactory.prototype.enemy = function (x, y, name, stats, spriteSheet, actions, seeker, pattern, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Enemy(this.game, x, y, name, stats, spriteSheet, seeker, pattern));
+        return group.add(new Enemy(this.game, x, y, name, stats, spriteSheet, actions, seeker, pattern));
     }
 
     Phaser.GameObjectFactory.prototype.bar = function (x, y, key, frame, parent = this.game.world) {
@@ -897,7 +1112,6 @@ fun = function (Phaser) {
         return group.add(new OptionMenu(this.game, buttonsMenu, group));
     }
 
-
     Phaser.GameObjectFactory.prototype.buttonMenu = function (name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
         if (group === undefined) { group = this.world; }
         return group.add(new ButtonMenu(this.game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
@@ -921,25 +1135,113 @@ fun = function (Phaser) {
     Phaser.GameObjectFactory.prototype.infoWindow = function (x, y, width, height, windowKey, text, style, parent = this.world) {
         return new InfoWindow(parent, this.game, x, y, width, height, windowKey, text, style);
     }
+
+    Phaser.GameObjectFactory.prototype.mainMenuHUD = function (x, y, selector, parent = this.game.world) {
+        return new MainMenuHUD(this.game, parent, x, y, selector);
+    }
+
+    Phaser.GameObjectFactory.prototype.creationHUD = function (x, y, exitFunction, context, parent = this.game.world) {
+        return new CreationHUD(this.game, parent, x, y, exitFunction, context);
+    }
 }
 
 module.exports = fun;
-},{"./characters/character":8,"./characters/enemy":10,"./characters/seeker":13,"./interface/actionButton":19,"./interface/bar":20,"./interface/buttonMenu":21,"./interface/circleWithSectors":22,"./interface/combatHUD":23,"./interface/enemyCombatHUD":24,"./interface/eventHUD":25,"./interface/framedButton":26,"./interface/healthBar":27,"./interface/infoWindow":28,"./interface/optionMenu":29,"./interface/reactiveBar":30,"./interface/reactiveContinuousBar":31,"./interface/reactiveRichText":32,"./interface/richText":33,"./interface/scrollText":34,"./interface/seekerCombatHUD":35,"./interface/windowFrame":39}],18:[function(require,module,exports){
+},{"./characters/character":10,"./characters/enemy":12,"./characters/seeker":15,"./interface/actionButton":21,"./interface/bar":22,"./interface/buttonMenu":23,"./interface/circleWithSectors":25,"./interface/combatHUD":26,"./interface/creationHUD":27,"./interface/enemyCombatHUD":28,"./interface/eventHUD":29,"./interface/framedButton":30,"./interface/healthBar":31,"./interface/infoWindow":32,"./interface/mainMenuHUD":33,"./interface/optionMenu":34,"./interface/reactiveBar":35,"./interface/reactiveContinuousBar":37,"./interface/reactiveRichText":38,"./interface/richText":39,"./interface/scrollText":40,"./interface/seekerCombatHUD":41,"./interface/windowFrame":47}],20:[function(require,module,exports){
 'use strict'
+
+var ReactiveBar = require('./reactiveBar');
+var ReactiveCircleBar = require('./reactiveCircleBar');
 
 var ActionBar = function(game, parent, x, y, enemy, frameKey){
     Phaser.Group.call(this, game, parent);
+    this._enemy = enemy;
     this.x = x;
     this.y = y;
-    this._frame = this.add(new Phaser.Image(game,0,0,frameKey));
+    this._nextX = 31;
+    this._back = this.add(new Phaser.Image(game,0,0,'actionsBarBack'));
+    this._actionContiner = this.add(new Phaser.Group(game, this));
+    this._actionContiner.mask = this.add(new Phaser.Graphics(game,31,13));
+    this._actionContiner.mask.beginFill(0xffffff);
+    this._actionContiner.mask.drawRect(0, 0, 80, 13);
+    this._actionContiner.mask.endFill();
+    this._timer = game.time.create(false);
+    this._onEveryHalfDeciSecond = new Phaser.Signal();
+    this._timer.loop(0.1,this._onEveryHalfDeciSecond.dispatch,this._onEveryHalfDeciSecond);
     
+    //ActionBar.prototype._createAction.call(this,'attack');
+    //ActionBar.prototype._createAction.call(this,'block');
+    this._actionCircle = this.add(new ReactiveCircleBar(this.game,this,13,13,12,[0,Math.PI*3/2, Math.PI],[0x0000FF, 0x00FF00, 0xFF0000],[1,1,1],true, 400, -Math.PI/2, function(){
+        if(this._actionContiner.children[0]){
+        let name = this._actionContiner.children[0].action;
+        let percentage = this._enemy[name].currentTime()/this._enemy[name].totalTime()*100;
+        return isNaN(percentage)?0:percentage;
+        } return 0;
+    }, this,this._onEveryHalfDeciSecond));
+    //this._onEveryHalfDeciSecond.add(ActionBar.prototype.move,this,0,-1);
+    
+    this._frame = this.add(new Phaser.Image(game,0,0,'actionsBarFrame'));
+    this._barShadow = this.add(new Phaser.Image(game,32,13,'actionsBarShadow'));
+    this._barShadow.alpha = 0.3;
+    this._actions = [];
+    this._childIndex = 0;
+    this._rightX = 31;
 }
 
 ActionBar.prototype = Object.create(Phaser.Group.prototype);
 ActionBar.prototype.constructor = ActionBar;
 
+ActionBar.prototype.update = function() {
+    let time = this._enemy[this._enemy.actionPattern.currentAction].currentTime();
+    if(!isNaN(time)){
+        this._actions = [];
+        this._actionContiner.removeAll(true);
+        this._rightX =31-time/8*80;
+        this._createAction(this._enemy.actionPattern.currentAction);
+        let i = 1;
+        while(this._rightX < 111){
+            this._createAction(this._enemy.actionPattern.actionNumber(i));
+            i++;
+        }
+    }
+}
+
+ActionBar.prototype._createAction = function(action) {
+    //'blockBar''attackBar''unknownBar' 'idleBar'
+    this._actions.push(this._actionContiner.add(new ReactiveBar(this.game, this,this._rightX,13,action+'Bar', function(){
+        return this[action].totalTime()/(8)*100;
+    },this._enemy, this._enemy.stats.onSpeedChange, 0)));
+    this._actions[this._actions.length-1].action = action;
+    this._rightX+=this._actions[this._actions.length-1].mask.width;
+    
+}
+ActionBar.prototype.reUpdate = function () {
+    this._actionContiner.children.forEach(function(element){
+        element.changePercentage();
+    });
+    this._actionContiner.mask.beginFill(0xffffff);
+    this._actionContiner.mask.drawRect(0, 0, 80, 13);
+    this._actionContiner.mask.endFill();
+}
+
+ActionBar.prototype.move = function(movement) {
+    
+    this._actions.forEach(function(element){
+        element.x+=movement;
+        if(element.right<31){
+            this._actionContiner.remove(this._actions.shift(),true);
+            this._actions.shift();
+        }
+    },this);
+    let right = false;
+    if(this._actions.length<=0 || this._actions[this._actions.length-1].x+this._actions[this._actions.length-1].mask.right<111){
+        //console.log(this._actions.length);
+        this._createAction(this._enemy.actionPattern.actionNumber(this._actions.length-1));
+    } 
+    
+}
+
 module.exports = ActionBar;
-},{}],19:[function(require,module,exports){
+},{"./reactiveBar":35,"./reactiveCircleBar":36}],21:[function(require,module,exports){
 'use strict'
 var FramedButton = require('./framedButton');
 var ReactiveBar = require('./reactiveBar');
@@ -947,7 +1249,7 @@ var ReactiveRichText = require('./reactiveRichText')
 var textFunction = require('./textFunctions');
 
 var ActionButton = function (parent, game, x, y, buttonKey, frameKey, barKey, callbacks, percentageFunction, percentageFunctionContext,
-    timeFunction, timeFunctionContext, barSignal, totalRechargeSignal,
+    timeFunction, timeFunctionContext, barSignal, totalRechargeSignal, tint,
     frameColorOver = 0, frameColorOut = 0, frameColorDown = 0, frameColorUp = 0, frameColorDisabled = 0,
     overButtonFrame = 0, outButtonFrame = 0, downButtonFrame = 0, upButtonFrame = 0, disabledButtonFrame = 0,
     overFrameFrame = 0, outFrameFrame = 0, downFrameFrame = 0, upFrameFrame = 0, disabledFrameFrame = 0, barFrame = 0) {
@@ -956,7 +1258,7 @@ var ActionButton = function (parent, game, x, y, buttonKey, frameKey, barKey, ca
         frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
          overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
          overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame);
-    this._button.tint = 0x5c5c5c;
+    this._button.tint = tint;
     this._bar = this.add(new ReactiveBar(game, parent, 0, 0, barKey, percentageFunction, percentageFunctionContext, barSignal, barFrame));
     this._bar.maskAngle = -90;
     this.moveUp(this._frame);
@@ -968,7 +1270,8 @@ var ActionButton = function (parent, game, x, y, buttonKey, frameKey, barKey, ca
         "align": "center"
     }, this, [barSignal]));
    
-    this._rechargeEvent = totalRechargeSignal.add( this.activate, this);
+    this._rechargeEvent = totalRechargeSignal?totalRechargeSignal.add( this.activate, this):{};
+    this._rechargeEvent.active;
 }
 
 ActionButton.prototype = Object.create(FramedButton.prototype);
@@ -980,7 +1283,7 @@ ActionButton.prototype.deactivate = function() {
 }
 
 module.exports = ActionButton;
-},{"./framedButton":26,"./reactiveBar":30,"./reactiveRichText":32,"./textFunctions":38}],20:[function(require,module,exports){
+},{"./framedButton":30,"./reactiveBar":35,"./reactiveRichText":38,"./textFunctions":46}],22:[function(require,module,exports){
 'use strict'
 
 var Bar = function (game, parent, x, y, key, frame = null) {
@@ -1060,23 +1363,28 @@ Object.defineProperty(Bar.prototype, 'height', {
 });
 
 module.exports = Bar;
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
+var FramedButton = require('./framedButton');
 
-var ButtonMenu = function (game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame) {
 
-    Phaser.Button.call(this, game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
+var ButtonMenu = function (parent, game, name, x, y, buttonKey, frameKey, callbacks,
+    frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
+    overButtonFrame = 0, outButtonFrame = 0, downButtonFrame = 0, upButtonFrame = 0, disabledButtonFrame = 0,
+    overFrameFrame = 0, outFrameFrame = 0, downFrameFrame = 0, upFrameFrame = 0, disabledFrameFrame = 0) {
+    FramedButton.call(this, parent, game, x, y, buttonKey, frameKey, callbacks,
+        frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
+        overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
+        overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame);
     this.name = name;
     this.leftButton = null;
     this.rightButton = null;
     this.upButton = null;
     this.downButton = null;
-    this.x = x;
-    this.y = y;
 }
 
-ButtonMenu.prototype = Object.create(Phaser.Button.prototype);
+ButtonMenu.prototype = Object.create(FramedButton.prototype);
 ButtonMenu.prototype.constructor = ButtonMenu;
 
 ButtonMenu.prototype.goLeft = function() { return this.left; }
@@ -1088,32 +1396,78 @@ ButtonMenu.prototype.select = function() {
     this.onInputDown.dispatch();
 }
 
-ButtonMenu.prototype.deactivate = function() {
-    this.kill();
-}
-
-ButtonMenu.prototype.activate = function() {
-    this.revive();
-}
-
 module.exports = ButtonMenu;
 
-},{}],22:[function(require,module,exports){
+},{"./framedButton":30}],24:[function(require,module,exports){
+'use strict'
+
+var CircleWithSectors = require('./circleWithSectors');
+
+var CircleBar = function (game,parent, x, y, radius, angles, colors, alphas, antiClockWise, segments, initialAngle) {
+    Phaser.Group.call(this,game, parent);
+    this.x = x;
+    this.y = y;
+    this._actionCircleBack = this.add(new CircleWithSectors(game,0,0,radius,angles,colors,alphas,antiClockWise, segments));
+    this._actionCircleBack.tint = 0xAAAAAA;
+    this._actionCircleFront = this.add(new CircleWithSectors(game,0,0,radius,angles,colors,alphas,antiClockWise, segments));
+    this._actionCircleFront.mask = this.add(new Phaser.Graphics(game,0,0));
+    this._antiClockWise = antiClockWise;
+    this._radius = radius;
+    this._initialAngle = initialAngle;
+    this._percentage = 1;
+}
+
+CircleBar.prototype = Object.create(Phaser.Group.prototype);
+CircleBar.prototype.constructor = CircleBar;
+
+Object.defineProperty(CircleBar.prototype, 'percentage', {
+    get: function () {
+        return 100 * this._percentage;
+    },
+    set: function (value) {
+        value = value / 100;
+        this._percentage = value;
+        this._actionCircleFront.mask.clear();
+        this._actionCircleFront.mask.beginFill(0xffffff);
+        let second = this._initialAngle + value*Math.PI*2;
+        this._actionCircleFront.mask.arc(0,0,this._radius,second,this._initialAngle,this._antiClockWise);
+        if(value<0.5){
+            this._actionCircleFront.mask.drawPolygon([0,0,
+                this._radius * Math.cos(second), this._radius * Math.sin(second),
+                this._radius * Math.cos(this._initialAngle), this._radius * Math.sin(this._initialAngle)]);
+        }
+        this._actionCircleFront.mask.endFill();
+
+    }
+});
+
+module.exports = CircleBar;
+},{"./circleWithSectors":25}],25:[function(require,module,exports){
 'use strict'
 
 
 var CircleWithSector = function (game, x, y, radius, angles, colors, alphas, antiClockWise, segments) {
     Phaser.Graphics.call(this, game, x, y);
     if (angles.length === colors.length) {
+        if(angles.length===1){
+            this.beginFill(colors[0], alphas[0]);
+            this.drawCircle(0, 0, radius*2);
+        } else {
         for (let i = 0; i < angles.length; i++) {
             this.beginFill(colors[i], alphas[i]);
             this.arc(0, 0, radius, angles[i], angles[(i + 1) % angles.length], antiClockWise, segments);
             // Si solucionan el bug de dibujar muchos sectores en un mismo grafico se podrá quitar la funcion thi.drawPolygon.
+            let c = angles[(i + 1) % angles.length] - angles[i];
+            c = antiClockWise? -c: c;
+            c = c<0?2*Math.PI+c:c;
+            if(Math.abs(c)<=Math.PI){
             this.drawPolygon([0, 0,
                 radius * Math.cos(angles[i]), radius * Math.sin(angles[i]),
                 radius * Math.cos(angles[(i + 1) % angles.length]), radius * Math.sin(angles[(i + 1) % angles.length])]
             );
         }
+        }
+    }
         this.endFill();
     }
 }
@@ -1122,11 +1476,14 @@ CircleWithSector.prototype = Object.create(Phaser.Graphics.prototype);
 CircleWithSector.prototype.constructor = CircleWithSector;
 
 module.exports = CircleWithSector;
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict'
 
 var EnemyCombatHUD = require('./enemyCombatHUD');
 var SeekerCombatHUD = require('./seekerCombatHUD');
+var FramedButton = require('./framedButton');
+var OptionMenu = require('./optionMenu');
+var RichText = require('./richText');
 
 var CombatHUD = function (game, parent, x, y, seeker, enemy) {
     Phaser.Group.call(this, game, parent);
@@ -1135,14 +1492,127 @@ var CombatHUD = function (game, parent, x, y, seeker, enemy) {
     this.frame = this.add(new Phaser.Image(game, 0, 0, 'interface'));
     this._seekerHUD = this.add(new SeekerCombatHUD(game, this, 0, 0, seeker, enemy));
     this._enemyHUD = this.add(new EnemyCombatHUD(game, this, 0, 0, seeker, enemy));
+    this._pause = false;
+    this._seeker = seeker;
+    this._enemy = enemy;
+    this.pauseButton = this.add(new FramedButton(this, game, 190, 2, 'pauseButton', 'pauseButtonFrame',[{callback: CombatHUD.prototype._pause, context:this, arguments:[]}],0xFFFFFF,0x000000,0x676767, 0x222222, 0x676767));
+    this.pauseMenu = this.add(new OptionMenu(game,40,15,120,120,[
+        [ 'hola', 10, 16, 'optionBack', 'optionFrame', 
+        [{callback: CombatHUD.prototype._pause, context:this, arguments:[]}],
+        0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA,
+        {leftButton: undefined, rightButton: undefined, upButton: undefined, downButton: undefined} ],
+        [ 'hola', 10, 30, 'optionBack', 'optionFrame', 
+        [{callback: this.game.state.start, context:this.game.state, arguments:['mainmenu']}],
+        0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA,
+        {leftButton: undefined, rightButton: undefined, upButton: undefined, downButton: undefined} ],
+    ],'infoWindow',this));
+    this.pauseMenu.visible = false;
+    this.pauseMenu.add(new RichText(game,0,5,120,'PAUSA',{align: 'center'},this));
+    this.pauseMenu.add(new RichText(game,0,16,120,'VOLVER',{align: 'center'},this));
+    this.pauseMenu.add(new RichText(game,0,30,120,'IR AL MENU',{align: 'center'},this));
 }
 
 
 CombatHUD.prototype = Object.create(Phaser.Group.prototype);
 CombatHUD.prototype.constructor = CombatHUD;
 
+CombatHUD.prototype._pause = function(){
+    if(this._pause){
+        this._seeker.start();
+        this._enemy.start();
+        this.pauseMenu.visible = false;
+        this._seekerHUD.unFreeze();
+        this.pauseButton._button.inputEnabled = true;
+    } else {
+        this._seeker.stop();
+        this._enemy.stop();
+        this.pauseMenu.visible = true;
+        this._seekerHUD.freeze();
+        this.pauseButton._button.inputEnabled = false;
+        this.pauseButton.changeFrameFrame('Out')
+    }
+    this._pause = !this._pause;
+}
+
 module.exports = CombatHUD;
-},{"./enemyCombatHUD":24,"./seekerCombatHUD":35}],24:[function(require,module,exports){
+},{"./enemyCombatHUD":28,"./framedButton":30,"./optionMenu":34,"./richText":39,"./seekerCombatHUD":41}],27:[function(require,module,exports){
+'use strict'
+//var ActionButton = require('./actionButton');
+//var HealthBar = require('./healthBar');
+var ReactiveRichText = require('./reactiveRichText');
+var RichText = require('./richText');
+var textFunctions = require('./textFunctions');
+var FramedButton = require('./framedButton');
+var StatMarker = require('./statMarker');
+var ShowCase = require('./showCase');
+
+/*var deactivateActionButton = function () {
+  this._button.onInputOver.removeAll();
+  this._button.onInputOut.removeAll();
+  this._button.onInputDown.removeAll();
+  this._button.onInputUp.removeAll();
+  this._rechargeEvent.active = false;
+  this._text.visible = false;
+  this._bar.percentageFunction = function () { return 0; };
+  this._bar.percentage = 0;
+  this.deactivate()
+};*/
+
+var CreationHUD = function (game, parent, x, y, exitFunction, context) {
+  Phaser.Group.call(this, game, parent);
+  this.x = x;
+  this.y = y;
+  let style = { "font": "Minecraft", "fill": "#FFFFFF", "fontSize": 10, "align": 'center' };
+  var style2 = { font: 'Minecraft', fill: '#000000', fontSize: 10 };
+  var style3 = { font: 'Minecraft', fill: '#000000', fontSize: 10, align: 'center' };
+
+  this.NameScene = function () {
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('name'); }, parent);
+  };
+
+  this.add(new Phaser.Image(game, 0, 0, 'creationinterface'));
+
+  this._showCase = this.add(new ShowCase(game, this, 0, 0, require('../../assets/characters/characters.json')));
+
+  this.leftArrowButton = this.add(new FramedButton(this, game, 49, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+
+  this.rightArrowButton = this.add(new FramedButton(this, game, 151, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [-1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+
+  this.nextStateButton = this.add(new FramedButton(this, game, 150, 0, 'crystal', 'crystalFrame', [{ callback: this.NameScene, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+
+  this.nextStateButtonText = this.add(new RichText(game, 145, 17, 50, 'INICIAR RITUAL', style3, this));
+  this.nextStateButton._button.input.pixelPerfectClick = true;
+  this.nextStateButton._button.input.pixelPerfectOver = true;
+
+  this.rightArrowButton.scale.x *= -1;
+
+  this._showCase.onBeginRotation.add(function () {
+    this.leftArrowButton.deactivate();
+    this.rightArrowButton.deactivate();
+    this.nextStateButton.deactivate();
+    this.nextStateButton._button.tint = 0x555555;
+    this.nextStateButtonText.text = '';
+  }, this);
+
+  this._showCase.onEndRotation.add(function () {
+    this.leftArrowButton.activate();
+    this.rightArrowButton.activate();
+    if (this._showCase.isAvaliable()) {
+      this.nextStateButton.activate();
+      this.nextStateButton._button.tint = 0xFFFFFF;
+      this.nextStateButtonText.text = 'INICIAR RITUAL';
+    }
+  }, this);
+}
+
+CreationHUD.prototype = Object.create(Phaser.Group.prototype);
+CreationHUD.prototype.constructor = CreationHUD;
+
+module.exports = CreationHUD;
+},{"../../assets/characters/characters.json":2,"./framedButton":30,"./reactiveRichText":38,"./richText":39,"./showCase":42,"./statMarker":45,"./textFunctions":46}],28:[function(require,module,exports){
 'use strict'
 
 var ActionBar = require('./actionBar');
@@ -1163,32 +1633,62 @@ var EnemyCombatHUD = function (game, parent, x, y, seeker, enemy) {
 
     this.name = this.add(new ReactiveRichText(game,3+123,-1,80,textFunctions.Fun(function() {
         return this.name;
-    }, enemy), style2, this, enemy.onNameChange));
+    }, enemy), style2, this, [enemy.onNameChange]));
 
     this.healthIcon = this.add(new Phaser.Image(game,3+122,14,'healthIcon'));
-    this.healthNumber = this.add(new ReactiveRichText(game,15+122,13,11,textFunctions.Fun(function() {
-        return this.stats.health.toString();
-    }, enemy), style2, this, enemy.stats.onHealthChange));
+    this.healthNumber = this.add(new ReactiveRichText(game,15+122,13,12,textFunctions.Fun(function() {
+        if(this.stats.tempHealth > this.stats.health){
+          return textFunctions.Color('#00CC00',this.stats.tempHealth.toString());
+        } else if (this.stats.tempHealth < this.stats.health){
+          return textFunctions.Color('#CC0000',this.stats.tempHealth.toString());
+        } else {
+          return textFunctions.Color('#000000',this.stats.tempHealth.toString());
+        }
+      }, enemy), style2, this, [enemy.stats.onHealthChange]));
 
     this.damageIcon = this.add(new Phaser.Image(game,27+122,14,'damageIcon'));
-    this.damageNumber = this.add(new ReactiveRichText(game,39+122,13,11,textFunctions.Fun(function() {
-        return this.stats.damage.toString();
-    }, enemy), style2, this, enemy.stats.onDamageChange));
+    this.damageNumber = this.add(new ReactiveRichText(game,39+122,13,12,textFunctions.Fun(function() {
+        if(this.stats.tempDamage > this.stats.damage){
+          return textFunctions.Color('#00CC00',this.stats.tempDamage.toString());
+        } else if (this.stats.tempDamage < this.stats.damage){
+          return textFunctions.Color('#CC0000',this.stats.tempDamage.toString());
+        } else {
+          return textFunctions.Color('#000000',this.stats.tempDamage.toString());
+        }
+      }, enemy), style2, this, [enemy.stats.onDamageChange]));
 
     this.defenseIcon = this.add(new Phaser.Sprite(game,51+122,14,'defenseIcon'));
-    this.defenseNumber = this.add(new ReactiveRichText(game,63+122,13,11,textFunctions.Fun(function() {
-        return this.stats.defense.toString();
-    }, enemy), style2, this, enemy.stats.onDefenseChange));
+    this.defenseNumber = this.add(new ReactiveRichText(game,63+122,13,12,textFunctions.Fun(function() {
+        if(this.stats.tempDefense > this.stats.defense){
+          return textFunctions.Color('#00CC00',this.stats.tempDefense.toString());
+        } else if (this.stats.tempDefense < this.stats.defense){
+          return textFunctions.Color('#CC0000',this.stats.tempDefense.toString());
+        } else {
+          return textFunctions.Color('#000000',this.stats.tempDefense.toString());
+        }
+      }, enemy), style2, this, [enemy.stats.onDefenseChange]));
 
     this.speedIcon = this.add(new Phaser.Image(game,13+122,24,'speedIcon'));
-    this.speedNumber = this.add(new ReactiveRichText(game,25+122,23,11,textFunctions.Fun(function() {
-        return this.stats.speed.toString();
-    }, enemy), style2, this, enemy.stats.onSpeedChange));
+    this.speedNumber = this.add(new ReactiveRichText(game,25+122,23,12,textFunctions.Fun(function() {
+        if(this.stats.tempSpeed > this.stats.speed){
+          return textFunctions.Color('#00CC00',this.stats.tempSpeed.toString());
+        } else if (this.stats.tempSpeed < this.stats.speed){
+          return textFunctions.Color('#CC0000',this.stats.tempSpeed.toString());
+        } else {
+          return textFunctions.Color('#000000',this.stats.tempSpeed.toString());
+        }
+      }, enemy), style2, this, [enemy.stats.onSpeedChange]));
 
     this.perceptionIcon = this.add(new Phaser.Image(game,38+122,24,'perceptionIcon'));
-    this.perceptionNumber = this.add(new ReactiveRichText(game,50+122,23,11,textFunctions.Fun(function() {
-        return this.stats.damage.toString();
-    }, enemy), style2, this, enemy.stats.onPerceptionChange));
+    this.perceptionNumber = this.add(new ReactiveRichText(game,50+122,23,12,textFunctions.Fun(function() {
+        if(this.stats.tempPerception > this.stats.perception){
+          return textFunctions.Color('#00CC00',this.stats.tempPerception.toString());
+        } else if (this.stats.tempPerception < this.stats.perception){
+          return textFunctions.Color('#CC0000',this.stats.tempPerception.toString());
+        } else {
+          return textFunctions.Color('#000000',this.stats.tempPerception.toString());
+        }
+      }, enemy), style2, this, [enemy.stats.onPerceptionChange]));
 }
 
 
@@ -1196,7 +1696,7 @@ EnemyCombatHUD.prototype = Object.create(Phaser.Group.prototype);
 EnemyCombatHUD.prototype.constructor = EnemyCombatHUD;
 
 module.exports = EnemyCombatHUD;
-},{"./actionBar":18,"./healthBar":27,"./reactiveRichText":32,"./textFunctions":38}],25:[function(require,module,exports){
+},{"./actionBar":20,"./healthBar":31,"./reactiveRichText":38,"./textFunctions":46}],29:[function(require,module,exports){
 'use strict'
 
 var ScrollText = require('./scrollText');
@@ -1229,42 +1729,42 @@ var EventHUD = function (game, parent, seeker, text, options) {
     }, seeker), style2, this, seeker.onNameChange));
 
     this.healthIcon = this.add(new Phaser.Image(game, 3, 15, 'healthIcon'));
-    this.healthNumber = this.add(new ReactiveRichText(game, 15, 13, 11, textFunctions.Fun(function () {
+    this.healthNumber = this.add(new ReactiveRichText(game, 15, 13, 12, textFunctions.Fun(function () {
         return this.stats.health.toString();
     }, seeker), style2, this, seeker.stats.onHealthChange));
 
     this.damageIcon = this.add(new Phaser.Image(game, 27, 15, 'damageIcon'));
-    this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 11, textFunctions.Fun(function () {
+    this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 12, textFunctions.Fun(function () {
         return this.stats.damage.toString();
     }, seeker), style2, this, seeker.stats.onDamageChange));
 
     this.defenseIcon = this.add(new Phaser.Sprite(game, 51, 15, 'defenseIcon'));
-    this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 11, textFunctions.Fun(function () {
+    this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 12, textFunctions.Fun(function () {
         return this.stats.defense.toString();
     }, seeker), style2, this, seeker.stats.onDefenseChange));
 
     this.speedIcon = this.add(new Phaser.Image(game, 75, 15, 'speedIcon'));
-    this.speedNumber = this.add(new ReactiveRichText(game, 87, 13, 11, textFunctions.Fun(function () {
+    this.speedNumber = this.add(new ReactiveRichText(game, 87, 13, 12, textFunctions.Fun(function () {
         return this.stats.speed.toString();
     }, seeker), style2, this, seeker.stats.onSpeedChange));
 
     this.perceptionIcon = this.add(new Phaser.Image(game, 99, 15, 'perceptionIcon'));
-    this.perceptionNumber = this.add(new ReactiveRichText(game, 111, 13, 11, textFunctions.Fun(function () {
+    this.perceptionNumber = this.add(new ReactiveRichText(game, 111, 13, 12, textFunctions.Fun(function () {
         return this.stats.damage.toString();
     }, seeker), style2, this, seeker.stats.onPerceptionChange));
 
     this.gemIcon = this.add(new Phaser.Image(game, 68, 1, 'gemIcon'));
-    this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 15, textFunctions.Fun(function () {
+    this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 18, textFunctions.Fun(function () {
         return this.gems.toString();
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
     this.villageGemIcon = this.add(new Phaser.Image(game, 160 + 3, 18, 'villageGemIcon'));
-    this.villageGemNumber = this.add(new ReactiveRichText(game, 142 + 3, 16, 15, textFunctions.Fun(function () {
+    this.villageGemNumber = this.add(new ReactiveRichText(game, 142 + 3, 16, 18, textFunctions.Fun(function () {
         return this.gems.toString();//hay que cambiarlo
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
     this.populationIcon = this.add(new Phaser.Image(game, 160 + 28, 18, 'populationIcon'));
-    this.populationNumber = this.add(new ReactiveRichText(game, 142 + 28, 16, 15, textFunctions.Fun(function () {
+    this.populationNumber = this.add(new ReactiveRichText(game, 142 + 28, 16, 18, textFunctions.Fun(function () {
         return this.gems.toString();//hay que cambiarlo
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
@@ -1310,8 +1810,8 @@ var EventHUD = function (game, parent, seeker, text, options) {
         return '1';//hay que
     }, seeker), style4, this, seeker.stats.onPerceptionChange));
 
-    this.game.add.optionMenu([['pauseButton', 190, 2, 'pauseButton', this.EventScene, this, {}]]);
-
+    this.pauseButton = this.add(new FramedButton(this, game, 190, 2, 'pauseButton', 'pauseButtonFrame',[{callback: EventHUD.prototype._pause, context:this, arguments:[]}],0xFFFFFF,0x000000,0x676767, 0x222222, 0x676767));
+    this._pause = false;
 }
 
 EventHUD.prototype = Object.create(Phaser.Group.prototype);
@@ -1346,21 +1846,19 @@ EventHUD.prototype.reset = function (text, options) {
     }
 }
 
+EventHUD.prototype._pause = function(){
+    if(this._pause){
+    } else {
+    }
+    this._pause = !this._pause;
+}
+
 module.exports = EventHUD;
 
 
-},{"../../assets/fonts/style.json":2,"./framedButton":26,"./healthBar":27,"./reactiveRichText":32,"./richText":33,"./scrollText":34,"./slider":36,"./textFunctions":38}],26:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3,"./framedButton":30,"./healthBar":31,"./reactiveRichText":38,"./richText":39,"./scrollText":40,"./slider":43,"./textFunctions":46}],30:[function(require,module,exports){
 
-var changeFrameFrame = function (frame) {
 
-    this._frame.tint = this['_frameColor' + frame];
-    frame = this['_' + frame.toLowerCase() + 'FrameFrame'];
-    if (typeof frame === 'number') {
-        this._frame.frame = frame;
-    } else {
-        this._frame.frameName = frame;
-    }
-}
 
 //callBack ={function, context, arguments}
 
@@ -1372,10 +1870,11 @@ var FramedButton = function (parent, game, x, y, buttonKey, frameKey, callbacks,
     Phaser.Group.call(this, game, parent);
     this.x = x;
     this.y = y;
-    this._button = this.add(new Phaser.Button(game, 0, 0, buttonKey, function () { }, null, overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame));
+
     this._frame = this.add(new Phaser.Image(game, 0, 0, frameKey));
 
-
+    this._button = this.add(new Phaser.Button(game, 0, 0, buttonKey, function () { }, null, overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame));
+    
     this._pressed = false;
 
     this._callbacks = callbacks;
@@ -1402,6 +1901,7 @@ var FramedButton = function (parent, game, x, y, buttonKey, frameKey, callbacks,
     this._button.onInputDown.add(this._down, this);
     this._button.onInputOut.add(this._out, this);
     this._button.onInputOver.add(this._over, this);
+    
     this._button.onInputUp.add(this._up, this);
 
     this._button.input.useHandCursor = false;
@@ -1415,7 +1915,7 @@ FramedButton.prototype.constructor = FramedButton;
 
 FramedButton.prototype._down = function () {
     if (this._button.input.enabled) {
-        changeFrameFrame.call(this, 'Down');
+        this.changeFrameFrame('Down');
         this._pressed = true;
         this.onInputDown.dispatch();
     }
@@ -1424,7 +1924,7 @@ FramedButton.prototype._down = function () {
 FramedButton.prototype._out = function () {
     if (this._button.input.enabled) {
         if (!this._pressed) {
-            changeFrameFrame.call(this, 'Out');
+            this.changeFrameFrame( 'Out');
         }
         this.onInputOut.dispatch();
     }
@@ -1433,7 +1933,7 @@ FramedButton.prototype._out = function () {
 FramedButton.prototype._over = function () {
     if (this._button.input.enabled) {
         if (!this._pressed) {
-            changeFrameFrame.call(this, 'Over');
+            this.changeFrameFrame( 'Over');
         }
         this.onInputOver.dispatch();
     }
@@ -1441,12 +1941,12 @@ FramedButton.prototype._over = function () {
 
 FramedButton.prototype._up = function () {
     if (this._button.input.enabled) {
-        changeFrameFrame.call(this, 'Up');
+        this.changeFrameFrame( 'Up');
         if (this._button.input.checkPointerOver(this.game.input.activePointer)) {
-            changeFrameFrame.call(this, 'Over');
+            this.changeFrameFrame( 'Over');
             this._do();
         } else {
-            changeFrameFrame.call(this, 'Out');
+            this.changeFrameFrame( 'Out');
         }
         this._pressed = false;
         this.onInputUp.dispatch();
@@ -1464,14 +1964,14 @@ FramedButton.prototype._do = function () {
 FramedButton.prototype.activate = function () {
     this._button.input.enabled = true;
     if (this._button.input.checkPointerOver(this.game.input.activePointer)) {
-        changeFrameFrame.call(this, 'Over');
+        this.changeFrameFrame('Over');
     } else {
-        changeFrameFrame.call(this, 'Out');
+        this.changeFrameFrame( 'Out');
     }
 }
 
 FramedButton.prototype.deactivate = function () {
-    changeFrameFrame.call(this, 'Disabled');
+    this.changeFrameFrame('Disabled');
     this._button.input.enabled = false;
     if (typeof this._disabledButtonFrame === 'number') {
         this._button.frame = this._disabledButtonFrame;
@@ -1481,9 +1981,19 @@ FramedButton.prototype.deactivate = function () {
     this.onInputDisable.dispatch();
 }
 
+FramedButton.prototype.changeFrameFrame = function (frame) {
+
+    this._frame.tint = this['_frameColor' + frame];
+    frame = this['_' + frame.toLowerCase() + 'FrameFrame'];
+    if (typeof frame === 'number') {
+        this._frame.frame = frame;
+    } else {
+        this._frame.frameName = frame;
+    }
+}
 
 module.exports = FramedButton;
-},{}],27:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict'
 
 var Bar = require('./bar.js');
@@ -1515,7 +2025,7 @@ HealthBar.prototype.constructor = HealthBar;
 
 
 module.exports = HealthBar;
-},{"./bar.js":20,"./reactiveContinuousBar.js":31,"./reactiveRichText.js":32,"./textFunctions":38}],28:[function(require,module,exports){
+},{"./bar.js":22,"./reactiveContinuousBar.js":37,"./reactiveRichText.js":38,"./textFunctions":46}],32:[function(require,module,exports){
 'use strict'
 
 var WindowFrame = require('./windowFrame');
@@ -1536,18 +2046,208 @@ InfoWindow.prototype = Object.create(Phaser.Group.prototype);
 InfoWindow.prototype.constructor = InfoWindow;
 
 module.exports = InfoWindow;
-},{"./richText":33,"./scrollText":34,"./windowFrame":39}],29:[function(require,module,exports){
+},{"./richText":39,"./scrollText":40,"./windowFrame":47}],33:[function(require,module,exports){
+'use strict'
+//var ActionButton = require('./actionButton');
+//var HealthBar = require('./healthBar');
+var ReactiveRichText = require('./reactiveRichText');
+var textFunctions = require('./textFunctions');
+var FramedButton = require('./framedButton')
+
+/*var deactivateActionButton = function () {
+  this._button.onInputOver.removeAll();
+  this._button.onInputOut.removeAll();
+  this._button.onInputDown.removeAll();
+  this._button.onInputUp.removeAll();
+  this._rechargeEvent.active = false;
+  this._text.visible = false;
+  this._bar.percentageFunction = function () { return 0; };
+  this._bar.percentage = 0;
+  this.deactivate()
+};*/
+
+var MainMenuHUD = function (game, parent, x, y, selector) {
+  Phaser.Group.call(this, game, parent, selector);
+  this.x = x;
+  this.y = y;
+  let style = { "font": "Minecraft", "fill": "#FFFFFF", "fontSize": 10, "align": 'center' };
+  var style2 = { font: 'Minecraft', fill: '#000000', fontSize: 10 };
+  var style3 = { font: 'Minecraft', fill: '#000000', fontSize: 10, align: 'center' };
+
+  this.CreationScene = function () {
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('creation'); }, parent);
+  };
+
+  this.EventScene = function () {
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('event'); }, parent);
+  };
+
+  this.CombatScene = function () {
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('combat'); }, parent);
+  };
+
+  this.CreditsScene = function () {
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('credits'); }, parent);
+  };
+
+  this.SettingsScene = function () {
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('settings') }, parent);
+  };
+
+  this.ShopScene = function () {
+    this.game.add.audio('button', 0.1).play();
+    //fadeOut
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('shop') }, parent);
+  };
+
+  this.creditsButton = this.add(new FramedButton(this, game, 153, 0, 'tavern', 'tavernFrame', [{ callback: function () { this.CreditsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.creditsButton._button.input.pixelPerfectClick = true;
+  this.creditsButton._button.input.pixelPerfectOver = true;
+  this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.shopButton._button.input.pixelPerfectClick = true;
+  this.shopButton._button.input.pixelPerfectOver = true;
+  this.settingsButton = this.add(new FramedButton(this, game, 0, 27, 'settings', 'settingsFrame', [{ callback: function () { this.SettingsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.settingsButton._button.input.pixelPerfectClick = true;
+  this.settingsButton._button.input.pixelPerfectOver = true;
+  this.doorButton = this.add(new FramedButton(this, game, 174, 39, 'door', 'doorFrame', [{ callback: function () { this.CombatScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 1, 2));
+  this.doorButton._button.input.pixelPerfectClick = true;
+  this.doorButton._button.input.pixelPerfectOver = true;
+  this.crystalButton = this.add(new FramedButton(this, game, 81, 9, 'crystal', 'crystalFrame', [{ callback: function () { this.CreationScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.crystalButton._button.input.pixelPerfectClick = true;
+  this.crystalButton._button.input.pixelPerfectOver = true;
+
+
+  //this.doorButton.deactivate();
+
+
+  //version
+  this.game.add.richText(148, 139, 80, "v 1.0", style);
+
+  //textos de buttons
+  this.game.add.richText(10, 70, 80, "OPCIONES", style);
+  this.game.add.richText(28, 119, 80, "TIENDA", style);
+  this.game.add.richText(60, 39, 80, "NUEVA PARTIDA", style);
+  this.game.add.richText(120, 79, 80, "NUEVA BUSQUEDA", style);
+  this.game.add.richText(128, 20, 80, "CREDITOS", style);
+
+
+  this.shopButton.onInputOver.add(function () { selector.frame = 1; });
+  this.shopButton.onInputOut.add(function () { selector.frame = 0; });
+  this.shopButton.onInputDown.add(function () { selector.frame = 2; });
+
+  this.settingsButton.onInputOver.add(function () { selector.frame = 1; });
+  this.settingsButton.onInputOut.add(function () { selector.frame = 0; });
+  this.settingsButton.onInputDown.add(function () { selector.frame = 2; });
+
+  this.doorButton.onInputOver.add(function () { selector.frame = 1; });
+  this.doorButton.onInputOut.add(function () { selector.frame = 0; });
+  this.doorButton.onInputDown.add(function () { selector.frame = 2; });
+
+  this.crystalButton.onInputOver.add(function () { selector.frame = 1; });
+  this.crystalButton.onInputOut.add(function () { selector.frame = 0; });
+  this.crystalButton.onInputDown.add(function () { selector.frame = 2; });
+  //this.crystalButton.onInputUp.add(function(){selector.frame = 0;});
+
+  this.creditsButton.onInputOver.add(function () { selector.frame = 1; });
+  this.creditsButton.onInputOut.add(function () { selector.frame = 0; });
+  this.creditsButton.onInputDown.add(function () { selector.frame = 2; });
+
+  //var object1 = seeker.items[0];
+  //var object2 = seeker.items[1];
+
+
+
+
+
+  //this.item2Button = this.add(new FramedButton(this, game, 14,139, seeker.items[1].key,'itemFrame', [{callback:function(){seeker.use(object2.name, enemy);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+
+
+  //this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
+
+  /*this.name = this.add(new ReactiveRichText(game, 3, -1, 80, textFunctions.Fun(function () {
+    return this.name;
+  }, seeker), style2, this, seeker.onNameChange));
+ 
+    this.defenseIcon = this.add(new Phaser.Sprite(game,3,14,'healthIcon'));
+    this.defenseNumber = this.add(new ReactiveRichText(game,15,13,11,textFunctions.Fun(function() {
+        return this.stats.defense.toString();
+    }, seeker), style2, this, seeker.stats.onDefenseChange));
+ 
+  this.damageIcon = this.add(new Phaser.Sprite(game, 27, 14, 'damageIcon'));
+  this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 11, textFunctions.VariableNumber(function () { return this.stats.damage;}
+  , seeker, 100), style2, this, [seeker.stats.onDamageChange]));
+ 
+  this.defenseIcon = this.add(new Phaser.Sprite(game, 51, 14, 'defenseIcon'));
+  this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 11, textFunctions.Fun(function () {
+    return this.stats.defense.toString();
+  }, seeker), style2, this, seeker.stats.onDefenseChange));
+ 
+  this.speedIcon = this.add(new Phaser.Sprite(game, 13, 24, 'speedIcon'));
+  this.speedNumber = this.add(new ReactiveRichText(game, 25, 23, 11, textFunctions.Fun(function () {
+    return this.stats.speed.toString();
+  }, seeker), style2, this, seeker.stats.onSpeedChange));
+ 
+  this.perceptionIcon = this.add(new Phaser.Sprite(game, 38, 24, 'perceptionIcon'));
+  this.perceptionNumber = this.add(new ReactiveRichText(game, 50, 23, 11, textFunctions.Fun(function () {
+    return this.stats.perception.toString();
+  }, seeker), style2, this, seeker.stats.onPerceptionChange));
+ 
+  this.gemIcon = this.add(new Phaser.Sprite(game, 68, 1, 'gemIcon'));
+  this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 15, textFunctions.Fun(function () {
+    return this.gems.toString();
+  }, seeker), style2, this, seeker.stats.onPerceptionChange));
+ 
+  this.day = this.add(new ReactiveRichText(game, 80, -1, 40, textFunctions.Fun(function () {
+    return this.stats.perception.toString();
+  }, seeker), style3, this, seeker.stats.onPerceptionChange));*/
+
+  /*this.villageGemIcon = this.add(new Phaser.Image(game, 110-3, 18, 'villageGemIcon'));
+    this.villageGemNumber = this.add(new ReactiveRichText(game, 90-3, 16, 15, textFunctions.Fun(function () {
+    return this.totalGems.toString();//hay que cambiarlo
+    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
+ 
+    this.populationIcon = this.add(new Phaser.Image(game, 110-3, 28, 'populationIcon'));
+    this.populationNumber = this.add(new ReactiveRichText(game, 90-3, 26, 15, textFunctions.Fun(function () {
+    return this.population.toString();//hay que cambiarlo
+    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange*/
+
+  //this.game.add.optionMenu([['pauseButton', 190, 2, 'pauseButton', this.EventScene, this, {}]]);
+}
+
+MainMenuHUD.prototype = Object.create(Phaser.Group.prototype);
+MainMenuHUD.prototype.constructor = MainMenuHUD;
+
+module.exports = MainMenuHUD;
+},{"./framedButton":30,"./reactiveRichText":38,"./textFunctions":46}],34:[function(require,module,exports){
 'use strict';
 
 var ButtonMenu = require('./buttonMenu');
+var WindowFrame = require('./windowFrame');
 
-var OptionMenu = function (game, buttonsMenu, parent) {
+var OptionMenu = function (game, x, y, width, height, buttonsMenu, windowSprite, parent) {
     Phaser.Group.call(this, game, parent);
-
+    this.x = x;
+    this.y = y;
+    this.add(new WindowFrame(game, this, 0, 0, width, height, windowSprite));
     buttonsMenu.forEach(element => {
-        let b = this.add(new ButtonMenu(this.game, ...element.slice(0, element.length - 1)));
+        let b = this.add(new ButtonMenu(this, this.game, ...element.slice(0, element.length - 1)));
         b.onInputOver.add(this.over, this, [b]);
-        b.input.useHandCursor = false;
     }, this);
     buttonsMenu.forEach(element => {
         let child = this.children.find(function (element2) { return element2.name === element[0] });
@@ -1620,7 +2320,7 @@ OptionMenu.prototype.enter = function() {
 }
 
 module.exports = OptionMenu;
-},{"./buttonMenu":21}],30:[function(require,module,exports){
+},{"./buttonMenu":23,"./windowFrame":47}],35:[function(require,module,exports){
 'use strict'
 
 var Bar = require('./bar.js');
@@ -1628,7 +2328,8 @@ var Bar = require('./bar.js');
 var ReactiveBar = function (game, parent, x, y, key, percentageFunction, functionContext, signal, frame = null) {
     Bar.call(this, game, parent, x, y, key, frame);
     this.percentageFunction = percentageFunction.bind(functionContext);
-    signal.add(this.changePercentage, this, 0);
+    signal?signal.add(this.changePercentage, this, 0):null;
+    ReactiveBar.prototype.changePercentage.call(this);
 }
 
 ReactiveBar.prototype = Object.create(Bar.prototype);
@@ -1641,7 +2342,29 @@ ReactiveBar.prototype.changePercentage = function () {
 }
 
 module.exports = ReactiveBar;
-},{"./bar.js":20}],31:[function(require,module,exports){
+},{"./bar.js":22}],36:[function(require,module,exports){
+'use strict'
+
+var CircleBar = require('./circleBar');
+
+var ReactiveCircleBar = function(game,parent, x, y, radius, angles, colors, alphas, antiClockWise, segments, initialAngle, percentageFunction, functionContext, signal){
+    CircleBar.call(this, game,parent, x, y, radius, angles, colors, alphas, antiClockWise, segments, initialAngle);
+    this.percentageFunction = percentageFunction.bind(functionContext);
+    signal?signal.add(this.changePercentage,this,0):null;
+    ReactiveCircleBar.prototype.changePercentage.call(this);
+}
+
+ReactiveCircleBar.prototype = Object.create(CircleBar.prototype);
+ReactiveCircleBar.prototype.constructor = ReactiveCircleBar;
+
+ReactiveCircleBar.prototype.changePercentage = function () {
+    let p = this.percentageFunction();
+
+    this.percentage = isNaN(p)?100:p;
+}
+
+module.exports = ReactiveCircleBar;
+},{"./circleBar":24}],37:[function(require,module,exports){
 'use strict'
 
 var ReactiveBar = require('./reactiveBar.js');
@@ -1714,7 +2437,7 @@ ReactiveContinuousBar.prototype.reChangePercentage = function () {
 }
 
 module.exports = ReactiveContinuousBar;
-},{"./reactiveBar.js":30}],32:[function(require,module,exports){
+},{"./reactiveBar.js":35}],38:[function(require,module,exports){
 'use strict';
 
 var RichText = require('./richText.js');
@@ -1722,7 +2445,7 @@ var RichText = require('./richText.js');
 var ReactiveRichText = function (game, x, y, lineWidth, text, style, parent, signals) {
     RichText.call(this, game, x, y, lineWidth, text, style, parent);
     for (let i = 0; i < signals.length; i++) {
-        signals[i].add(this.write, this, 0);
+        signals[i]?signals[i].add(this.write, this, 0):null;
     }
     this.write();
 }
@@ -1731,7 +2454,7 @@ ReactiveRichText.prototype = Object.create(RichText.prototype);
 ReactiveRichText.prototype.constructor = ReactiveRichText;
 
 module.exports = ReactiveRichText;
-},{"./richText.js":33}],33:[function(require,module,exports){
+},{"./richText.js":39}],39:[function(require,module,exports){
 'use strict';
 
 
@@ -1806,18 +2529,18 @@ RichText.prototype.write = function () {
 
 RichText.prototype.reWrite = function (proto) {
     if (typeof (proto) === 'string') {
+        let presize = this.children.length;
         for (let i = 0; i < proto.length; i++) {
             let a = this.add(new Phaser.Text(this.game, this.xLast, this.yLast, proto.charAt(i), this.styleLast));
             if (proto.charAt(i) === '\n') {
                 this.xLast = 0;
                 this.yLast += this.lineHeight;
-                this.indexFirstParragraphLetter = i + 1;
+                this.indexFirstParragraphLetter = presize + i + 1;
             } else if (!(proto.charAt(i) === ' ' && this.xLast === 0)) {
                 this.xLast += a.width;
                 if (this.xLast > this.lineWidth) {
                     if (a.text !== ' ') {
-                        i = Math.min(i, this.children.length - 1);
-                        let index = i;
+                        let index = Math.min(presize + i-1, this.children.length - 1);
                         let temporalWidth = 0;
                         while (index >= 0 && this.getChildAt(index).text !== ' ') {
                             temporalWidth += this.getChildAt(index).width;
@@ -1836,7 +2559,7 @@ RichText.prototype.reWrite = function (proto) {
                             this.xLast = 0;
                             this.yLast += this.lineHeight;
                         }
-                        for (let j = index; j <= i; j++) {
+                        for (let j = index; j <= presize + i; j++) {
                             if (this.xLast > this.lineWidth) {
                                 this.xLast = 0;
                                 this.yLast += this.lineHeight;
@@ -1881,29 +2604,29 @@ RichText.prototype.reWrite = function (proto) {
                             }
                             if (this.getChildAt(i - 1).text === ' ') { tmpwidth += this.getChildAt(i - 1).width / 2 }
                             tmpwidth = (this.lineWidth - tmpwidth) / 2;
-                            for (let j = this.indexFirstParragraphLetter; j < i; j++) {
+                            for (let j = this.indexFirstParragraphLetter; j < presize + i; j++) {
                                 this.getChildAt(j).x += tmpwidth;
                             }
 
                         } else if (this.align === 'right') {
                             let tmpwidth = 0;
-                            for (let j = this.indexFirstParragraphLetter; j < i; j++) {
+                            for (let j = this.indexFirstParragraphLetter; j < presize + i; j++) {
                                 tmpwidth += this.getChildAt(j).width;
                             }
                             tmpwidth = (this.lineWidth - tmpwidth);
-                            if (i - 1 >= 0 && this.getChildAt(i - 1).text === ' ') { tmpwidth += this.getChildAt(i - 1).width }
-                            for (let j = this.indexFirstParragraphLetter; j < i; j++) {
+                            if (i - 1 >= 0 && this.getChildAt(presize + i - 1).text === ' ') { tmpwidth += this.getChildAt(presize + i - 1).width }
+                            for (let j = this.indexFirstParragraphLetter; j < presize + i; j++) {
                                 this.getChildAt(j).x += tmpwidth;
                             }
 
                         }
-                        this.indexFirstParragraphLetter = i + 1;
+                        this.indexFirstParragraphLetter = presize + i + 1;
                         this.xLast = 0;
                         this.yLast += this.lineHeight;
                     }
                 }
-                this.numberOfCharacters++;
             }
+            this.numberOfCharacters++;
         }
     } else if (typeof (proto) === 'function') {
         proto.apply(this);
@@ -1923,7 +2646,7 @@ Object.defineProperty(RichText.prototype, 'text',{
 });
 
 module.exports = RichText;
-},{}],34:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict'
 
 var ReactiveRichText = require('./reactiveRichText');
@@ -1968,7 +2691,7 @@ Object.defineProperty(ScrollText.prototype, 'text',{
 });
 module.exports = ScrollText;
 
-},{"./reactiveRichText":32}],35:[function(require,module,exports){
+},{"./reactiveRichText":38}],41:[function(require,module,exports){
 'use strict'
 var ActionButton = require('./actionButton');
 var HealthBar = require('./healthBar');
@@ -2005,9 +2728,13 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     if (isNaN(a)) {
       return '';
     } else {
-      return a.toFixed(1).toString();
+      let t = a.toFixed(1);
+      if(t>=0.1)
+        return t.toString();
+      else
+        return '';
     }
-  }, seeker, seeker.coolDown.block.onWhile, seeker.coolDown.block.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+  }, seeker, seeker.coolDown.block.onWhile, seeker.coolDown.block.onEnd, 0x5c5c5c, 0xffffff, 0x000000, 0x222222, 0x676767, 0x676767));
 
   this.attackButton = this.add(new ActionButton(this, game, 25, 132, 'attackIcon', 'actionFrame','attackIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
    function () {
@@ -2017,91 +2744,277 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
     if (isNaN(a)) {
       return '';
     } else {
-      return a.toFixed(1).toString();
+      let t = a.toFixed(1);
+      if(t>=0.1)
+        return t.toString();
+      else
+        return '';
     }
-  }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+    
+  }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x5c5c5c, 0xffffff, 0x000000, 0x222222, 0x676767, 0x676767));
+
+  this.ultimateButton = this.add(new ActionButton(this, game, 64, 132, 'ultimateIcon', 'actionFrame','ultimateIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
+   function () {
+      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
+    }, seeker, function () {
+    let a = this.attack.timeToCoolDown() / 1000;
+    if (isNaN(a)) {
+      return '';
+    } else {
+      let t = a.toFixed(1);
+      if(t>=0.1)
+        return t.toString();
+      else
+        return '';
+    }
+  }, seeker, seeker.coolDown.attack.onWhile, seeker.coolDown.attack.onEnd, 0x5c5c5c, 0xffffff, 0x000000, 0x222222, 0x676767, 0x676767));
 
   var object1 = seeker.items[0];
   var object2 = seeker.items[1];
+  if(object1!==undefined){
+  this.item1Button = this.add(new ActionButton(this, game, 2,139, 'emptyItem','itemFrame',seeker.items[0].key, [{callback:function(){seeker.use(object1.name, enemy);}, context:this, arguments:[]}],
+  function(){return 100;}, this, function(){return '';}, this, object1.onUse, object1.onUse, 0x5c5c5c, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+  object1.onUse.add(deactivateActionButton, this.item1Button);
+  seeker.onDeath.add(deactivateActionButton, this.item1Button);
+  enemy.onDeath.add(deactivateActionButton, this.item1Button);
+} else {
+  this.item1Button = this.add(new ActionButton(this, game, 2,139, 'emptyItem','itemFrame','emptyItem', [],
+  function(){return 100;}, this, function(){return '';}, this, null, null, 0x5c5c5c, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+  deactivateActionButton.apply(this.item1Button);
+}
+  
 
-  this.item1Button = this.add(new FramedButton(this, game, 3,139, seeker.items[0].key,'itemFrame', [{callback:function(){seeker.use(object1.name, enemy);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
-  object1.onUse.add(this.item1Button.deactivate, this.item1Button);
-  object1.onUse.add(function() { this.item1Button._button.loadTexture('emptyItem');}, this);
-
-  this.item2Button = this.add(new FramedButton(this, game, 14,139, seeker.items[1].key,'itemFrame', [{callback:function(){seeker.use(object2.name, enemy);}, context:this, arguments:[]}], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
-  object2.onUse.add(this.item2Button.deactivate, this.item2Button);
-  object2.onUse.add(function() { this.item2Button._button.loadTexture('emptyItem');}, this);
+if(object2!==undefined){
+  this.item2Button = this.add(new ActionButton(this, game, 13,139, 'emptyItem','itemFrame', seeker.items[1].key, [{callback:function(){seeker.use(object2.name, enemy);}, context:this, arguments:[]}], 
+  function(){return 100;}, this, function(){return '';}, this, object2.onUse, object2.onUse, 0x5c5c5c, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+  object2.onUse.add(deactivateActionButton, this.item2Button);
+  seeker.onDeath.add(deactivateActionButton, this.item2Button);
+  enemy.onDeath.add(deactivateActionButton, this.item2Button);
+} else {
+  this.item2Button = this.add(new ActionButton(this, game, 13,139, 'emptyItem','itemFrame','emptyItem', [],
+  function(){return 100;}, this, function(){return '';}, this, null, null, 0x5c5c5c, 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+  deactivateActionButton.apply(this.item2Button);
+}
 
   this.blockButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
   this.blockButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
+  this.blockButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.ultimateButton, arguments: [] });
   this.attackButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
   this.attackButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
+  this.attackButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.ultimateButton, arguments: [] });
+  this.ultimateButton._callbacks.push({ callback: this.blockButton.deactivate, context: this.blockButton, arguments: [] });
+  this.ultimateButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.attackButton, arguments: [] });
+  this.ultimateButton._callbacks.push({ callback: this.attackButton.deactivate, context: this.ultimateButton, arguments: [] });
   seeker.onDeath.add(deactivateActionButton, this.blockButton);
   seeker.onDeath.add(deactivateActionButton, this.attackButton);
-  seeker.onDeath.add(this.item1Button.deactivate, this.item1Button);
-  seeker.onDeath.add(this.item2Button.deactivate, this.item2Button);
-  enemy.onDeath.add(deactivateActionButton, this.blockButton);
+  seeker.onDeath.add(deactivateActionButton, this.ultimateButton);
   enemy.onDeath.add(deactivateActionButton, this.attackButton);
-  enemy.onDeath.add(this.item1Button.deactivate, this.item1Button);
-  enemy.onDeath.add(this.item2Button.deactivate, this.item2Button);
+  enemy.onDeath.add(deactivateActionButton, this.blockButton);
+  enemy.onDeath.add(deactivateActionButton, this.ultimateButton);
+
+
 
   this.healthBar = this.add(new HealthBar(game, 2, 121, seeker, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
 
   this.name = this.add(new ReactiveRichText(game, 3, -1, 80, textFunctions.Fun(function () {
     return this.name;
-  }, seeker), style2, this, seeker.onNameChange));
+  }, seeker), style2, this, [seeker.onNameChange]));
 
-    this.defenseIcon = this.add(new Phaser.Sprite(game,3,14,'healthIcon'));
-    this.defenseNumber = this.add(new ReactiveRichText(game,15,13,11,textFunctions.Fun(function() {
-        return this.stats.defense.toString();
-    }, seeker), style2, this, seeker.stats.onDefenseChange));
+    this.healthIcon = this.add(new Phaser.Sprite(game,3,14,'healthIcon'));
+    this.healthNumber = this.add(new ReactiveRichText(game,15,13,12,textFunctions.Fun(function() {
+      if(this.stats.tempHealth > this.stats.health){
+        return textFunctions.Color('#00CC00',this.stats.tempHealth.toString());
+      } else if (this.stats.tempHealth < this.stats.health){
+        return textFunctions.Color('#CC0000',this.stats.tempHealth.toString());
+      } else {
+        return textFunctions.Color('#000000',this.stats.tempHealth.toString());
+      }
+    }, seeker), style2, this, [seeker.stats.onHealthChange]));
 
   this.damageIcon = this.add(new Phaser.Sprite(game, 27, 14, 'damageIcon'));
-  this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 11, textFunctions.VariableNumber(function () { return this.stats.damage;}
-  , seeker, 100), style2, this, [seeker.stats.onDamageChange]));
+  this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 12, textFunctions.Fun(function() {
+    if(this.stats.tempDamage > this.stats.damage){
+      return textFunctions.Color('#00CC00',this.stats.tempDamage.toString());
+    } else if (this.stats.tempDamage < this.stats.damage){
+      return textFunctions.Color('#CC0000',this.stats.tempDamage.toString());
+    } else {
+      return textFunctions.Color('#000000',this.stats.tempDamage.toString());
+    }
+  }, seeker, 100), style2, this, [seeker.stats.onDamageChange]));
 
   this.defenseIcon = this.add(new Phaser.Sprite(game, 51, 14, 'defenseIcon'));
-  this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 11, textFunctions.Fun(function () {
-    return this.stats.defense.toString();
-  }, seeker), style2, this, seeker.stats.onDefenseChange));
+  this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 12, textFunctions.Fun(function() {
+    if(this.stats.tempDefense > this.stats.defense){
+      return textFunctions.Color('#00CC00',this.stats.tempDefense.toString());
+    } else if (this.stats.tempDefense < this.stats.defense){
+      return textFunctions.Color('#CC0000',this.stats.tempDefense.toString());
+    } else {
+      return textFunctions.Color('#000000',this.stats.tempDefense.toString());
+    }
+  }, seeker), style2, this, [seeker.stats.onDefenseChange]));
 
   this.speedIcon = this.add(new Phaser.Sprite(game, 13, 24, 'speedIcon'));
-  this.speedNumber = this.add(new ReactiveRichText(game, 25, 23, 11, textFunctions.Fun(function () {
-    return this.stats.speed.toString();
-  }, seeker), style2, this, seeker.stats.onSpeedChange));
+  this.speedNumber = this.add(new ReactiveRichText(game, 25, 23, 12, textFunctions.Fun(function() {
+    if(this.stats.tempSpeed > this.stats.speed){
+      return textFunctions.Color('#00CC00',this.stats.tempSpeed.toString());
+    } else if (this.stats.tempSpeed < this.stats.speed){
+      return textFunctions.Color('#CC0000',this.stats.tempSpeed.toString());
+    } else {
+      return textFunctions.Color('#000000',this.stats.tempSpeed.toString());
+    }
+  }, seeker), style2, this, [seeker.stats.onSpeedChange]));
 
   this.perceptionIcon = this.add(new Phaser.Sprite(game, 38, 24, 'perceptionIcon'));
-  this.perceptionNumber = this.add(new ReactiveRichText(game, 50, 23, 11, textFunctions.Fun(function () {
-    return this.stats.perception.toString();
-  }, seeker), style2, this, seeker.stats.onPerceptionChange));
+  this.perceptionNumber = this.add(new ReactiveRichText(game, 50, 23, 12, textFunctions.Fun(function() {
+    if(this.stats.tempPerception > this.stats.perception){
+      return textFunctions.Color('#00CC00',this.stats.tempPerception.toString());
+    } else if (this.stats.tempPerception < this.stats.perception){
+      return textFunctions.Color('#CC0000',this.stats.tempPerception.toString());
+    } else {
+      return textFunctions.Color('#000000',this.stats.tempPerception.toString());
+    }
+  }, seeker), style2, this, [seeker.stats.onPerceptionChange]));
 
   this.gemIcon = this.add(new Phaser.Sprite(game, 68, 1, 'gemIcon'));
   this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 15, textFunctions.Fun(function () {
     return this.gems.toString();
-  }, seeker), style2, this, seeker.stats.onPerceptionChange));
+  }, seeker), style2, this, [seeker.stats.onPerceptionChange]));
 
   this.day = this.add(new ReactiveRichText(game, 80, -1, 40, textFunctions.Fun(function () {
     return this.stats.perception.toString();
-  }, seeker), style3, this, seeker.stats.onPerceptionChange));
+  }, seeker), style3, this, [seeker.stats.onPerceptionChange]));
 
   this.villageGemIcon = this.add(new Phaser.Image(game, 110-3, 18, 'villageGemIcon'));
-    this.villageGemNumber = this.add(new ReactiveRichText(game, 90-3, 16, 15, textFunctions.Fun(function () {
+    this.villageGemNumber = this.add(new ReactiveRichText(game, 90-3, 16, 18, textFunctions.Fun(function () {
     return this.totalGems.toString();//hay que cambiarlo
-    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
+    }, seeker), style2, this, [seeker.stats.onPerceptionChange]));//cambiar onPerceptionChange
 
     this.populationIcon = this.add(new Phaser.Image(game, 110-3, 28, 'populationIcon'));
-    this.populationNumber = this.add(new ReactiveRichText(game, 90-3, 26, 15, textFunctions.Fun(function () {
+    this.populationNumber = this.add(new ReactiveRichText(game, 90-3, 26, 18, textFunctions.Fun(function () {
     return this.population.toString();//hay que cambiarlo
-    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
-
-  this.game.add.optionMenu([['pauseButton', 190, 2, 'pauseButton', this.EventScene, this, {}]]);
+    }, seeker), style2, this, [seeker.stats.onPerceptionChange]));//cambiar onPerceptionChange
 }
 
 SeekerCombatHUD.prototype = Object.create(Phaser.Group.prototype);
 SeekerCombatHUD.prototype.constructor = SeekerCombatHUD;
 
+SeekerCombatHUD.prototype.freeze = function() {
+  this.attackButton._button.inputEnabled = false;
+  this.blockButton._button.inputEnabled = false;
+  this.ultimateButton._button.inputEnabled = false;
+  this.item1Button._button.inputEnabled = false;
+  this.item2Button._button.inputEnabled = false;
+}
+
+SeekerCombatHUD.prototype.unFreeze = function() {
+  this.attackButton._button.inputEnabled = true;
+  this.blockButton._button.inputEnabled = true;
+  this.ultimateButton._button.inputEnabled = true;
+  this.item1Button._button.inputEnabled = true;
+  this.item2Button._button.inputEnabled = true;
+}
+
 module.exports = SeekerCombatHUD;
-},{"./actionButton":19,"./framedButton":26,"./healthBar":27,"./reactiveRichText":32,"./textFunctions":38}],36:[function(require,module,exports){
+},{"./actionButton":21,"./framedButton":30,"./healthBar":31,"./reactiveRichText":38,"./textFunctions":46}],42:[function(require,module,exports){
+'use strict'
+
+var StatMarker = require('./statMarker');
+var RichText = require('./richText');
+
+var ShowCase = function(game, parent, x, y, characters) {
+    Phaser.Group.call(this,game,parent);
+    
+    let style = { "font": "Minecraft", "fill": "#FFFFFF", "fontSize": 10, "align": 'center' };
+    let style2 = { font: 'Minecraft', fill: '#000000', fontSize: 10 };
+
+    this.x = x;
+    this.y = y;
+    this._healthMarker = this.add(new StatMarker(game, this,22,76,2,5,0,'statPoint','emptyStatPoint',0xb60000));
+    this._damageMarker = this.add(new StatMarker(game, this,22,91,2,5,0,'statPoint','emptyStatPoint',0xcf6e1a));
+    this._defenseMarker = this.add(new StatMarker(game, this,22,106,2,5,0,'statPoint','emptyStatPoint',0x14879f));
+    this._speedMarker = this.add(new StatMarker(game, this,22,121,2,5,0,'statPoint','emptyStatPoint',0xe5d40a));
+    this._perceptionMarker = this.add(new StatMarker(game, this,22,136,2,5,0,'statPoint','emptyStatPoint',0x4ce742));
+    this._characters = characters;
+    this._nameText = this.add( new RichText(game, 0, 56, 200, "", style));
+
+
+    this._attackIcon = this.add(new Phaser.Image(game,64,75+2,''));
+    this._attackText = this.add( new RichText(game, 86, 97-24, 110, "", style2, this));
+    this._blockIcon = this.add(new Phaser.Image(game,64,100+2,''));
+    this._blockText = this.add( new RichText(game,86, 123-24, 110, "", style2, this));
+    this._ultimateIcon = this.add(new Phaser.Image(game,64,125+2,''));
+    this._ultimateText = this.add( new RichText(game,86, 148-24, 110, "", style2, this));
+    this._image = this.add(new Phaser.Image(game,62,-70,''));
+    this._reemplaceImage = this.add(new Phaser.Image(game,-80,-70,''));
+    this._current = 0;
+    this._image.loadTexture('seeker'+Object.keys(this._characters)[this._current]+'Animations');
+    
+    this.onBeginRotation = new Phaser.Signal();
+    this.onEndRotation = new Phaser.Signal();
+    ShowCase.prototype.showCharacter.call(this, Object.keys(this._characters)[this._current]);
+}
+
+ShowCase.prototype = Object.create(Phaser.Group.prototype);
+ShowCase.prototype.constructor = ShowCase;
+
+ShowCase.prototype.rotate = function(direction) {
+    if(direction!==0){
+        this.onBeginRotation.dispatch();
+        let newdirection = direction<0?direction+Object.keys(this._characters).length: direction;
+        let oldS = Object.keys(this._characters)[this._current];
+        this._current = (this._current+newdirection)%Object.keys(this._characters).length;
+        let newS = Object.keys(this._characters)[this._current];
+        this._image.loadTexture('seeker'+newS+'Siluette');
+        this._image.x = direction > 0 ? -80 : 230;
+        this._reemplaceImage.loadTexture('seeker'+oldS+'Siluette');
+        this._reemplaceImage.x = 62;
+        this.game.add.tween(this._image).to({x:[direction > 0 ? -80 : 230,62]}, 400,"Sine.easeInOut", true, 0);
+        this.game.add.tween(this._reemplaceImage).to({x:[62,direction > 0 ? 230 : -80]}, 400,"Sine.easeInOut", true, 0).onComplete.
+        add(function(){
+            ShowCase.prototype.showCharacter.call(this, Object.keys(this._characters)[this._current]);
+            this.onEndRotation.dispatch();
+        }, this);
+    }
+}
+
+ShowCase.prototype.showCharacter = function(character) {
+    this._nameText.text = character.toUpperCase();
+    if(this._characters[character].avaliable) {
+        this._attackIcon.loadTexture(this._characters[character].attack.icon);
+        this._attackText.text = this._characters[character].attack.description;
+        this._blockIcon.loadTexture(this._characters[character].block.icon);
+        this._blockText.text = this._characters[character].block.description;
+        this._ultimateIcon.loadTexture(this._characters[character].ultimate.icon);
+        this._ultimateText.text = this._characters[character].ultimate.description;
+        this._image.loadTexture('seeker'+character+'Animations');
+        this._healthMarker.currentPoints = this._characters[character].stats.health;
+        this._damageMarker.currentPoints = this._characters[character].stats.damage;
+        this._defenseMarker.currentPoints = this._characters[character].stats.defense;
+        this._speedMarker.currentPoints = this._characters[character].stats.speed;
+        this._perceptionMarker.currentPoints = this._characters[character].stats.perception;
+    } else {
+
+        this._attackIcon.loadTexture('blockedIcon');
+        this._attackText.text = '?????\n?????';
+        this._blockIcon.loadTexture('blockedIcon');
+        this._blockText.text = '?????\n?????';
+        this._ultimateIcon.loadTexture('blockedIcon');
+        this._ultimateText.text = '?????\n?????';
+        this._image.loadTexture('seeker'+character+'Siluette');
+        this._healthMarker.currentPoints = 0;
+        this._damageMarker.currentPoints = 0;
+        this._defenseMarker.currentPoints = 0;
+        this._speedMarker.currentPoints = 0;
+        this._perceptionMarker.currentPoints = 0;
+    }
+}
+
+ShowCase.prototype.isAvaliable = function(){
+    return this._characters[Object.keys(this._characters)[this._current]].avaliable;
+}
+
+module.exports = ShowCase;
+},{"./richText":39,"./statMarker":45}],43:[function(require,module,exports){
 'use strict'
 
 var SliderImage = require('./sliderImage');
@@ -2157,7 +3070,7 @@ Slider.prototype.move = function (movement) {
 }
 
 module.exports = Slider;
-},{"./sliderImage":37}],37:[function(require,module,exports){
+},{"./sliderImage":44}],44:[function(require,module,exports){
 'use strict'
 
 var SliderImage = function(game, parent, x, y, key, height) {
@@ -2176,7 +3089,52 @@ SliderImage.prototype = Object.create(Phaser.Group.prototype);
 SliderImage.prototype.constructor = SliderImage;
 
 module.exports = SliderImage;
-},{}],38:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
+'use strict'
+
+var StatMarker = function(game, parent, x, y, xSpace, maxPoints, currentPoints, pointKey, emptyKey, color) {
+    Phaser.Group.call(this, game, parent);
+    this.x = x;
+    this.y = y;
+    let width = new Phaser.Image(game, 0, 0, pointKey).width;//.width;
+    this._points = [];
+    for(let i = 0; i < currentPoints; i++) {
+        this._points.push(this.add(new Phaser.Image(game, i*(width+xSpace), 0, pointKey)));
+        this._points[i].tint = color;
+    }
+    for(let i = currentPoints; i<maxPoints; i++) {
+        this._points.push(this.add(new Phaser.Image(game, i*(width+xSpace), 0, emptyKey)));
+    }
+    this._emptyKey = emptyKey;
+    this._pointKey = pointKey;
+    this._currentPoints = currentPoints;
+    this._maxPoints = maxPoints;
+    this._color = color;
+}
+
+StatMarker.prototype = Object.create(Phaser.Group.prototype);
+StatMarker.prototype.constructor = StatMarker;
+
+Object.defineProperty(StatMarker.prototype, 'currentPoints', {
+    get: function () {
+        return this._currentPoints;
+    },
+    set: function (value) {
+        if(value!==this._currentPoints) {
+            this._currentPoints = value;
+            for(let i = 0; i < this._currentPoints; i++) {
+                this._points[i].loadTexture(this._pointKey);
+                this._points[i].tint = this._color;
+            }
+            for(let i = this._currentPoints; i < this._maxPoints; i++) {
+                this._points[i].loadTexture(this._emptyKey);
+                this._points[i].tint = 0xFFFFFF;
+            }
+        }
+    }
+});
+module.exports = StatMarker;
+},{}],46:[function(require,module,exports){
 
 var functions = {
 Fun: function (func, context) {
@@ -2271,7 +3229,7 @@ VariableNumber: function (numberfunction, context, delay) {
 }
 }
 module.exports = functions;
-},{}],39:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict'
 
 
@@ -2375,15 +3333,14 @@ WindowFrame.prototype.resize = function(width, height) {
 }
 
 module.exports = WindowFrame;
-},{}],40:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 'use strict';
 
 //PREGUNTAS
 // - ¿Hay alguna manera para evitar la carga repetida? Quiero que, cuando tenga absolutamente todo cargado, se de a start.
 //   y poner pantalla de carga(sin conocer porcentaje jeje).
 //BUGS
-// - El cooldown de las habilidades en los combates se queda pillado a 0.0 si sacas el mouse fuera del juego.
-// - El slider se desencaja un poco hacia arriba cuando lo mueves.
+// ActionBar
 
 
 var IntroScene = require('./scenes/intro_scene.js');
@@ -2392,12 +3349,14 @@ var CombatScene = require('./scenes/combat_scene.js');
 var EventScene = require('./scenes/event_scene.js');
 var CreditsScene = require('./scenes/credits_scene.js');
 var SettingsScene = require('./scenes/settings_scene.js');
+var ShopScene = require('./scenes/shop_scene.js');
+var CreationScene = require('./scenes/creation_scene.js');
+var NameScene = require('./scenes/name_scene.js');
+var TextFunctions = require('./interface/textFunctions');
 
  var webFontLoading = {
   active: function() {
     var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
-require('./gameFactory')(Phaser);
-
     webFontLoading.game = game;
     game.state.add('boot', BootScene);
     game.state.add('preloader', PreloaderScene);
@@ -2407,6 +3366,9 @@ require('./gameFactory')(Phaser);
     game.state.add('event', EventScene);
     game.state.add('credits', CreditsScene);
     game.state.add('settings', SettingsScene);
+    game.state.add('shop', ShopScene);
+    game.state.add('creation', CreationScene);
+    game.state.add('name', NameScene);
     game.state.start('boot');
   },
   custom: {
@@ -2420,6 +3382,14 @@ var WebFont = require('webfontloader');
 
 var BootScene = {
   preload: function () {
+    require('./gameFactory')(Phaser);
+    // scale the game 4x
+    this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    this.game.scale.setUserScale(4, 4);
+    // enable crisp rendering
+    this.game.renderer.renderSession.roundPixels = true;
+    Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+
     // load here assets required for the loading screen
     this.game.load.image('preloader_bar', 'temporal%20images/preloader_bar.png');
   },
@@ -2432,41 +3402,61 @@ var BootScene = {
 
 var PreloaderScene = {
   preload: function () {
-    // scale the game 4x
-    this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-    this.game.scale.setUserScale(4, 4);
-
-    // enable crisp rendering
-    this.game.renderer.renderSession.roundPixels = true;
-    Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
-    this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
-    this.loadingBar.anchor.setTo(0, 0.5);
-    this.load.setPreloadSprite(this.loadingBar);
+    this.loadSignal = new Phaser.Signal();
+    this.loadingText = this.game.add.richText(50, 120, 100, TextFunctions.Tremble(2,5,1,'Cargando...'), require('../assets/fonts/style.json'));
+    this.loadingBar = this.game.add.reactiveBar(this.game.world,15,135,'preloader_bar',function(){
+      return  this._audioLoad*0.88+this._otherLoad*0.12;
+    },this,this.loadSignal);
+    this.loadingBar.width = 170;
+    this._audioLoad = 0;
+    this._otherLoad = 0;
+    this.game.load.onFileComplete.add(function(progress, file, key, success){
+      this._otherLoad = progress;
+      this.loadSignal.dispatch();
+    },this);
+    this.load.onFileComplete.add(function(progress, file, key, success){
+      this._audioLoad = progress;
+      this.loadSignal.dispatch();
+    },this);
     // TODO: load here the assets for the game
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
+      //INTRO
+        this.game.load.spritesheet('intro1', 'assets/images/intro/intro1.png', 57, 107);
+        this.game.load.spritesheet('intro2', 'assets/images/intro/intro2.png', 57, 80);
+        this.game.load.spritesheet('intro3', 'assets/images/intro/intro3.png', 140, 80);
+        this.game.load.spritesheet('intro4', 'assets/images/intro/intro4.png', 140, 80);
       //INTERFACE
+        this.game.load.spritesheet('logo', 'assets/images/interface/logo.png', 61, 69);
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
         this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
         this.game.load.image('emptyItem','assets/images/interface/emptyItem.png');
+        this.game.load.image('backIcon','assets/images/interface/backIcon.png');
+        this.game.load.image('backFrame','assets/images/interface/backFrame.png');
+        this.game.load.image('title','assets/images/interface/title.png');
+        this.game.load.image('statPoint','assets/images/interface/statPoint.png');
+        this.game.load.image('emptyStatPoint','assets/images/interface/emptyStatPoint.png');
+        this.game.load.image('blockedIcon','assets/images/interface/blockedIcon.png');
+        this.game.load.image('textBox','assets/images/interface/textBox.png');
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
+        this.game.load.image('actionsBarBack','assets/images/interface/actionsBarBack.png');
         this.game.load.image('actionsBarShadow','assets/images/interface/actionsBarShadow.png');
         this.game.load.image('blockBar','assets/images/interface/blockBar.png');
         this.game.load.image('attackBar','assets/images/interface/attackBar.png');
         this.game.load.image('unknownBar','assets/images/interface/unknownBar.png');
+        this.game.load.image('idleBar','assets/images/interface/idleBar.png');
         //HUDs
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         this.game.load.image('eventinterface','assets/images/interface/eventinterfaceback.png');
+        this.game.load.image('creationinterface','assets/images/interface/creationinterface.png');
         //HUDs scroll
         this.game.load.spritesheet('sliderBackground','assets/images/interface/sliderbackground.png',6,5);
         this.game.load.spritesheet('slider','assets/images/interface/slider.png',6,3);
         //Cursor
-        this.game.load.image('cursor','assets/images/interface/cursor.png');
+        this.game.load.spritesheet('cursor','assets/images/interface/cursor.png',7,7);
         this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
-        this.game.load.image('handCursor','assets/images/interface/handCursor.png');
-        this.game.load.image('selectCursor','assets/images/interface/selectCursor.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');
@@ -2476,9 +3466,12 @@ var PreloaderScene = {
         //Action Icon
         this.game.load.image('attackIcon','assets/images/interface/attackIcon.png');
         this.game.load.image('blockIcon','assets/images/interface/blockIcon.png');
+        this.game.load.image('ultimateIcon','assets/images/interface/ultimateIcon.png');
         //Items
         this.game.load.image('itemIcon','assets/images/interface/itemIcon.png');
         this.game.load.image('itemIcon2','assets/images/interface/itemIcon2.png');
+
+        this.game.load.image('shopItemIcon','assets/images/interface/shopItemIcon.png');
         //Stats Icons
         this.game.load.image('damageIcon','assets/images/interface/damageIcon.png');
         this.game.load.image('defenseIcon','assets/images/interface/defenseIcon.png');
@@ -2494,22 +3487,46 @@ var PreloaderScene = {
         this.game.load.image('optionBack','assets/images/interface/optionback.png');
         this.game.load.image('optionFrame','assets/images/interface/optionFrame.png');
         this.game.load.image('pauseButton','assets/images/interface/pauseButton.png');
+        this.game.load.image('pauseButtonFrame','assets/images/interface/pauseButtonFrame.png');
+        this.game.load.spritesheet('shop','assets/images/interface/shop.png',51,64);
+        this.game.load.spritesheet('shopFrame', 'assets/images/interface/shopFrame.png');
+        this.game.load.spritesheet('door', 'assets/images/interface/door.png',27,49);
+        this.game.load.spritesheet('doorFrame', 'assets/images/interface/doorFrame.png');
+        this.game.load.spritesheet('settings', 'assets/images/interface/settings.png',24,53);
+        this.game.load.spritesheet('settingsFrame', 'assets/images/interface/settingsFrame.png');
+        this.game.load.spritesheet('tavern', 'assets/images/interface/tavern.png',47,23);
+        this.game.load.spritesheet('tavernFrame', 'assets/images/interface/tavernFrame.png');
+        this.game.load.spritesheet('crystal', 'assets/images/interface/crystal.png',39,65);
+        this.game.load.spritesheet('crystalFrame', 'assets/images/interface/crystalFrame.png');
+        this.game.load.image('arrow', 'assets/images/interface/arrow.png');
+        this.game.load.image('arrowFrame', 'assets/images/interface/arrowFrame.png');
+
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
+      this.game.load.image('shines', 'assets/images/backgrounds/shines.png');
+      this.game.load.image('creationbackground', 'assets/images/backgrounds/creationbackground.png');
+      this.game.load.image('namebackground', 'assets/images/backgrounds/namebackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
       this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
       this.game.load.spritesheet('crystalShines','assets/images/particles/crystalShines.png',3,3);
+      this.game.load.spritesheet('smoke','assets/images/particles/smoke.png',4,4);
+      this.game.load.spritesheet('creationParticles','assets/images/particles/creationParticles.png',8,8);
       //CHARACTERS
         //Seeker
-        this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
+        this.game.load.spritesheet('seekerBruteAnimations','assets/images/seeker/seekerBruteAnimations.png',80,120);
+        this.game.load.spritesheet('seekerHarpyAnimations','assets/images/seeker/seekerHarpySiluette.png',80,120);
+        this.game.load.spritesheet('seekerWarlockAnimations','assets/images/seeker/seekerWarlockSiluette.png',80,120);
+        this.game.load.spritesheet('seekerBruteSiluette','assets/images/seeker/seekerBruteSiluette.png',80,120);
+        this.game.load.spritesheet('seekerHarpySiluette','assets/images/seeker/seekerHarpySiluette.png',80,120);
+        this.game.load.spritesheet('seekerWarlockSiluette','assets/images/seeker/seekerWarlockSiluette.png',80,120);
         //Enemies
         this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
-        this.game.load.spritesheet('wormAnimations', 'assets/images/enemies/WormAlpha.png',80,120);
+        this.game.load.spritesheet('fungiAnimations', 'assets/images/enemies/fungiAnimations.png',80,120);
     //SOUNDS
       //Effects
       this.load.audio('attacking', ['assets/sounds/attacking.wav']);
@@ -2522,14 +3539,18 @@ var PreloaderScene = {
       this.load.audio('shoptheme', ['assets/music/shoptheme.mp3']);
       this.load.audio('watertheme', ['assets/music/watertheme.mp3']);
       this.load.audio('credits', ['assets/music/creditstheme.mp3']);
+      this.load.audio('mainmenu', ['assets/music/mainmenutheme.mp3']);
+      this.load.audio('intro', ['assets/music/introtheme.mp3']);
+      this.load.audio('logo', ['assets/music/logo.mp3']);
+      this.load.audio('credits', ['assets/music/creditstheme.mp3']);
       this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.mp3']);
-
+    //PLUGINS
+      this.game.add.plugin(PhaserInput.Plugin);
   },
 
   create: function () {
-      this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL
-
-      PreloaderScene.game.state.start('mainmenu');
+      this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+      PreloaderScene.game.state.start('intro');
   }
 
 };
@@ -2539,7 +3560,7 @@ window.onload = function () {
   
 
 };
-},{"./gameFactory":17,"./scenes/combat_scene.js":41,"./scenes/credits_scene.js":42,"./scenes/event_scene.js":43,"./scenes/intro_scene.js":44,"./scenes/mainmenu_scene.js":45,"./scenes/settings_scene.js":46,"webfontloader":1}],41:[function(require,module,exports){
+},{"../assets/fonts/style.json":3,"./gameFactory":19,"./interface/textFunctions":46,"./scenes/combat_scene.js":49,"./scenes/creation_scene.js":50,"./scenes/credits_scene.js":51,"./scenes/event_scene.js":52,"./scenes/intro_scene.js":53,"./scenes/mainmenu_scene.js":54,"./scenes/name_scene.js":55,"./scenes/settings_scene.js":56,"./scenes/shop_scene.js":57,"webfontloader":1}],49:[function(require,module,exports){
 'use strict';
 
 var Stats = require('../characters/stats');
@@ -2563,15 +3584,11 @@ var CombatScene = {
   enemy: null,
   // Buttons functions
   attackKey: function () {
-    if (true) {
-      this.seeker.attack(this.enemy);
-      this.game.add.audio('preAttacking', 0.1).play();
-    }
+    this.combatHUD._enemyHUD._actionBar.reUpdate();
   },
   blockKey: function () {
-    if (true) {
-      this.seeker.block();
-    }
+    this.seeker.start();
+    this.enemy.start();
   },
   attackEnemy: function () {
     if (true) {
@@ -2594,34 +3611,31 @@ var CombatScene = {
     this.camera.flash('#000000');
 
     //render background
-    var combatbackground = this.game.add.sprite(0, 0, 'watercombatbackground');
+    var combatbackground = this.game.add.image(0, 0, 'combatbackground');
     //render seeker //tope de nombre caracteres = 9
-    this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', new Stats(8, 3, 1, 20, 1),
-      [new Item('Heal Potion', 'Restores 10hp', 'itemIcon', function (character, enemy) {
-        this.heal(3);
-      }),
-      new Item('Hurt Potion', 'Deals 10 damage', 'itemIcon2', function () {
-        this.stats.damage+=3;
-      }),
-      ], 'seekerAnimations');
-    this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000);
-    this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000);
-    this.seeker.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]);
-    this.seeker.addAction.useObjects();
+    this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', {damage: 99, defense: 3, speed: 1, health: 20, perception: 1}, 
+      ['healthPotion','speedEnemyPotion'], 'seekerBruteAnimations',
+      {
+        idle:[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
+        attack:[[24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000],
+        block:[[48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000],
+        die:[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]],
+        useObjects:[]
+      });
     this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
     //render enemy
-
-    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Lord Ragno', new Stats(7, 10, 1, 27, 3), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').normal);
-    this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
-    this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
-    this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
-    this.enemy.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]);
-
+var a = require('../../assets/patterns/patterns');
+    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Lord Ragno', {damage: 5, defense: 10, speed: 1, health: 27, perception: 3}, 'spiderAnimations', 
+    {
+      idle:[[0, 1, 2, 3, 4, 5]],
+      attack:[[24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]],
+      block:[[48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]],
+      die:[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]]
+    },this.seeker, a.normal);
     this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
 
     //interface
-    this.game.add.combatHUD(0, 0, this.seeker, this.enemy);
+    this.combatHUD = this.game.add.combatHUD(0, 0, this.seeker, this.enemy);
     //transicion de entrada a combate
 
     var filter = this.game.add.filter('Pixelate', 800, 600);
@@ -2643,6 +3657,8 @@ var CombatScene = {
         this.seeker.use('Heal Potion');
       }, this);
       this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);
+      this.combatHUD._enemyHUD._actionBar.reUpdate();
+      this.combatHUD._enemyHUD._actionBar._timer.start();
     }, this);
 
     var style = require('../../assets/fonts/style.json');
@@ -2671,15 +3687,13 @@ var CombatScene = {
       }, this);
       t.start();
     }, this);
-    //para ir a fullscreen pulsar F4
+    //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
 
     //music
     var music = this.game.add.audio('firetheme', 0.1, true);
     this.game.sound.stopAll();
     music.play();
-
-
 
     //INFOWINDOWS
     //vitalidad
@@ -2722,10 +3736,57 @@ var CombatScene = {
 
 module.exports = CombatScene;
 
-},{"../../assets/fonts/style.json":2,"../../assets/patterns/patterns":3,"../characters/item":11,"../characters/stats":14,"../interface/textFunctions":38}],42:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3,"../../assets/patterns/patterns":5,"../characters/item":13,"../characters/stats":16,"../interface/textFunctions":46}],50:[function(require,module,exports){
 'use strict';
 
-var exitButton;
+
+var CreationScene = {
+  MainMenuScene: function () {
+    this.game.add.audio('button', 0.1).play();
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
+  },
+
+  create: function () {
+    //fadeIn
+    this.camera.flash('#000000');
+
+    var style = require('../../assets/fonts/style.json');
+
+    //background
+    this.game.add.image(0, 0, 'creationbackground');
+
+    this.game.add.creationHUD(0, 0, this.MainMenuScene, this);
+
+    //exitButton = this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
+
+    //prueba cursor
+    this.selector = this.game.add.sprite(50, 50, 'cursor');
+
+    //Controles para cambiar de escenas
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+
+    //music
+    var music = this.game.add.audio('intro', 0.1, true);
+    this.game.sound.stopAll();
+    music.play();
+  },
+  update: function () {
+    //prueba cursor
+    this.selector.x = this.game.input.x;
+    this.selector.y = this.game.input.y;
+  }
+};
+
+
+module.exports = CreationScene;
+
+},{"../../assets/fonts/style.json":3}],51:[function(require,module,exports){
+'use strict';
+
+var FramedButton = require('../interface/framedButton')
+
+var backButton;
 var selector;
 
 var CreditsScene = {
@@ -2749,7 +3810,7 @@ var CreditsScene = {
     this.game.add.richText(10, this.game.world.height+180, 100, 'Carlos León Aznar', style);
     this.game.add.richText(10, this.game.world.height+220, 100, '¡Gracias por jugar!', style);
 
-    exitButton = this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
+    backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
@@ -2766,7 +3827,7 @@ var CreditsScene = {
     this.game.world.forEach(element => {
       element.y -=0.2;
     });
-    exitButton.y += 0.2;
+    backButton.y += 0.2;
   
   //prueba cursor
   selector.x = this.game.input.x;
@@ -2777,7 +3838,7 @@ var CreditsScene = {
 
 module.exports = CreditsScene;
 
-},{"../../assets/fonts/style.json":2}],43:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],52:[function(require,module,exports){
 'use strict';
 
 var selector;
@@ -2800,7 +3861,7 @@ var EventScene = {
     //render background
     this.game.add.sprite(0, 0, 'eventbackground');
 
-    this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(10, 3, 1, 20, 1), 'seekerAnimations');
+    this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(10, 3, 1, 20, 1), 'seekerBruteAnimations');
 
     this.HUD = this.game.add.eventHUD(this.seeker, '"Brillos bajo tierra"\n\n Avanzando por los oscuros túneles, avistas un tenue brillo a lo lejos. Cuando te acercas, te das cuenta de que ese brillo sale de la tierra, emergiendo y flotando como si de polvo se tratase. La luz que emite es agradable y te resulta familiar.',
      [{text: '1. Excavar', callback: function(){console.log('Jeje, NO CAVO');
@@ -2864,7 +3925,7 @@ var EventScene = {
 
 module.exports = EventScene;
 
-},{"../../assets/fonts/style.json":2,"../characters/stats":14}],44:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3,"../characters/stats":16}],53:[function(require,module,exports){
 'use strict';
 
 var selector;
@@ -2873,50 +3934,95 @@ var IntroScene = {
   MainMenuScene: function () {
     this.game.add.audio('button', 0.1).play();
     this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function(){this.game.state.start('mainmenu');}, this);
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
 
 
-  appear(object, duration, delay){
+  appear(object, duration, delay, funct) {
     object.alpha = 0;
 
-    var tween = this.game.add.tween(object).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, delay);
-    tween.onComplete.add(function(){this.game.add.tween(object).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, duration)}
-       , this);
+    var tween = this.game.add.tween(object).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, delay);
+    tween.onComplete.add(function () {
+      if (funct && (typeof funct == "function")) {
+        funct();
+      }
+      this.game.add.tween(object).to({ alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, duration);
+    }
+      , this);
   },
-  
+
   create: function () {
     var style = require('../../assets/fonts/style.json');
+    //color de background
+    this.game.stage.backgroundColor = "#31261a";
+    //stop music
+    this.game.sound.stopAll();
 
-    'LA LUZ DE LA ESPERANZA SE HA EXTINGUIDO......Y SE TE HA ENCOMENDADO EL DEBER DE VOLVER A AVIVARLO...LA ALDEA TE NECESITA..'
+    //logo music
+    var logomusic = this.game.add.audio('logo', 0.1, false);
+    logomusic.play();
 
-
-    this.appear(this.game.add.richText(40, 80, 80, "CUENTA LA LEYENDA...", style),2000);
-    this.appear(this.game.add.richText(80, 80, 80, "QUE HACE MUCHO TIEMPO", style),2000, 4000);
+    //intro music
+    var intro = this.game.add.audio('intro', 0.1, false);
+    this.game.add.tween(intro).to( { }, 7500, "Linear", true, 7500).onStart.add(function(){ intro.play();}, this);
     
+   
+    this.appear(this.game.add.sprite(70, 30, 'logo')
+      .animations.add('play', Array.apply(null, { length: 22 }).map(Function.call, Number))
+      ._parent.play('play', 7)._parent, 4000);
+    this.appear(this.game.add.richText(60, 100, 80, "TURING'S SONG STUDIOS", style), 1000, 3000);
+
+    this.appear(this.game.add.richText(60, 40, 80, "Cuenta la leyenda...", style), 2000, 9000);
+    this.appear(this.game.add.richText(60, 80, 80, "...que hace mucho tiempo...", style), 2000, 10000);
+
+    var intro1 = this.game.add.sprite(20, 20, 'intro1');
+    intro1.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    this.appear(intro1, 3000, 17000, function () { intro1.play('play', 4) });
+    this.appear(this.game.add.richText(90, 50, 100, "...una gran bola de fuego alimentaba al mundo con sus rayos desde el cielo...", style), 3000, 17000);
+
+    var intro2 = this.game.add.sprite(130, 30, 'intro2');
+    intro2.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    this.appear(intro2, 3000, 24000, function () { intro2.play('play', 6) });
+    this.appear(this.game.add.richText(10, 50, 100, "...y que las gemas de luz no eran necesarias para poder sobrevivir.", style), 3000, 24000);
+
+    var intro3 = this.game.add.sprite(30, 10, 'intro3');
+    intro3.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]);
+    this.appear(intro3, 9000, 32000, function () { intro3.play('play', 6) });
+    this.appear(this.game.add.richText(25, 100, 150, "Tras la Gran Guerra, el suelo dónde alzamos nuestros reinos...", style), 3000, 32000);
+    this.appear(this.game.add.richText(25, 132, 150, "...desapareció.", style), 3000, 38000);
+
+    var intro4 = this.game.add.sprite(30, 60, 'intro4');
+    intro4.animations.add('play', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]);
+    this.appear(intro4, 11000, 46000, function () { intro4.play('play', 6) });
+    this.appear(this.game.add.richText(25, 10, 150, "Los spilianos somos los únicos supervivientes. Hemos evolucionado para no ser los últimos, pero...", style), 3000, 46000);
+    this.appear(this.game.add.richText(25, 10, 150, "...las gemas de luz escasean en la aldea, y cada vez hay menos spilianos...", style), 3000, 54000);
+
+    this.appear(this.game.add.richText(50, 50, 100, "Necesitamos tu ayuda. Has sido elegido por el Gran Cristal.", style), 3000, 62000);
+    this.appear(this.game.add.richText(50, 60, 100, "Por favor... no nos falles...", style), 3000, 70000);
 
     //espera a que acabe intro
-    this.game.time.events.add(Phaser.Timer.SECOND * 7, this.MainMenuScene, this);
-    
+    this.game.time.events.add(Phaser.Timer.SECOND * 80, this.MainMenuScene, this);
 
 
-    
 
 
-    this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
+
+
+    //this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
 
 
     //prueba cursor
-    selector = this.game.add.sprite(50, 50, 'cursor');
+    //selector = this.game.add.sprite(50, 50, 'cursor');
 
     //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(this.MainMenuScene, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(this.MainMenuScene, this);
 
   },
-  update: function(){
-  //prueba cursor
-  selector.x = this.game.input.x;
-  selector.y = this.game.input.y;
+  update: function () {
+    //prueba cursor
+    //selector.x = this.game.input.x;
+    //selector.y = this.game.input.y;
   }
 };
 
@@ -2925,98 +4031,71 @@ var IntroScene = {
 
 module.exports = IntroScene;
 
-},{"../../assets/fonts/style.json":2}],45:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3}],54:[function(require,module,exports){
 'use strict';
 
 var textFunctions = require('../interface/textFunctions');
+var FramedButton = require('../interface/framedButton')
 
 var selector;
 
 var MainMenuScene = {
-  EventScene: function () {
-    this.game.add.audio('button', 0.1).play();
-    //fadeOut
-    this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function(){this.game.state.start('event');}, this);
-  },
-
-  CombatScene: function () {
-    this.game.add.audio('button', 0.1).play();
-    //fadeOut
-    this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function(){this.game.state.start('combat');}, this);
-  },
-
-  CreditsScene: function () {
-    this.game.add.audio('button', 0.1).play();
-    //fadeOut
-    this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function(){this.game.state.start('credits')}, this);
-  },
-
-  SettingsScene: function () {
-    this.game.add.audio('button', 0.1).play();
-    //fadeOut
-    this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function(){this.game.state.start('settings')}, this);
-  },
-
-
 
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
 
-    
+
+
     var style = require('../../assets/fonts/style.json');
     //background
-    this.game.add.image(0,0,'mainmenubackground');
-    //great crystal shine particles
-    var emitter = this.game.add.emitter(100, 35, 100);
-    emitter.makeParticles('crystalShines',[0,1,2]);
-    emitter.setRotation(0, 90);
-    emitter.setAlpha(0.3, 0.8);
-    emitter.setScale(0.5, 1);
-    emitter.gravity = 0;
-    emitter.flow(2000, 500, 5, -1);
+    this.game.add.image(0, 0, 'mainmenubackground');
 
-    //version
-    var text = this.game.add.richText(176, 140, 80, "v 1.0", style);
+    selector = this.game.add.sprite(50, 50, 'cursor');
 
     //buttons
-    // name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group
-    var a = this.game.add.optionMenu([['botonDeAbajo',85,100,'button',this.EventScene,this,1,0,2,1,{up: 'botonDeArriba'}],
-    ['botonDeArriba',85,60,'button',this.CombatScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
-    ['botonCredits',125,60,'button',this.CreditsScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
-    ['botonSettings',45,60,'button',this.SettingsScene,this,1,0,2,1,{down: 'botonDeAbajo'}]
-    ]);
-    //console.log(a);
+    this.game.add.mainMenuHUD(0, 0, selector);
+    this.game.add.image(0, 0, 'shines').alpha = 0.2;
+    //great crystal shine particles
+    var emitterCrystal = this.game.add.emitter(100, 35, 100);
+    emitterCrystal.makeParticles('crystalShines', [0, 1, 2]);
+    emitterCrystal.setRotation(0, 0);
+    emitterCrystal.setAlpha(0.3, 0.8);
+    //emitter.setScale(0.5, 1);
+    emitterCrystal.gravity = 0;
+    emitterCrystal.flow(2000, 100);
 
-    
-    
-    //mainmenuoptionsscene
-    //new run/continue run
+    this.game.add.image(4, 1, 'title');
 
-    //para ir a fullscreen pulsar F4
-    //this.game.input.keyboard.addKey(Phaser.Keyboard.F4).onDown.add(this.goFullscreen, this);
+    this.game.world.bringToTop(selector);
+
+    //smoke
+    /*var emitter = this.game.add.emitter(10, 100, 400);
+    emitter.makeParticles('smoke', [0,1,2]);
+    emitter.setRotation(0, 0);
+    emitter.setAlpha(0.1, 1, 3000);
+    //emitter.setScale(0.1, 1, 0.1, 1, 6000, Phaser.Easing.Quintic.Out);
+    emitter.gravity = -400;
+    emitter.start(false, 5000,1);
+    //emitter.emitX = 0;*/
+
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
 
 
     //Controles para moverse entre botones
-    this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(a.goUp, this);//no funcionaaa aaaaaaaaaa
+    /*this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(a.goUp, this);//no funcionaaa aaaaaaaaaa
     this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(a.goDown, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function(){console.log("enter")}, this);
 
     //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.CreditsScene, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.CreditsScene, this);*/
 
 
     //music
     var music = this.game.add.audio('mainmenutheme', 0.1, true);
     this.game.sound.stopAll();
     music.play();
-
-    selector = this.game.add.sprite(50, 50, 'cursor');
-
   },
 
   update: function () {
@@ -3025,7 +4104,7 @@ var MainMenuScene = {
     selector.y = this.game.input.y;
   },
 
-  goFullscreen: function() {
+  goFullscreen: function () {
     if (this.game.scale.isFullScreen) {
       this.game.scale.stopFullScreen();
     }
@@ -3037,10 +4116,104 @@ var MainMenuScene = {
 
 module.exports = MainMenuScene;
 
-},{"../../assets/fonts/style.json":2,"../interface/textFunctions":38}],46:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30,"../interface/textFunctions":46}],55:[function(require,module,exports){
 'use strict';
 
-var exitButton;
+var FramedButton = require('../interface/framedButton')
+
+var selector;
+
+var SettingsScene = {
+  MainMenuScene: function () {
+    this.game.add.audio('button', 0.1).play();
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
+  },
+
+  create: function () {
+    //fadeIn
+    this.camera.flash('#000000');
+
+    var style = require('../../assets/fonts/style.json');
+
+    this.game.add.image(0, 0, 'namebackground').alpha = 0.2;
+
+    var emitter = this.game.add.emitter(100, 75, 200);
+    emitter.alpha = 0.1;
+    emitter.makeParticles('creationParticles', [0, 1, 2, 3, 4, 5]);
+    emitter.minParticleSpeed.setTo(-100, -100);
+    emitter.maxParticleSpeed.setTo(100, 100);
+    emitter.setRotation(0, 0);
+    emitter.gravity = 0;
+    emitter.flow(20000, 100);
+
+    var emitter2 = this.game.add.emitter(100, 75, 200);
+    emitter2.alpha = 0.2;
+    emitter2.makeParticles('creationParticles', [0, 1, 2, 3, 4, 5]);
+    emitter2.minParticleSpeed.setTo(-100, -100);
+    emitter2.maxParticleSpeed.setTo(100, 100);
+    emitter2.setRotation(0, 0);
+    emitter2.gravity = 0;
+    emitter2.flow(20000, 100);
+
+    var emitter3 = this.game.add.emitter(100, 75, 200);
+    emitter3.alpha = 0.3;
+    emitter3.makeParticles('creationParticles', [0, 1, 2, 3, 4, 5]);
+    emitter3.minParticleSpeed.setTo(-100, -100);
+    emitter3.maxParticleSpeed.setTo(100, 100);
+    emitter3.setRotation(0, 0);
+    emitter3.gravity = 0;
+    emitter3.flow(20000, 100);
+
+
+    this.game.add.richText(0, 20, 200, 'NAME YOUR VESSEL', style);
+    this.game.add.image(60,108,'textBox').alpha = 0.8;
+
+    this.game.add.image(62,-30,'seekerBruteAnimations');
+
+    //this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+    this.hola = this.game.add.inputField(40,100,{
+      font: '10px Minecraft',
+      width: 150,
+      padding: 8,
+      borderWidth: 1,
+      borderColor: '#FFFFFF',
+      borderRadius: 6,
+      placeHolder: 'NOMBRE',
+      textAlign: 'center',
+      fillAlpha: 0,
+      width: 100,
+      height: 1,
+      selectionColor: '#FF00FF',
+      cursorColor : '#FFFFFF'
+    });
+    this.hola.text.style.fill = '#FFFFFF';
+    this.hola.domElement.setMax(8,0);
+    this.hola.cursor.y+=2;
+    this.hola.input.useHandCursor = false;
+    //prueba cursor
+    selector = this.game.add.sprite(50, 50, 'cursor');
+
+    //Controles para cambiar de escenas
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+
+    
+  },
+  update: function () {
+    //prueba cursor
+    selector.x = this.game.input.x;
+    selector.y = this.game.input.y;
+  }
+};
+
+
+module.exports = SettingsScene;
+
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],56:[function(require,module,exports){
+'use strict';
+
+var FramedButton = require('../interface/framedButton')
+
 var selector;
 
 var SettingsScene = {
@@ -3064,7 +4237,7 @@ var SettingsScene = {
     this.game.add.richText(10, this.game.world.height+180, 100, 'Carlos León Aznar', style);
     this.game.add.richText(10, this.game.world.height+220, 100, '¡Gracias por jugar!', style);
 
-    exitButton = this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
+    this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
@@ -3087,4 +4260,52 @@ var SettingsScene = {
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":2}]},{},[40]);
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],57:[function(require,module,exports){
+'use strict';
+
+var FramedButton = require('../interface/framedButton')
+
+var selector;
+
+var ShopScene = {
+  MainMenuScene: function () {
+    this.game.add.audio('button', 0.1).play();
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
+  },
+
+  create: function () {
+    //fadeIn
+    this.camera.flash('#000000');
+
+    var style = require('../../assets/fonts/style.json');
+
+    this.game.add.richText(10, 10, 100, 'TIENDA DE TEMMIE', style);
+
+    this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+
+    var item = this.game.add.sprite(50,50,'shopItemIcon');
+    //item.sprite.setToScale(2,2);
+
+    //prueba cursor
+    selector = this.game.add.sprite(50, 50, 'cursor');
+
+    //Controles para cambiar de escenas
+    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+
+    //music
+    var music = this.game.add.audio('shoptheme', 0.1, true);
+    this.game.sound.stopAll();
+    music.play();
+  },
+  update: function () {
+    //prueba cursor
+    selector.x = this.game.input.x;
+    selector.y = this.game.input.y;
+  }
+};
+
+
+module.exports = ShopScene;
+
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}]},{},[48]);
