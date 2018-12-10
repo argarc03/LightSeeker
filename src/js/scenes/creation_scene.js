@@ -1,7 +1,5 @@
 'use strict';
 
-var exitButton;
-var selector;
 
 var CreationScene = {
   MainMenuScene: function () {
@@ -19,12 +17,12 @@ var CreationScene = {
     //background
     this.game.add.image(0, 0, 'creationbackground');
 
-    this.game.add.creationHUD(0, 0, selector);
+    this.game.add.creationHUD(0, 0, this.MainMenuScene, this);
 
     //exitButton = this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
 
     //prueba cursor
-    selector = this.game.add.sprite(50, 50, 'cursor');
+    this.selector = this.game.add.sprite(50, 50, 'cursor');
 
     //Controles para cambiar de escenas
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
@@ -36,8 +34,8 @@ var CreationScene = {
   },
   update: function () {
     //prueba cursor
-    selector.x = this.game.input.x;
-    selector.y = this.game.input.y;
+    this.selector.x = this.game.input.x;
+    this.selector.y = this.game.input.y;
   }
 };
 

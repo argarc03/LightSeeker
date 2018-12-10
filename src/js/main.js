@@ -163,7 +163,9 @@ var PreloaderScene = {
       this.game.load.spritesheet('smoke','assets/images/particles/smoke.png',4,4);
       //CHARACTERS
         //Seeker
-        this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
+        this.game.load.spritesheet('seekerBruteAnimations','assets/images/seeker/seekerBruteAnimations.png',80,120);
+        this.game.load.spritesheet('seekerHarpyAnimations','assets/images/seeker/seekerHarpySiluette.png',80,120);
+        this.game.load.spritesheet('seekerWarlockAnimations','assets/images/seeker/seekerWarlockSiluette.png',80,120);
         //Enemies
         this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
         this.game.load.spritesheet('fungiAnimations', 'assets/images/enemies/fungiAnimations.png',80,120);

@@ -137,8 +137,8 @@ fun = function (Phaser) {
         return new MainMenuHUD(this.game, parent, x, y, selector);
     }
 
-    Phaser.GameObjectFactory.prototype.creationHUD = function (x, y, selector, parent = this.game.world) {
-        return new CreationHUD(this.game, parent, x, y, selector);
+    Phaser.GameObjectFactory.prototype.creationHUD = function (x, y, exitFunction, context, parent = this.game.world) {
+        return new CreationHUD(this.game, parent, x, y, exitFunction, context);
     }
 }
 
