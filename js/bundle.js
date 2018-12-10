@@ -3352,6 +3352,7 @@ var SettingsScene = require('./scenes/settings_scene.js');
 var ShopScene = require('./scenes/shop_scene.js');
 var CreationScene = require('./scenes/creation_scene.js');
 var NameScene = require('./scenes/name_scene.js');
+var FullscreenScene = require('./scenes/fullscreen_scene.js');
 var TextFunctions = require('./interface/textFunctions');
 
  var webFontLoading = {
@@ -3369,6 +3370,7 @@ var TextFunctions = require('./interface/textFunctions');
     game.state.add('shop', ShopScene);
     game.state.add('creation', CreationScene);
     game.state.add('name', NameScene);
+    game.state.add('fullscreen', FullscreenScene);
     game.state.start('boot');
   },
   custom: {
@@ -3550,7 +3552,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('intro');
+      PreloaderScene.game.state.start('fullscreen');
   }
 
 };
@@ -3560,7 +3562,7 @@ window.onload = function () {
   
 
 };
-},{"../assets/fonts/style.json":3,"./gameFactory":19,"./interface/textFunctions":46,"./scenes/combat_scene.js":49,"./scenes/creation_scene.js":50,"./scenes/credits_scene.js":51,"./scenes/event_scene.js":52,"./scenes/intro_scene.js":53,"./scenes/mainmenu_scene.js":54,"./scenes/name_scene.js":55,"./scenes/settings_scene.js":56,"./scenes/shop_scene.js":57,"webfontloader":1}],49:[function(require,module,exports){
+},{"../assets/fonts/style.json":3,"./gameFactory":19,"./interface/textFunctions":46,"./scenes/combat_scene.js":49,"./scenes/creation_scene.js":50,"./scenes/credits_scene.js":51,"./scenes/event_scene.js":52,"./scenes/fullscreen_scene.js":53,"./scenes/intro_scene.js":54,"./scenes/mainmenu_scene.js":55,"./scenes/name_scene.js":56,"./scenes/settings_scene.js":57,"./scenes/shop_scene.js":58,"webfontloader":1}],49:[function(require,module,exports){
 'use strict';
 
 var Stats = require('../characters/stats');
@@ -3687,6 +3689,8 @@ var a = require('../../assets/patterns/patterns');
       }, this);
       t.start();
     }, this);
+
+    
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
 
@@ -3928,6 +3932,54 @@ module.exports = EventScene;
 },{"../../assets/fonts/style.json":3,"../characters/stats":16}],53:[function(require,module,exports){
 'use strict';
 
+var FramedButton = require('../interface/framedButton')
+
+var selector;
+
+var SettingsScene = {
+  IntroScene: function () {
+    this.game.add.audio('button', 0.1).play();
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('intro'); }, this);
+  },
+
+  create: function () {
+    //fadeIn
+    this.camera.flash('#000000');
+
+    var style = require('../../assets/fonts/style.json');
+
+
+
+
+    this.game.add.richText(60, 39, 80, "fullscreen?", style);
+
+    //Controles para cambiar de escenas
+    this.acceptButton = this.game.world.add(new FramedButton(this.game.world, this.game, 60, 70, 'backIcon', 'backFrame', [{ callback: function () { this.game.scale.startFullScreen(false);this.IntroScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+    this.ignoreButton = this.game.world.add(new FramedButton(this.game.world, this.game, 120, 70, 'backIcon', 'backFrame', [{ callback: function () { this.game.scale.stopFullScreen();this.IntroScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+
+
+    //prueba cursor
+    selector = this.game.add.sprite(50, 50, 'cursor');
+
+    //music
+    var music = this.game.add.audio('shoptheme', 0.1, true);
+    this.game.sound.stopAll();
+    music.play();
+  },
+  update: function () {
+    //prueba cursor
+    selector.x = this.game.input.x;
+    selector.y = this.game.input.y;
+  }
+};
+
+
+module.exports = SettingsScene;
+
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],54:[function(require,module,exports){
+'use strict';
+
 var selector;
 
 var IntroScene = {
@@ -4031,7 +4083,7 @@ var IntroScene = {
 
 module.exports = IntroScene;
 
-},{"../../assets/fonts/style.json":3}],54:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3}],55:[function(require,module,exports){
 'use strict';
 
 var textFunctions = require('../interface/textFunctions');
@@ -4116,7 +4168,7 @@ var MainMenuScene = {
 
 module.exports = MainMenuScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30,"../interface/textFunctions":46}],55:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30,"../interface/textFunctions":46}],56:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4209,7 +4261,7 @@ var SettingsScene = {
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],56:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],57:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4260,7 +4312,7 @@ var SettingsScene = {
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],57:[function(require,module,exports){
+},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],58:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
