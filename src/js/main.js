@@ -16,12 +16,11 @@ var SettingsScene = require('./scenes/settings_scene.js');
 var ShopScene = require('./scenes/shop_scene.js');
 var CreationScene = require('./scenes/creation_scene.js');
 var NameScene = require('./scenes/name_scene.js');
+var ReactiveBar = require('./interface/reactiveBar');
 
  var webFontLoading = {
   active: function() {
     var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
-require('./gameFactory')(Phaser);
-
     webFontLoading.game = game;
     game.state.add('boot', BootScene);
     game.state.add('preloader', PreloaderScene);
@@ -59,6 +58,7 @@ var BootScene = {
 
 var PreloaderScene = {
   preload: function () {
+    require('./gameFactory')(Phaser);
     // scale the game 4x
     this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     this.game.scale.setUserScale(4, 4);
@@ -66,9 +66,20 @@ var PreloaderScene = {
     // enable crisp rendering
     this.game.renderer.renderSession.roundPixels = true;
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
-    this.loadingBar = this.game.add.sprite(0, 240, 'preloader_bar');
-    this.loadingBar.anchor.setTo(0, 0.5);
-    this.load.setPreloadSprite(this.loadingBar);
+    this.loadSignal = new Phaser.Signal();
+    this.loadingBar = this.game.add.reactiveBar(this.game.world,0,0,'preloader_bar',function(){
+      return  this._audioLoad*0.88+this._otherLoad*0.12;
+    },this,this.loadSignal);
+    this._audioLoad = 0;
+    this._otherLoad = 0;
+    this.game.load.onFileComplete.add(function(progress, file, key, success){
+      this._otherLoad = progress;
+      this.loadSignal.dispatch();
+    },this);
+    this.load.onFileComplete.add(function(progress, file, key, success){
+      this._audioLoad = progress;
+      this.loadSignal.dispatch();
+    },this);
     // TODO: load here the assets for the game
     //IMAGES
         this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Pixelate.js');
@@ -201,7 +212,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('name');
+      PreloaderScene.game.state.start('intro');
   }
 
 };
