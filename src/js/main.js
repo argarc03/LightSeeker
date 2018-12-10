@@ -16,6 +16,7 @@ var SettingsScene = require('./scenes/settings_scene.js');
 var ShopScene = require('./scenes/shop_scene.js');
 var CreationScene = require('./scenes/creation_scene.js');
 var NameScene = require('./scenes/name_scene.js');
+var FullscreenScene = require('./scenes/fullscreen_scene.js');
 var TextFunctions = require('./interface/textFunctions');
 
  var webFontLoading = {
@@ -33,6 +34,7 @@ var TextFunctions = require('./interface/textFunctions');
     game.state.add('shop', ShopScene);
     game.state.add('creation', CreationScene);
     game.state.add('name', NameScene);
+    game.state.add('fullscreen', FullscreenScene);
     game.state.start('boot');
   },
   custom: {
@@ -214,7 +216,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('intro');
+      PreloaderScene.game.state.start('fullscreen');
   }
 
 };

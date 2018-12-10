@@ -124,6 +124,8 @@ var a = require('../../assets/patterns/patterns');
       }, this);
       t.start();
     }, this);
+
+    
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
 
