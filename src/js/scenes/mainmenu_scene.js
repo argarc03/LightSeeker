@@ -45,24 +45,6 @@ var MainMenuScene = {
     emitter.start(false, 5000,1);
     //emitter.emitX = 0;*/
 
-
-
-
-    //buttons
-    //this.game.add(new FramedButton(3,139, 'shop', 'shopFrame', [{callback:function(){this.SettingsScene();}, context:this, arguments:[]}]));
-
-    /*var a = this.game.add.optionMenu([['botonDeAbajo',85,100,'button',this.EventScene,this,1,0,2,1,{up: 'botonDeArriba'}],
-    ['botonDeArriba',85,60,'button',this.CombatScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
-    ['botonCredits',125,60,'button',this.CreditsScene,this,1,0,2,1,{down: 'botonDeAbajo'}],
-    ['botonSettings',45,60,'button',this.SettingsScene,this,1,0,2,1,{down: 'botonDeAbajo'}]
-    ]);*/
-    //console.log(a);
-
-
-
-    //mainmenuoptionsscene
-    //new run/continue run
-
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
 

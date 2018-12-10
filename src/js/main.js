@@ -15,6 +15,7 @@ var EventScene = require('./scenes/event_scene.js');
 var CreditsScene = require('./scenes/credits_scene.js');
 var SettingsScene = require('./scenes/settings_scene.js');
 var ShopScene = require('./scenes/shop_scene.js');
+var CreationScene = require('./scenes/creation_scene.js');
 
  var webFontLoading = {
   active: function() {
@@ -31,6 +32,7 @@ require('./gameFactory')(Phaser);
     game.state.add('credits', CreditsScene);
     game.state.add('settings', SettingsScene);
     game.state.add('shop', ShopScene);
+    game.state.add('creation', CreationScene);
     game.state.start('boot');
   },
   custom: {
@@ -80,7 +82,10 @@ var PreloaderScene = {
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
         this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
         this.game.load.image('emptyItem','assets/images/interface/emptyItem.png');
+        this.game.load.image('backIcon','assets/images/interface/backIcon.png');
+        this.game.load.image('backFrame','assets/images/interface/backFrame.png');
         this.game.load.image('title','assets/images/interface/title.png');
+        this.game.load.image('statPoint','assets/images/interface/statPoint.png');
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarBack','assets/images/interface/actionsBarBack.png');
@@ -92,6 +97,7 @@ var PreloaderScene = {
         //HUDs
         this.game.load.image('interface','assets/images/interface/combatinterfaceback.png');
         this.game.load.image('eventinterface','assets/images/interface/eventinterfaceback.png');
+        this.game.load.image('creationinterface','assets/images/interface/creationinterface.png');
         //HUDs scroll
         this.game.load.spritesheet('sliderBackground','assets/images/interface/sliderbackground.png',6,5);
         this.game.load.spritesheet('slider','assets/images/interface/slider.png',6,3);
@@ -139,7 +145,8 @@ var PreloaderScene = {
         this.game.load.spritesheet('tavernFrame', 'assets/images/interface/tavernFrame.png');
         this.game.load.spritesheet('crystal', 'assets/images/interface/crystal.png',39,65);
         this.game.load.spritesheet('crystalFrame', 'assets/images/interface/crystalFrame.png');
-
+        this.game.load.image('arrow', 'assets/images/interface/arrow.png');
+        this.game.load.image('arrowFrame', 'assets/images/interface/arrowFrame.png');
 
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
@@ -147,6 +154,7 @@ var PreloaderScene = {
       this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
       this.game.load.image('shines', 'assets/images/backgrounds/shines.png');
+      this.game.load.image('creationbackground', 'assets/images/backgrounds/creationbackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
@@ -158,7 +166,7 @@ var PreloaderScene = {
         this.game.load.spritesheet('seekerAnimations','assets/images/seeker/seekerAnimations.png',80,120);
         //Enemies
         this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
-        this.game.load.spritesheet('wormAnimations', 'assets/images/enemies/WormAlpha.png',80,120);
+        this.game.load.spritesheet('fungiAnimations', 'assets/images/enemies/fungiAnimations.png',80,120);
     //SOUNDS
       //Effects
       this.load.audio('attacking', ['assets/sounds/attacking.wav']);
@@ -181,7 +189,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('combat');
+      PreloaderScene.game.state.start('creation');
   }
 
 };

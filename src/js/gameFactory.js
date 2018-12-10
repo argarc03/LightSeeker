@@ -22,6 +22,7 @@ var WindowFrame = require('./interface/windowFrame');
 var FramedButton = require('./interface/framedButton');
 var InfoWindow = require('./interface/infoWindow');
 var MainMenuHUD = require('./interface/mainMenuHUD');
+var CreationHUD = require('./interface/creationHUD');
 /**
  * 
  */
@@ -134,6 +135,10 @@ fun = function (Phaser) {
 
     Phaser.GameObjectFactory.prototype.mainMenuHUD = function (x, y, selector, parent = this.game.world) {
         return new MainMenuHUD(this.game, parent, x, y, selector);
+    }
+
+    Phaser.GameObjectFactory.prototype.creationHUD = function (x, y, selector, parent = this.game.world) {
+        return new CreationHUD(this.game, parent, x, y, selector);
     }
 }
 

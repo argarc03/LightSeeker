@@ -1,10 +1,9 @@
 'use strict';
 
-var FramedButton = require('../interface/framedButton')
-
+var exitButton;
 var selector;
 
-var ShopScene = {
+var CreationScene = {
   MainMenuScene: function () {
     this.game.add.audio('button', 0.1).play();
     this.game.camera.fade('#000000');
@@ -17,12 +16,12 @@ var ShopScene = {
 
     var style = require('../../assets/fonts/style.json');
 
-    this.game.add.richText(10, 10, 100, 'TIENDA DE TEMMIE', style);
+    //background
+    this.game.add.image(0, 0, 'creationbackground');
 
-    this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+    this.game.add.creationHUD(0, 0, selector);
 
-    var item = this.game.add.sprite(50,50,'shopItemIcon');
-    //item.sprite.setToScale(2,2);
+    //exitButton = this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
@@ -43,4 +42,4 @@ var ShopScene = {
 };
 
 
-module.exports = ShopScene;
+module.exports = CreationScene;

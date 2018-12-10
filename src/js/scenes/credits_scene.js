@@ -1,6 +1,8 @@
 'use strict';
 
-var exitButton;
+var FramedButton = require('../interface/framedButton')
+
+var backButton;
 var selector;
 
 var CreditsScene = {
@@ -24,7 +26,7 @@ var CreditsScene = {
     this.game.add.richText(10, this.game.world.height+180, 100, 'Carlos León Aznar', style);
     this.game.add.richText(10, this.game.world.height+220, 100, '¡Gracias por jugar!', style);
 
-    exitButton = this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
+    backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
@@ -41,7 +43,7 @@ var CreditsScene = {
     this.game.world.forEach(element => {
       element.y -=0.2;
     });
-    exitButton.y += 0.2;
+    backButton.y += 0.2;
   
   //prueba cursor
   selector.x = this.game.input.x;
