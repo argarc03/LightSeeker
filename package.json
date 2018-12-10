@@ -18,5 +18,8 @@
     "vinyl-source-stream": "*",
     "watchify": "*",
     "webfontloader": "^1.6.28"
+  },
+  "devDependencies": {
+    "@orange-games/phaser-input": "^2.0.5"
   }
 }

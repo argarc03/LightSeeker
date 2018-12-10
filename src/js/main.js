@@ -4,8 +4,7 @@
 // - ¿Hay alguna manera para evitar la carga repetida? Quiero que, cuando tenga absolutamente todo cargado, se de a start.
 //   y poner pantalla de carga(sin conocer porcentaje jeje).
 //BUGS
-// - El cooldown de las habilidades en los combates se queda pillado a 0.0 si sacas el mouse fuera del juego.
-// - El slider se desencaja un poco hacia arriba cuando lo mueves.
+// ActionBar
 
 
 var IntroScene = require('./scenes/intro_scene.js');
@@ -186,7 +185,8 @@ var PreloaderScene = {
       this.load.audio('logo', ['assets/music/logo.mp3']);
       this.load.audio('credits', ['assets/music/creditstheme.mp3']);
       this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.mp3']);
-
+      //PLUGINS
+      this.game.add.plugin(PhaserInput.Plugin);
   },
 
   create: function () {

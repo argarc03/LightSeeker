@@ -34,9 +34,9 @@ var CreationHUD = function (game, parent, x, y, exitFunction, context) {
 
     this._showCase = this.add( new ShowCase(game, this, 0, 0, require('../../assets/characters/characters.json')));
 
-    this.leftArrowButton = this.add(new FramedButton(this, game, 49, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [-1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+    this.leftArrowButton = this.add(new FramedButton(this, game, 49, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
     
-    this.rightArrowButton = this.add(new FramedButton(this, game, 151, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+    this.rightArrowButton = this.add(new FramedButton(this, game, 151, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [-1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
     this.nextStateButton = this.add(new FramedButton(this, game, 180, 55, 'arrow', 'arrowFrame', [{ callback: exitFunction, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 

@@ -1,8 +1,8 @@
 {
     "Brute": {
         "stats": {"health": 2, "damage":3, "defense":2, "speed":1, "perception":1},
-        "attack": {"name": "Golpetazo","description":"Realiza un fuerte golpe con su arma", "icon": "attackIcon"},
-        "block": {"name": "Coraza","description":"Se protege con su hombrera", "icon": "blockIcon"},
+        "attack": {"name": "Golpetazo","description":"Realiza un fuerte golpe con su arma.", "icon": "attackIcon"},
+        "block": {"name": "Coraza","description":"Se protege con su hombrera.", "icon": "blockIcon"},
         "ultimate": {"name": "Furia ancestral","description":"Aumenta su velocidad desatando su ira.", "icon": "ultimateIcon"},
         "avaliable": true
     },
