@@ -6,6 +6,7 @@ var ReactiveBar = function (game, parent, x, y, key, percentageFunction, functio
     Bar.call(this, game, parent, x, y, key, frame);
     this.percentageFunction = percentageFunction.bind(functionContext);
     signal?signal.add(this.changePercentage, this, 0):null;
+    ReactiveBar.prototype.changePercentage.call(this);
 }
 
 ReactiveBar.prototype = Object.create(Bar.prototype);
