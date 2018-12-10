@@ -38,8 +38,10 @@ gulp.task('browserify', bundle);
 
 // 3rd party libs that don't play nice with browserify
 gulp.task('libs', function () {
-  var dir = './node_modules/phaser/build/';
-  return gulp.src(['phaser.min.js', 'phaser.map'], { cwd: dir, base: dir})
+  var dir = './node_modules/';
+
+  return gulp.src(['phaser/build/phaser.min.js', 'phaser/build/phaser.map', 
+  '@orange-games/phaser-input/build/phaser-input.min.js','@orange-games/phaser-input/build/phaser-input.js.map'], { cwd: dir})
     .pipe(gulp.dest('./.tmp/js/lib/'));
 });
 

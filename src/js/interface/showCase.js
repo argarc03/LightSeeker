@@ -60,7 +60,7 @@ ShowCase.prototype.rotate = function(direction) {
 }
 
 ShowCase.prototype.showCharacter = function(character) {
-    this._nameText.text = character;
+    this._nameText.text = character.toUpperCase();
     this._attackIcon.loadTexture(this._characters[character].attack.icon);
     this._attackText.text = this._characters[character].attack.description;
     this._blockIcon.loadTexture(this._characters[character].block.icon);
