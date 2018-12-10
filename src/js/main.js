@@ -16,7 +16,7 @@ var SettingsScene = require('./scenes/settings_scene.js');
 var ShopScene = require('./scenes/shop_scene.js');
 var CreationScene = require('./scenes/creation_scene.js');
 var NameScene = require('./scenes/name_scene.js');
-var ReactiveBar = require('./interface/reactiveBar');
+var TextFunctions = require('./interface/textFunctions');
 
  var webFontLoading = {
   active: function() {
@@ -67,9 +67,11 @@ var PreloaderScene = {
     this.game.renderer.renderSession.roundPixels = true;
     Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
     this.loadSignal = new Phaser.Signal();
-    this.loadingBar = this.game.add.reactiveBar(this.game.world,0,0,'preloader_bar',function(){
+    this.loadingText = this.game.add.richText(50, 120, 100, TextFunctions.Tremble(2,5,1,'Cargando...'), require('../assets/fonts/style.json'));
+    this.loadingBar = this.game.add.reactiveBar(this.game.world,15,135,'preloader_bar',function(){
       return  this._audioLoad*0.88+this._otherLoad*0.12;
     },this,this.loadSignal);
+    this.loadingBar.width = 170;
     this._audioLoad = 0;
     this._otherLoad = 0;
     this.game.load.onFileComplete.add(function(progress, file, key, success){

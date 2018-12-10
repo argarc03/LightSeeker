@@ -70,7 +70,7 @@ var IntroScene = {
     this.appear(this.game.add.richText(25, 10, 150, "...las gemas de luz escasean en la aldea, y cada vez hay menos spilianos...", style), 3000, 54000);
 
     this.appear(this.game.add.richText(50, 50, 100, "Necesitamos tu ayuda. Has sido elegido por el Gran Cristal.", style), 3000, 62000);
-    this.appear(this.game.add.richText(50, 60, 100, "Porfavor... no nos falles...", style), 3000, 70000);
+    this.appear(this.game.add.richText(50, 60, 100, "Por favor... no nos falles...", style), 3000, 70000);
 
     //espera a que acabe intro
     this.game.time.events.add(Phaser.Timer.SECOND * 80, this.MainMenuScene, this);
