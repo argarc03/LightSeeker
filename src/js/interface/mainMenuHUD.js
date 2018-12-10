@@ -84,7 +84,9 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
   this.crystalButton._button.input.pixelPerfectOver = true;
 
 
-  this.doorButton.deactivate();
+  //this.doorButton.deactivate();
+
+
   //version
   this.game.add.richText(148, 139, 80, "v 1.0", style);
 

@@ -46,6 +46,14 @@ var WebFont = require('webfontloader');
 
 var BootScene = {
   preload: function () {
+    require('./gameFactory')(Phaser);
+    // scale the game 4x
+    this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    this.game.scale.setUserScale(4, 4);
+    // enable crisp rendering
+    this.game.renderer.renderSession.roundPixels = true;
+    Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+
     // load here assets required for the loading screen
     this.game.load.image('preloader_bar', 'temporal%20images/preloader_bar.png');
   },
@@ -58,14 +66,6 @@ var BootScene = {
 
 var PreloaderScene = {
   preload: function () {
-    require('./gameFactory')(Phaser);
-    // scale the game 4x
-    this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-    this.game.scale.setUserScale(4, 4);
-
-    // enable crisp rendering
-    this.game.renderer.renderSession.roundPixels = true;
-    Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
     this.loadSignal = new Phaser.Signal();
     this.loadingText = this.game.add.richText(50, 120, 100, TextFunctions.Tremble(2,5,1,'Cargando...'), require('../assets/fonts/style.json'));
     this.loadingBar = this.game.add.reactiveBar(this.game.world,15,135,'preloader_bar',function(){
