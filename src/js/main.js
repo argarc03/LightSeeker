@@ -15,6 +15,7 @@ var CreditsScene = require('./scenes/credits_scene.js');
 var SettingsScene = require('./scenes/settings_scene.js');
 var ShopScene = require('./scenes/shop_scene.js');
 var CreationScene = require('./scenes/creation_scene.js');
+var NameScene = require('./scenes/name_scene.js');
 
  var webFontLoading = {
   active: function() {
@@ -32,6 +33,7 @@ require('./gameFactory')(Phaser);
     game.state.add('settings', SettingsScene);
     game.state.add('shop', ShopScene);
     game.state.add('creation', CreationScene);
+    game.state.add('name', NameScene);
     game.state.start('boot');
   },
   custom: {
@@ -154,12 +156,14 @@ var PreloaderScene = {
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
       this.game.load.image('shines', 'assets/images/backgrounds/shines.png');
       this.game.load.image('creationbackground', 'assets/images/backgrounds/creationbackground.png');
+      this.game.load.image('namebackground', 'assets/images/backgrounds/namebackground.png');
       //PARTICLES
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
       this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
       this.game.load.spritesheet('crystalShines','assets/images/particles/crystalShines.png',3,3);
       this.game.load.spritesheet('smoke','assets/images/particles/smoke.png',4,4);
+      this.game.load.spritesheet('creationParticles','assets/images/particles/creationParticles.png',8,8);
       //CHARACTERS
         //Seeker
         this.game.load.spritesheet('seekerBruteAnimations','assets/images/seeker/seekerBruteAnimations.png',80,120);
@@ -191,7 +195,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('creation');
+      PreloaderScene.game.state.start('name');
   }
 
 };
