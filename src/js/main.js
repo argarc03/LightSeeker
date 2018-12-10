@@ -85,6 +85,8 @@ var PreloaderScene = {
         this.game.load.image('backFrame','assets/images/interface/backFrame.png');
         this.game.load.image('title','assets/images/interface/title.png');
         this.game.load.image('statPoint','assets/images/interface/statPoint.png');
+        this.game.load.image('emptyStatPoint','assets/images/interface/emptyStatPoint.png');
+        this.game.load.image('blockedIcon','assets/images/interface/blockedIcon.png');
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarBack','assets/images/interface/actionsBarBack.png');
