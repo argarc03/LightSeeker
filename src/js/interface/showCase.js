@@ -11,11 +11,11 @@ var ShowCase = function(game, parent, x, y, characters) {
 
     this.x = x;
     this.y = y;
-    this._healthMarker = this.add(new StatMarker(game, this,22,76,2,5,0,'statPoint',0xb60000));
-    this._damageMarker = this.add(new StatMarker(game, this,22,91,2,5,0,'statPoint',0xcf6e1a));
-    this._defenseMarker = this.add(new StatMarker(game, this,22,106,2,5,0,'statPoint',0x14879f));
-    this._speedMarker = this.add(new StatMarker(game, this,22,121,2,5,0,'statPoint',0xe5d40a));
-    this._perceptionMarker = this.add(new StatMarker(game, this,22,136,2,5,0,'statPoint',0x4ce742));
+    this._healthMarker = this.add(new StatMarker(game, this,22,76,2,5,0,'statPoint','emptyStatPoint',0xb60000));
+    this._damageMarker = this.add(new StatMarker(game, this,22,91,2,5,0,'statPoint','emptyStatPoint',0xcf6e1a));
+    this._defenseMarker = this.add(new StatMarker(game, this,22,106,2,5,0,'statPoint','emptyStatPoint',0x14879f));
+    this._speedMarker = this.add(new StatMarker(game, this,22,121,2,5,0,'statPoint','emptyStatPoint',0xe5d40a));
+    this._perceptionMarker = this.add(new StatMarker(game, this,22,136,2,5,0,'statPoint','emptyStatPoint',0x4ce742));
     this._characters = characters;
     this._nameText = this.add( new RichText(game, 0, 56, 200, "", style));
     this._attackIcon = this.add(new Phaser.Image(game,66,75+2,''));
@@ -60,19 +60,35 @@ ShowCase.prototype.rotate = function(direction) {
 }
 
 ShowCase.prototype.showCharacter = function(character) {
-    this._nameText.text = character;
-    this._attackIcon.loadTexture(this._characters[character].attack.icon);
-    this._attackText.text = this._characters[character].attack.description;
-    this._blockIcon.loadTexture(this._characters[character].block.icon);
-    this._blockText.text = this._characters[character].block.description;
-    this._ultimateIcon.loadTexture(this._characters[character].ultimate.icon);
-    this._ultimateText.text = this._characters[character].ultimate.description;
-    this._image.loadTexture('seeker'+character+'Animations');
-    this._healthMarker.currentPoints = this._characters[character].stats.health;
-    this._damageMarker.currentPoints = this._characters[character].stats.damage;
-    this._defenseMarker.currentPoints = this._characters[character].stats.defense;
-    this._speedMarker.currentPoints = this._characters[character].stats.speed;
-    this._perceptionMarker.currentPoints = this._characters[character].stats.perception;
+    this._nameText.text = character.toUpperCase();
+    if(this._characters[character].avaliable) {
+        this._attackIcon.loadTexture(this._characters[character].attack.icon);
+        this._attackText.text = this._characters[character].attack.description;
+        this._blockIcon.loadTexture(this._characters[character].block.icon);
+        this._blockText.text = this._characters[character].block.description;
+        this._ultimateIcon.loadTexture(this._characters[character].ultimate.icon);
+        this._ultimateText.text = this._characters[character].ultimate.description;
+        this._image.loadTexture('seeker'+character+'Animations');
+        this._healthMarker.currentPoints = this._characters[character].stats.health;
+        this._damageMarker.currentPoints = this._characters[character].stats.damage;
+        this._defenseMarker.currentPoints = this._characters[character].stats.defense;
+        this._speedMarker.currentPoints = this._characters[character].stats.speed;
+        this._perceptionMarker.currentPoints = this._characters[character].stats.perception;
+    } else {
+
+        this._attackIcon.loadTexture('blockedIcon');
+        this._attackText.text = '?????\n?????';
+        this._blockIcon.loadTexture('blockedIcon');
+        this._blockText.text = '?????\n?????';
+        this._ultimateIcon.loadTexture('blockedIcon');
+        this._ultimateText.text = '?????\n?????';
+        this._image.loadTexture('seeker'+character+'Animations');
+        this._healthMarker.currentPoints = 0;
+        this._damageMarker.currentPoints = 0;
+        this._defenseMarker.currentPoints = 0;
+        this._speedMarker.currentPoints = 0;
+        this._perceptionMarker.currentPoints = 0;
+    }
 }
 
 ShowCase.prototype.isAvaliable = function(){

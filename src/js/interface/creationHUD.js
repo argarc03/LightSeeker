@@ -38,7 +38,9 @@ var CreationHUD = function (game, parent, x, y, exitFunction, context) {
     
     this.rightArrowButton = this.add(new FramedButton(this, game, 151, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [-1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
-    this.nextStateButton = this.add(new FramedButton(this, game, 180, 55, 'arrow', 'arrowFrame', [{ callback: exitFunction, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+    this.nextStateButton = this.add(new FramedButton(this, game, 150, 0, 'crystal', 'crystalFrame', [{ callback: exitFunction, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+
+    this.nextStateButtonText = this.add(new RichText(game,145,17,50,'INICIAR RITUAL',style3,this));
 
     this.rightArrowButton.scale.x *= -1;
 
@@ -46,6 +48,8 @@ var CreationHUD = function (game, parent, x, y, exitFunction, context) {
       this.leftArrowButton.deactivate();
       this.rightArrowButton.deactivate();
       this.nextStateButton.deactivate();
+      this.nextStateButton._button.tint = 0x555555;
+      this.nextStateButtonText.text = '';
     },this);
 
     this._showCase.onEndRotation.add(function(){
@@ -53,6 +57,8 @@ var CreationHUD = function (game, parent, x, y, exitFunction, context) {
       this.rightArrowButton.activate();
       if(this._showCase.isAvaliable()){
         this.nextStateButton.activate();
+        this.nextStateButton._button.tint = 0xFFFFFF;
+        this.nextStateButtonText.text = 'INICIAR RITUAL';
       }
     },this);    
 }
