@@ -30,42 +30,42 @@ var EventHUD = function (game, parent, seeker, text, options) {
     }, seeker), style2, this, seeker.onNameChange));
 
     this.healthIcon = this.add(new Phaser.Image(game, 3, 15, 'healthIcon'));
-    this.healthNumber = this.add(new ReactiveRichText(game, 15, 13, 11, textFunctions.Fun(function () {
+    this.healthNumber = this.add(new ReactiveRichText(game, 15, 13, 12, textFunctions.Fun(function () {
         return this.stats.health.toString();
     }, seeker), style2, this, seeker.stats.onHealthChange));
 
     this.damageIcon = this.add(new Phaser.Image(game, 27, 15, 'damageIcon'));
-    this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 11, textFunctions.Fun(function () {
+    this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 12, textFunctions.Fun(function () {
         return this.stats.damage.toString();
     }, seeker), style2, this, seeker.stats.onDamageChange));
 
     this.defenseIcon = this.add(new Phaser.Sprite(game, 51, 15, 'defenseIcon'));
-    this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 11, textFunctions.Fun(function () {
+    this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 12, textFunctions.Fun(function () {
         return this.stats.defense.toString();
     }, seeker), style2, this, seeker.stats.onDefenseChange));
 
     this.speedIcon = this.add(new Phaser.Image(game, 75, 15, 'speedIcon'));
-    this.speedNumber = this.add(new ReactiveRichText(game, 87, 13, 11, textFunctions.Fun(function () {
+    this.speedNumber = this.add(new ReactiveRichText(game, 87, 13, 12, textFunctions.Fun(function () {
         return this.stats.speed.toString();
     }, seeker), style2, this, seeker.stats.onSpeedChange));
 
     this.perceptionIcon = this.add(new Phaser.Image(game, 99, 15, 'perceptionIcon'));
-    this.perceptionNumber = this.add(new ReactiveRichText(game, 111, 13, 11, textFunctions.Fun(function () {
+    this.perceptionNumber = this.add(new ReactiveRichText(game, 111, 13, 12, textFunctions.Fun(function () {
         return this.stats.damage.toString();
     }, seeker), style2, this, seeker.stats.onPerceptionChange));
 
     this.gemIcon = this.add(new Phaser.Image(game, 68, 1, 'gemIcon'));
-    this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 15, textFunctions.Fun(function () {
+    this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 18, textFunctions.Fun(function () {
         return this.gems.toString();
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
     this.villageGemIcon = this.add(new Phaser.Image(game, 160 + 3, 18, 'villageGemIcon'));
-    this.villageGemNumber = this.add(new ReactiveRichText(game, 142 + 3, 16, 15, textFunctions.Fun(function () {
+    this.villageGemNumber = this.add(new ReactiveRichText(game, 142 + 3, 16, 18, textFunctions.Fun(function () {
         return this.gems.toString();//hay que cambiarlo
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
     this.populationIcon = this.add(new Phaser.Image(game, 160 + 28, 18, 'populationIcon'));
-    this.populationNumber = this.add(new ReactiveRichText(game, 142 + 28, 16, 15, textFunctions.Fun(function () {
+    this.populationNumber = this.add(new ReactiveRichText(game, 142 + 28, 16, 18, textFunctions.Fun(function () {
         return this.gems.toString();//hay que cambiarlo
     }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
 
@@ -111,8 +111,8 @@ var EventHUD = function (game, parent, seeker, text, options) {
         return '1';//hay que
     }, seeker), style4, this, seeker.stats.onPerceptionChange));
 
-    this.game.add.optionMenu([['pauseButton', 190, 2, 'pauseButton', this.EventScene, this, {}]]);
-
+    this.pauseButton = this.add(new FramedButton(this, game, 190, 2, 'pauseButton', 'pauseButtonFrame',[{callback: EventHUD.prototype._pause, context:this, arguments:[]}],0xFFFFFF,0x000000,0x676767, 0x222222, 0x676767));
+    this._pause = false;
 }
 
 EventHUD.prototype = Object.create(Phaser.Group.prototype);
@@ -145,6 +145,13 @@ EventHUD.prototype.reset = function (text, options) {
         this.options[i].button.deactivate();
         this.options[i].text.visible = false;
     }
+}
+
+EventHUD.prototype._pause = function(){
+    if(this._pause){
+    } else {
+    }
+    this._pause = !this._pause;
 }
 
 module.exports = EventHUD;

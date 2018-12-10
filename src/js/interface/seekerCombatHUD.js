@@ -203,4 +203,20 @@ if(object2!==undefined){
 SeekerCombatHUD.prototype = Object.create(Phaser.Group.prototype);
 SeekerCombatHUD.prototype.constructor = SeekerCombatHUD;
 
+SeekerCombatHUD.prototype.freeze = function() {
+  this.attackButton._button.inputEnabled = false;
+  this.blockButton._button.inputEnabled = false;
+  this.ultimateButton._button.inputEnabled = false;
+  this.item1Button._button.inputEnabled = false;
+  this.item2Button._button.inputEnabled = false;
+}
+
+SeekerCombatHUD.prototype.unFreeze = function() {
+  this.attackButton._button.inputEnabled = true;
+  this.blockButton._button.inputEnabled = true;
+  this.ultimateButton._button.inputEnabled = true;
+  this.item1Button._button.inputEnabled = true;
+  this.item2Button._button.inputEnabled = true;
+}
+
 module.exports = SeekerCombatHUD;

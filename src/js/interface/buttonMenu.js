@@ -1,19 +1,24 @@
 'use strict';
 
+var FramedButton = require('./framedButton');
 
-var ButtonMenu = function (game, name, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame) {
 
-    Phaser.Button.call(this, game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
+var ButtonMenu = function (parent, game, name, x, y, buttonKey, frameKey, callbacks,
+    frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
+    overButtonFrame = 0, outButtonFrame = 0, downButtonFrame = 0, upButtonFrame = 0, disabledButtonFrame = 0,
+    overFrameFrame = 0, outFrameFrame = 0, downFrameFrame = 0, upFrameFrame = 0, disabledFrameFrame = 0) {
+    FramedButton.call(this, parent, game, x, y, buttonKey, frameKey, callbacks,
+        frameColorOver, frameColorOut, frameColorDown, frameColorUp, frameColorDisabled,
+        overButtonFrame, outButtonFrame, downButtonFrame, upButtonFrame, disabledButtonFrame,
+        overFrameFrame, outFrameFrame, downFrameFrame, upFrameFrame, disabledFrameFrame);
     this.name = name;
     this.leftButton = null;
     this.rightButton = null;
     this.upButton = null;
     this.downButton = null;
-    this.x = x;
-    this.y = y;
 }
 
-ButtonMenu.prototype = Object.create(Phaser.Button.prototype);
+ButtonMenu.prototype = Object.create(FramedButton.prototype);
 ButtonMenu.prototype.constructor = ButtonMenu;
 
 ButtonMenu.prototype.goLeft = function() { return this.left; }
@@ -23,14 +28,6 @@ ButtonMenu.prototype.goDown = function() { return this.down; }
 
 ButtonMenu.prototype.select = function() {
     this.onInputDown.dispatch();
-}
-
-ButtonMenu.prototype.deactivate = function() {
-    this.kill();
-}
-
-ButtonMenu.prototype.activate = function() {
-    this.revive();
 }
 
 module.exports = ButtonMenu;

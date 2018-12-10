@@ -1,14 +1,16 @@
 'use strict';
 
 var ButtonMenu = require('./buttonMenu');
+var WindowFrame = require('./windowFrame');
 
-var OptionMenu = function (game, buttonsMenu, parent) {
+var OptionMenu = function (game, x, y, width, height, buttonsMenu, windowSprite, parent) {
     Phaser.Group.call(this, game, parent);
-
+    this.x = x;
+    this.y = y;
+    this.add(new WindowFrame(game, this, 0, 0, width, height, windowSprite));
     buttonsMenu.forEach(element => {
-        let b = this.add(new ButtonMenu(this.game, ...element.slice(0, element.length - 1)));
+        let b = this.add(new ButtonMenu(this, this.game, ...element.slice(0, element.length - 1)));
         b.onInputOver.add(this.over, this, [b]);
-        b.input.useHandCursor = false;
     }, this);
     buttonsMenu.forEach(element => {
         let child = this.children.find(function (element2) { return element2.name === element[0] });

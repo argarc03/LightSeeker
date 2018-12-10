@@ -1,14 +1,5 @@
 
-var changeFrameFrame = function (frame) {
 
-    this._frame.tint = this['_frameColor' + frame];
-    frame = this['_' + frame.toLowerCase() + 'FrameFrame'];
-    if (typeof frame === 'number') {
-        this._frame.frame = frame;
-    } else {
-        this._frame.frameName = frame;
-    }
-}
 
 //callBack ={function, context, arguments}
 
@@ -64,7 +55,7 @@ FramedButton.prototype.constructor = FramedButton;
 
 FramedButton.prototype._down = function () {
     if (this._button.input.enabled) {
-        changeFrameFrame.call(this, 'Down');
+        this.changeFrameFrame('Down');
         this._pressed = true;
         this.onInputDown.dispatch();
     }
@@ -73,7 +64,7 @@ FramedButton.prototype._down = function () {
 FramedButton.prototype._out = function () {
     if (this._button.input.enabled) {
         if (!this._pressed) {
-            changeFrameFrame.call(this, 'Out');
+            this.changeFrameFrame( 'Out');
         }
         this.onInputOut.dispatch();
     }
@@ -82,7 +73,7 @@ FramedButton.prototype._out = function () {
 FramedButton.prototype._over = function () {
     if (this._button.input.enabled) {
         if (!this._pressed) {
-            changeFrameFrame.call(this, 'Over');
+            this.changeFrameFrame( 'Over');
         }
         this.onInputOver.dispatch();
     }
@@ -90,12 +81,12 @@ FramedButton.prototype._over = function () {
 
 FramedButton.prototype._up = function () {
     if (this._button.input.enabled) {
-        changeFrameFrame.call(this, 'Up');
+        this.changeFrameFrame( 'Up');
         if (this._button.input.checkPointerOver(this.game.input.activePointer)) {
-            changeFrameFrame.call(this, 'Over');
+            this.changeFrameFrame( 'Over');
             this._do();
         } else {
-            changeFrameFrame.call(this, 'Out');
+            this.changeFrameFrame( 'Out');
         }
         this._pressed = false;
         this.onInputUp.dispatch();
@@ -113,14 +104,14 @@ FramedButton.prototype._do = function () {
 FramedButton.prototype.activate = function () {
     this._button.input.enabled = true;
     if (this._button.input.checkPointerOver(this.game.input.activePointer)) {
-        changeFrameFrame.call(this, 'Over');
+        this.changeFrameFrame('Over');
     } else {
-        changeFrameFrame.call(this, 'Out');
+        this.changeFrameFrame( 'Out');
     }
 }
 
 FramedButton.prototype.deactivate = function () {
-    changeFrameFrame.call(this, 'Disabled');
+    this.changeFrameFrame('Disabled');
     this._button.input.enabled = false;
     if (typeof this._disabledButtonFrame === 'number') {
         this._button.frame = this._disabledButtonFrame;
@@ -130,5 +121,15 @@ FramedButton.prototype.deactivate = function () {
     this.onInputDisable.dispatch();
 }
 
+FramedButton.prototype.changeFrameFrame = function (frame) {
+
+    this._frame.tint = this['_frameColor' + frame];
+    frame = this['_' + frame.toLowerCase() + 'FrameFrame'];
+    if (typeof frame === 'number') {
+        this._frame.frame = frame;
+    } else {
+        this._frame.frameName = frame;
+    }
+}
 
 module.exports = FramedButton;
