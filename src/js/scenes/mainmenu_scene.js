@@ -47,7 +47,7 @@ var MainMenuScene = {
 
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
-
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //Controles para moverse entre botones
     /*this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(a.goUp, this);//no funcionaaa aaaaaaaaaa
