@@ -126,6 +126,7 @@ var PreloaderScene = {
         this.game.load.image('optionBack','assets/images/interface/optionback.png');
         this.game.load.image('optionFrame','assets/images/interface/optionFrame.png');
         this.game.load.image('pauseButton','assets/images/interface/pauseButton.png');
+        this.game.load.image('pauseButtonFrame','assets/images/interface/pauseButtonFrame.png');
         this.game.load.spritesheet('shop','assets/images/interface/shop.png',51,64);
         this.game.load.spritesheet('shopFrame', 'assets/images/interface/shopFrame.png');
         this.game.load.spritesheet('door', 'assets/images/interface/door.png',27,49);
@@ -178,7 +179,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('mainmenu');
+      PreloaderScene.game.state.start('combat');
   }
 
 };

@@ -21,15 +21,12 @@ var CombatScene = {
   enemy: null,
   // Buttons functions
   attackKey: function () {
-    if (true) {
-      this.seeker.attack(this.enemy);
-      this.game.add.audio('preAttacking', 0.1).play();
-    }
+    this.seeker.stop();
+    this.enemy.stop();
   },
   blockKey: function () {
-    if (true) {
-      this.seeker.block();
-    }
+    this.seeker.start();
+    this.enemy.start();
   },
   attackEnemy: function () {
     if (true) {
@@ -54,28 +51,25 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.image(0, 0, 'combatbackground');
     //render seeker //tope de nombre caracteres = 9
-    this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', new Stats(8, 3, 1, 20, 1),
-      [new Item('Heal Potion', 'Restores 10hp', 'itemIcon', function (character, enemy) {
-        this.heal(3);
-      }),
-      new Item('Hurt Potion', 'Deals 10 damage', 'itemIcon2', function () {
-        this.stats.damage+=3;
-      }),
-      ], 'seekerAnimations');
-    this.seeker.addAction.idle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    this.seeker.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000);
-    this.seeker.addAction.block([48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000);
-    this.seeker.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]);
-    this.seeker.addAction.useObjects();
+    this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', {damage: 10, defense: 3, speed: 1, health: 20, perception: 1}, 
+      [], 'seekerAnimations',
+      {
+        idle:[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
+        attack:[[24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000],
+        block:[[48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000],
+        die:[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]],
+        useObjects:[]
+      });
     this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
     //render enemy
-
-    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Lord Ragno', new Stats(7, 10, 1, 27, 3), 'spiderAnimations', this.seeker, require('../../assets/patterns/patterns').normal);
-    this.enemy.addAction.idle([0, 1, 2, 3, 4, 5]);
-    this.enemy.addAction.attack([24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]);
-    this.enemy.addAction.block([48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]);
-    this.enemy.addAction.die([72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]);
-
+var a = require('../../assets/patterns/patterns');
+    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Lord Ragno', {damage: 0, defense: 10, speed: 1, health: 27, perception: 3}, 'spiderAnimations', 
+    {
+      idle:[[0, 1, 2, 3, 4, 5]],
+      attack:[[24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]],
+      block:[[48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]],
+      die:[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]]
+    },this.seeker, a.normal);
     this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
 
     //interface
@@ -136,8 +130,6 @@ var CombatScene = {
     var music = this.game.add.audio('firetheme', 0.1, true);
     this.game.sound.stopAll();
     music.play();
-
-
 
     //INFOWINDOWS
     //vitalidad

@@ -10,7 +10,7 @@ var CoolDown = {
      * @param {number} time 
      */
     addAllTime(event) {
-        this.coolDown[event].nextTick = this[event].coolDownTime + Date.now();
+        this.coolDown[event].nextTick = this[event].coolDownTime + this.coolDown[event]._now;
         this.coolDown[event].start();
         this.coolDown[event].onStart.dispatch();
         for (let timer in this.coolDown) {
@@ -20,7 +20,7 @@ var CoolDown = {
                 } else {
                     this.coolDown[timer].start();
                     this.coolDown[timer].onStart.dispatch();
-                    this.coolDown[timer].nextTick = this.coolDown[event].global + Date.now();
+                    this.coolDown[timer].nextTick = this.coolDown[event].global + this.coolDown[event]._now;
                     CoolDown.signalEmiter.call(this, timer);
                 }
             }
@@ -28,9 +28,10 @@ var CoolDown = {
         }
     },
     signalEmiter(event) {
-        if (this.coolDown[event].nextTick > Date.now()) {
+        if (this.coolDown[event].nextTick > this.coolDown[event]._now) {
             this.coolDown[event].onWhile.dispatch();
-            this.game.time.events.add(this.frameRate, CoolDown.signalEmiter, this, event);
+            this.coolDownTimer.add(this.frameRate, CoolDown.signalEmiter, this, event);
+            this.coolDownTimer.start();
         } else {
             this.coolDown[event].stop();
             this.coolDown[event].onWhile.dispatch();

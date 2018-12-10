@@ -8,7 +8,7 @@
 
 var ActionFactory = require('./actionFactory');
 var ParticleFactory = require('./particleFactory.js');
-
+var Stats = require('./stats');
 /**
  * A Character is an instance...jeje
 */
@@ -21,13 +21,18 @@ var ParticleFactory = require('./particleFactory.js');
  * @param {string} name -
  * @param {Stats} stats -
  * @param {string} spriteSheet -
+ * @param {string, arguments} actions -
 */
-var Character = function (game, x, y, name, stats, spriteSheet) {
+var Character = function (game, x, y, name, stats, spriteSheet, actions) {
     Phaser.Sprite.call(this, game, x, y, spriteSheet)
     this._name = name;
     this.onNameChange = new Phaser.Signal();
-    this.stats = stats;
-    this.hp = this.stats.maxHp;
+    this.stats = new Stats(stats.damage,stats.defense,stats.speed,stats.health,stats.perception,stats.tempDamage,stats.tempDefense,stats.tempSpeed,stats.tempHealth,stats.tempPerception);
+    this.stats.onSpeedChange.add(function(){
+        this.animations.currentAnim.delay = 1000 /this.stats.frameRate;
+    }, this)
+    
+    this.hp = stats.currentHp===undefined?this.stats.maxHp:stats.currentHp;
     this.game = game;
     this.isBlocking = false;
     //Signals 
@@ -37,6 +42,10 @@ var Character = function (game, x, y, name, stats, spriteSheet) {
     //ref to Factories
     this.addAction = new ActionFactory(this);
     this.addParticle = new ParticleFactory(this);
+
+    for(var action in actions){
+        this.addAction[action](...actions[action]);
+    }
 }
 
 Character.prototype = Object.create(Phaser.Sprite.prototype);

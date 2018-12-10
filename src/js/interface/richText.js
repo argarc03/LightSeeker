@@ -72,18 +72,18 @@ RichText.prototype.write = function () {
 
 RichText.prototype.reWrite = function (proto) {
     if (typeof (proto) === 'string') {
+        let presize = this.children.length;
         for (let i = 0; i < proto.length; i++) {
             let a = this.add(new Phaser.Text(this.game, this.xLast, this.yLast, proto.charAt(i), this.styleLast));
             if (proto.charAt(i) === '\n') {
                 this.xLast = 0;
                 this.yLast += this.lineHeight;
-                this.indexFirstParragraphLetter = i + 1;
+                this.indexFirstParragraphLetter = presize + i + 1;
             } else if (!(proto.charAt(i) === ' ' && this.xLast === 0)) {
                 this.xLast += a.width;
                 if (this.xLast > this.lineWidth) {
                     if (a.text !== ' ') {
-                        i = Math.min(i, this.children.length - 1);
-                        let index = i;
+                        let index = Math.min(presize + i-1, this.children.length - 1);
                         let temporalWidth = 0;
                         while (index >= 0 && this.getChildAt(index).text !== ' ') {
                             temporalWidth += this.getChildAt(index).width;
@@ -102,7 +102,7 @@ RichText.prototype.reWrite = function (proto) {
                             this.xLast = 0;
                             this.yLast += this.lineHeight;
                         }
-                        for (let j = index; j <= i; j++) {
+                        for (let j = index; j <= presize + i; j++) {
                             if (this.xLast > this.lineWidth) {
                                 this.xLast = 0;
                                 this.yLast += this.lineHeight;
@@ -147,29 +147,29 @@ RichText.prototype.reWrite = function (proto) {
                             }
                             if (this.getChildAt(i - 1).text === ' ') { tmpwidth += this.getChildAt(i - 1).width / 2 }
                             tmpwidth = (this.lineWidth - tmpwidth) / 2;
-                            for (let j = this.indexFirstParragraphLetter; j < i; j++) {
+                            for (let j = this.indexFirstParragraphLetter; j < presize + i; j++) {
                                 this.getChildAt(j).x += tmpwidth;
                             }
 
                         } else if (this.align === 'right') {
                             let tmpwidth = 0;
-                            for (let j = this.indexFirstParragraphLetter; j < i; j++) {
+                            for (let j = this.indexFirstParragraphLetter; j < presize + i; j++) {
                                 tmpwidth += this.getChildAt(j).width;
                             }
                             tmpwidth = (this.lineWidth - tmpwidth);
-                            if (i - 1 >= 0 && this.getChildAt(i - 1).text === ' ') { tmpwidth += this.getChildAt(i - 1).width }
-                            for (let j = this.indexFirstParragraphLetter; j < i; j++) {
+                            if (i - 1 >= 0 && this.getChildAt(presize + i - 1).text === ' ') { tmpwidth += this.getChildAt(presize + i - 1).width }
+                            for (let j = this.indexFirstParragraphLetter; j < presize + i; j++) {
                                 this.getChildAt(j).x += tmpwidth;
                             }
 
                         }
-                        this.indexFirstParragraphLetter = i + 1;
+                        this.indexFirstParragraphLetter = presize + i + 1;
                         this.xLast = 0;
                         this.yLast += this.lineHeight;
                     }
                 }
-                this.numberOfCharacters++;
             }
+            this.numberOfCharacters++;
         }
     } else if (typeof (proto) === 'function') {
         proto.apply(this);

@@ -9,6 +9,7 @@ var ActionFactory = require('./actionFactory');
 var SeekerActionFactory = function (character) {
     ActionFactory.call(this, character);
     this.character.coolDown = {};
+    this.character.coolDownTimer = this.character.game.time.create(false); 
 }
 
 SeekerActionFactory.prototype = Object.create(ActionFactory.prototype);
@@ -38,7 +39,7 @@ SeekerActionFactory.prototype.attack = function (framesPreAttacking, framesAttac
     this.character.attack.currentTime = TimeCalculations.currentAttackTime.bind(this.character);
     this.character.attack.totalTime = TimeCalculations.totalAttackTime.bind(this.character);
     this.character.attack.timeToCoolDown = function () {
-        let a = this.coolDown.attack.nextTick - Date.now();
+        let a = this.coolDown.attack.nextTick - this.coolDown.attack._now;
         return a<0?NaN:a;
     }.bind(this.character);
     this.character.attack.coolDownTime = selfCoolDown;
@@ -66,7 +67,7 @@ SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlockin
     this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
 
     this.character.block.timeToCoolDown = function () {
-        let a = this.coolDown.block.nextTick - Date.now();
+        let a = this.coolDown.block.nextTick - this.coolDown.block._now;
         return a<0?NaN:a;
     }.bind(this.character);
     this.character.block.coolDownTime = selfCoolDown;

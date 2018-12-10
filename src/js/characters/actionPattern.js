@@ -13,6 +13,7 @@ var ActionPattern = function (pattern, seeker, character) {
         }
         this._totalActions += element.repetitions;
     }, this);
+    this._character.patternTimer = this._character.game.time.create(false); 
 }
 
 ActionPattern.prototype.actionNumber = function (number) {

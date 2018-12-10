@@ -5,7 +5,7 @@ var Bar = require('./bar.js');
 var ReactiveBar = function (game, parent, x, y, key, percentageFunction, functionContext, signal, frame = null) {
     Bar.call(this, game, parent, x, y, key, frame);
     this.percentageFunction = percentageFunction.bind(functionContext);
-    signal.add(this.changePercentage, this, 0);
+    signal?signal.add(this.changePercentage, this, 0):null;
 }
 
 ReactiveBar.prototype = Object.create(Bar.prototype);
