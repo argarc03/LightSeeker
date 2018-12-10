@@ -18,13 +18,13 @@ var ShowCase = function(game, parent, x, y, characters) {
     this._perceptionMarker = this.add(new StatMarker(game, this,22,136,2,5,0,'statPoint','emptyStatPoint',0x4ce742));
     this._characters = characters;
     this._nameText = this.add( new RichText(game, 0, 56, 200, "", style));
-    this._attackIcon = this.add(new Phaser.Image(game,66,75+2,''));
-    
-    
+
+
+    this._attackIcon = this.add(new Phaser.Image(game,64,75+2,''));
     this._attackText = this.add( new RichText(game, 86, 97-24, 110, "", style2, this));
-    this._blockIcon = this.add(new Phaser.Image(game,66,100+2,''));
+    this._blockIcon = this.add(new Phaser.Image(game,64,100+2,''));
     this._blockText = this.add( new RichText(game,86, 123-24, 110, "", style2, this));
-    this._ultimateIcon = this.add(new Phaser.Image(game,66,125+2,''));
+    this._ultimateIcon = this.add(new Phaser.Image(game,64,125+2,''));
     this._ultimateText = this.add( new RichText(game,86, 148-24, 110, "", style2, this));
     this._image = this.add(new Phaser.Image(game,62,-70,''));
     this._reemplaceImage = this.add(new Phaser.Image(game,-80,-70,''));

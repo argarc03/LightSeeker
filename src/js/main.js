@@ -195,13 +195,13 @@ var PreloaderScene = {
       this.load.audio('logo', ['assets/music/logo.mp3']);
       this.load.audio('credits', ['assets/music/creditstheme.mp3']);
       this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.mp3']);
-      //PLUGINS
+    //PLUGINS
       this.game.add.plugin(PhaserInput.Plugin);
   },
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('name');
+      PreloaderScene.game.state.start('creation');
   }
 
 };
