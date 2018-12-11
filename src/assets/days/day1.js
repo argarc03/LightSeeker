@@ -12,7 +12,7 @@ var Day0 = {
             options: [ { text: 'Seguir', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] },
                        { text: 'Combatir', callback: DayFunctions.Combat, arguments:[   seeker, 
                                                                                         dayManager, 
-                                                                                        Enemies.Fungi, 
+                                                                                        Enemies.LordRagno, 
                                                                                         'combatbackground', 
                                                                                         'bosstheme', 
                                                                                         function(){DayFunctions.NextDay(seeker, dayManager)}

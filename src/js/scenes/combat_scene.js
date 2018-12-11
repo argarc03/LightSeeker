@@ -47,6 +47,7 @@ var CombatScene = {
 
     //interface
     this.combatHUD = this.game.add.combatHUD(0, 0, this.seeker, this.enemy);
+    this.combatHUD.deactivate();
     //transicion de entrada a combate
 
     var filter = this.game.add.filter('Pixelate', 800, 600);
@@ -59,8 +60,7 @@ var CombatScene = {
       // Controls
       this.seeker.idle();
       this.enemy.act();
-      this.combatHUD._enemyHUD._actionBar.reUpdate();
-      this.combatHUD._enemyHUD._actionBar._timer.start();
+      this.combatHUD.activate();
     }, this);
 
     var style = require('../../assets/fonts/style.json');

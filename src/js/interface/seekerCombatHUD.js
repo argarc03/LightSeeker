@@ -199,6 +199,8 @@ if(object2!==undefined){
     this.populationNumber = this.add(new ReactiveRichText(game, 90-3, 26, 18, textFunctions.Fun(function () {
     return this.population.toString();//hay que cambiarlo
     }, seeker), style2, this, [seeker.stats.onPerceptionChange]));//cambiar onPerceptionChange
+
+    this.seeker= seeker;
 }
 
 SeekerCombatHUD.prototype = Object.create(Phaser.Group.prototype);
@@ -218,6 +220,24 @@ SeekerCombatHUD.prototype.unFreeze = function() {
   this.ultimateButton._button.inputEnabled = true;
   this.item1Button._button.inputEnabled = true;
   this.item2Button._button.inputEnabled = true;
+}
+
+SeekerCombatHUD.prototype.deactivate = function() {
+  this.ultimateButton.deactivate();
+  this.attackButton.deactivate();
+  this.blockButton.deactivate();
+  this.item1Button.deactivate();
+  this.item2Button.deactivate();
+}
+
+SeekerCombatHUD.prototype.activate = function () {
+  this.ultimateButton.activate();
+  this.attackButton.activate();
+  this.blockButton.activate();
+  if(this.seeker.items[0])
+    this.item1Button.activate();
+  if(this.seeker.items[1])
+    this.item2Button.activate();
 }
 
 module.exports = SeekerCombatHUD;

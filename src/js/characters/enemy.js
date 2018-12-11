@@ -16,7 +16,7 @@ var Enemy = function(game, x, y, name, stats, spriteSheet, actions, particles, s
     },this);
     this.onDeath.add(function() {
         this.act = function () {};
-        this.game.time.events.remove(this._lastActionEvent);
+        this.patternTimer.removeAll();
     }, this)
 }
 
