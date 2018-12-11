@@ -11,7 +11,7 @@ var EventScene = {
 
   create: function () {
     //fadeIn
-    this.camera.flash(0x000000); //ESTO NO FUNCIONA Y NO SE POR QUE AAAAAAAA
+    this.camera.flash(0x000000);
 
 
     var style = require('../../assets/fonts/style.json');
@@ -29,34 +29,15 @@ var EventScene = {
      {text: '2. Descansar', callback: function(){console.log('¡NO PUEDO DORMIR!');}, context: this, arguments: []},
      {text: '3. No hacer nada', callback: function(){console.log('YA ESTOY HACIENDO ALGO');}, context: this, arguments: []}])
 
-    /*var g = this.game.add.graphics(1, 0);
-    for (let i = 0; i < 75; i++) {
-      g.beginFill(0xffffff);
-      g.drawRect(2 * i, 0, 1, 1);
-      g.beginFill(0x000000);
-      g.drawRect(2 * i + 1, 0, 1, 1);
-    }
-    g.angle = 90;
-    var ge = this.game.add.graphics(0, 0);
-    for (let i = 0; i < 100; i++) {
-      ge.beginFill(0xffffff);
-      ge.drawRect(2 * i, 0, 1, 1);
-      ge.beginFill(0x000000);
-      ge.drawRect(2 * i + 1, 0, 1, 1);
-    }*/
-
 
     //music
     var music = this.game.add.audio('watertheme', 0.1, true);
     this.game.sound.stopAll();
     music.play();
 
-
-    //para ir a fullscreen pulsar F4
+    //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
-
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');

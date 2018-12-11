@@ -48,12 +48,12 @@ var SettingsScene = {
 
 
     this.game.add.richText(0, 20, 200, 'NAME YOUR VESSEL', style);
-    this.game.add.image(60,108,'textBox').alpha = 0.8;
+    this.game.add.image(60, 108, 'textBox').alpha = 0.8;
 
-    this.game.add.image(62,-30,'seekerBruteAnimations');
+    this.game.add.image(62, -30, 'seekerBruteAnimations');
 
     //this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
-    this.hola = this.game.add.inputField(40,100,{
+    this.hola = this.game.add.inputField(40, 100, {
       font: '10px Minecraft',
       width: 150,
       padding: 8,
@@ -66,24 +66,36 @@ var SettingsScene = {
       width: 100,
       height: 1,
       selectionColor: '#FF00FF',
-      cursorColor : '#FFFFFF'
+      cursorColor: '#FFFFFF'
     });
     this.hola.text.style.fill = '#FFFFFF';
-    this.hola.domElement.setMax(8,0);
-    this.hola.cursor.y+=2;
+    this.hola.domElement.setMax(8, 0);
+    this.hola.cursor.y += 2;
     this.hola.input.useHandCursor = false;
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
 
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
+
     //Controles para cambiar de escenas
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
 
-    
+
   },
   update: function () {
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 

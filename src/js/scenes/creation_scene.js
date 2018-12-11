@@ -24,6 +24,10 @@ var CreationScene = {
     //prueba cursor
     this.selector = this.game.add.sprite(50, 50, 'cursor');
 
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
+
     //Controles para cambiar de escenas
     this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
 
@@ -36,6 +40,14 @@ var CreationScene = {
     //prueba cursor
     this.selector.x = this.game.input.x;
     this.selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 

@@ -9,7 +9,6 @@ var IntroScene = {
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
 
-
   appear(object, duration, delay, funct) {
     object.alpha = 0;
 
@@ -36,9 +35,8 @@ var IntroScene = {
 
     //intro music
     var intro = this.game.add.audio('intro', 0.1, false);
-    this.game.add.tween(intro).to( { }, 7500, "Linear", true, 7500).onStart.add(function(){ intro.play();}, this);
-    
-   
+    this.game.add.tween(intro).to({}, 7500, "Linear", true, 7500).onStart.add(function () { intro.play(); }, this);
+
     this.appear(this.game.add.sprite(70, 30, 'logo')
       .animations.add('play', Array.apply(null, { length: 22 }).map(Function.call, Number))
       ._parent.play('play', 7)._parent, 4000);
@@ -75,9 +73,9 @@ var IntroScene = {
     //espera a que acabe intro
     this.game.time.events.add(Phaser.Timer.SECOND * 80, this.MainMenuScene, this);
 
-
-
-
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
 
     //this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
@@ -95,6 +93,14 @@ var IntroScene = {
     //prueba cursor
     //selector.x = this.game.input.x;
     //selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 

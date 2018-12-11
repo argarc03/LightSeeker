@@ -128,6 +128,7 @@ var a = require('../../assets/patterns/patterns');
     
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //music
     var music = this.game.add.audio('firetheme', 0.1, true);

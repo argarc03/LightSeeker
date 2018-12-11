@@ -70,7 +70,7 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
   this.creditsButton = this.add(new FramedButton(this, game, 153, 0, 'tavern', 'tavernFrame', [{ callback: function () { this.CreditsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
   this.creditsButton._button.input.pixelPerfectClick = true;
   this.creditsButton._button.input.pixelPerfectOver = true;
-  this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 1, 2));
   this.shopButton._button.input.pixelPerfectClick = true;
   this.shopButton._button.input.pixelPerfectOver = true;
   this.settingsButton = this.add(new FramedButton(this, game, 0, 27, 'settings', 'settingsFrame', [{ callback: function () { this.SettingsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
@@ -84,7 +84,7 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
   this.crystalButton._button.input.pixelPerfectOver = true;
 
 
-  //this.doorButton.deactivate();
+  this.shopButton.deactivate();
 
 
   //version
