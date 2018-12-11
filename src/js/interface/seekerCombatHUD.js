@@ -17,7 +17,7 @@ var deactivateActionButton = function () {
   this.deactivate()
 };
 
-var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
+var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy, selector) {
   Phaser.Group.call(this, game, parent);
   this.x = x;
   this.y = y;

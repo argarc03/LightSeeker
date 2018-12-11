@@ -11,12 +11,12 @@ var SettingsScene = {
     this.game.camera.fade('#000000');
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
-  NewGame : function(seeker, name){
-    var seeker = new Seeker(this.game,0, -8, name, seeker.stats, seeker.items, seeker.spriteSheet,seeker.actions);
-    var dayManager = new DayManager(seeker,this.game);
+  NewGame: function (seeker, name) {
+    var seeker = new Seeker(this.game, 0, -8, name, seeker.stats, seeker.items, seeker.spriteSheet, seeker.actions);
+    var dayManager = new DayManager(seeker, this.game);
     dayManager.newDay();
   },
-  init: function(seeker){
+  init: function (seeker) {
     this._tmpSeeker = seeker;
   },
   create: function () {
@@ -78,7 +78,7 @@ var SettingsScene = {
       cursorColor: '#FFFFFF'
     });
     this.hola.text.style.fill = '#FFFFFF';
-    this.hola.domElement.setMax(8, 0);
+    this.hola.domElement.setMax(7, 0);
     this.hola.cursor.y += 2;
     this.hola.input.useHandCursor = false;
     //prueba cursor
@@ -87,15 +87,30 @@ var SettingsScene = {
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
-    
-    this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function(key, seeker, name){
-      this.NewGame(seeker, this.hola.value);
+
+    //input name
+    this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function (key, seeker, name) {
+      if (this.hola.value !== ''){
+        this.NewGame(seeker, this.hola.value);
+        this.hola.destroy();
+    }
     }, this, 0, this._tmpSeeker);
 
+    this.hola.blockInput = false;
+    this.hola.focus = false;
+
+    PhaserInput.onKeyboardClose.add(function (seeker, name) {
+      if (this.hola.value !== ''){
+        this.NewGame(seeker, this.hola.value);
+        this.hola.destroy();
+      }
+    }, this, 0, this._tmpSeeker);
     
+    this.hola.focusOutOnEnter = false;
+
+
   },
   update: function () {
-    console.log(this.hola.value);
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;

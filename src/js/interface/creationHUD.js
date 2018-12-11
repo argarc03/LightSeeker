@@ -31,7 +31,7 @@ var CreationHUD = function (game, parent, x, y, selector, context) {
   this.MainMenuScene = function () {
     this.game.add.audio('button', 0.1).play();
     this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, parent);
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   };
 
   this.NameScene = function () {
@@ -51,7 +51,7 @@ var CreationHUD = function (game, parent, x, y, selector, context) {
 
   this.rightArrowButton = this.add(new FramedButton(this, game, 151, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [-1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
-  this.nextStateButton = this.add(new FramedButton(this, game, 134, 13, 'ritualButton', 'ritualFrame', [{ callback: this.NameScene, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.nextStateButton = this.add(new FramedButton(this, game, 134, 13, 'ritualButton', 'ritualFrame', [{ callback: this.NameScene, context: this, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
   this.nextStateButtonText = this.add(new RichText(game, 141, 17, 50, 'INICIAR RITUAL', style3, this));
   this.nextStateButton._button.input.pixelPerfectClick = true;

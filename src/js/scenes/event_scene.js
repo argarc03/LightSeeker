@@ -14,12 +14,11 @@ var EventScene = {
     this._text = text;
     this._image = image;
     this._options = options;
-    this._music;
+    this._music = music;
   },
   create: function () {
     //fadeIn
     this.camera.flash(0x000000);
-
 
     var style = require('../../assets/fonts/style.json');
     style.align = 'left';

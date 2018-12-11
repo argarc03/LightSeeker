@@ -108,7 +108,6 @@ var EventHUD = function (game, parent, seeker, dayManager, text, options, image)
     this.imageFrame = this.add(new Phaser.Sprite(game, 2, 42, image));
 
     this.day = this.add(new ReactiveRichText(game, 26, 27, 40, textFunctions.Fun(function () {
-        console.log(this.day);
         return this.day.toString();
     }, seeker), style4, this, seeker.stats.onPerceptionChange));
 
