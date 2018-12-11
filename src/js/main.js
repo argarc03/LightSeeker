@@ -166,6 +166,8 @@ var PreloaderScene = {
         this.game.load.spritesheet('crystalFrame', 'assets/images/interface/crystalFrame.png');
         this.game.load.image('arrow', 'assets/images/interface/arrow.png');
         this.game.load.image('arrowFrame', 'assets/images/interface/arrowFrame.png');
+        this.game.load.image('ritualButton', 'assets/images/interface/ritualButton.png');
+        this.game.load.image('ritualFrame', 'assets/images/interface/ritualFrame.png');
 
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
@@ -216,7 +218,7 @@ var PreloaderScene = {
 
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('intro');
+      PreloaderScene.game.state.start('creation');
   }
 
 };

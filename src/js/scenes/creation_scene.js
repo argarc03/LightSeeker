@@ -1,5 +1,8 @@
 'use strict';
 
+var FramedButton = require('../interface/framedButton')
+
+var backButton;
 
 var CreationScene = {
   MainMenuScene: function () {
@@ -19,7 +22,7 @@ var CreationScene = {
 
     this.game.add.creationHUD(0, 0, this.MainMenuScene, this);
 
-    //exitButton = this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
+    backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 20, 22, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
     //prueba cursor
     this.selector = this.game.add.sprite(50, 50, 'cursor');
@@ -27,9 +30,6 @@ var CreationScene = {
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
-
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
 
     //music
     var music = this.game.add.audio('intro', 0.1, true);

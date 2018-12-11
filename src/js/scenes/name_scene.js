@@ -46,8 +46,9 @@ var SettingsScene = {
     emitter3.gravity = 0;
     emitter3.flow(20000, 100);
 
-
-    this.game.add.richText(0, 20, 200, 'NAME YOUR VESSEL', style);
+    this.game.add.richText(0, 5, 200, 'EL RITUAL HA COMENZADO.', style);
+    this.game.add.richText(0, 16, 200, 'YA NO HAY VUELTA ATRAS.', style);
+    this.game.add.richText(0, 34, 200, 'NOMBRA A TU BUSCADOR:', style);
     this.game.add.image(60, 108, 'textBox').alpha = 0.8;
 
     this.game.add.image(62, -30, 'seekerBruteAnimations');
@@ -78,11 +79,6 @@ var SettingsScene = {
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
-
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
-
-
   },
   update: function () {
     //prueba cursor

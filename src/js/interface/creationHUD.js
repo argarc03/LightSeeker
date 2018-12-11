@@ -43,13 +43,16 @@ var CreationHUD = function (game, parent, x, y, exitFunction, context) {
 
   this.rightArrowButton = this.add(new FramedButton(this, game, 151, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [-1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
-  this.nextStateButton = this.add(new FramedButton(this, game, 150, 0, 'crystal', 'crystalFrame', [{ callback: this.NameScene, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.nextStateButton = this.add(new FramedButton(this, game, 134, 13, 'ritualButton', 'ritualFrame', [{ callback: this.NameScene, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
-  this.nextStateButtonText = this.add(new RichText(game, 145, 17, 50, 'INICIAR RITUAL', style3, this));
+  this.nextStateButtonText = this.add(new RichText(game, 141, 17, 50, 'INICIAR RITUAL', style3, this));
   this.nextStateButton._button.input.pixelPerfectClick = true;
   this.nextStateButton._button.input.pixelPerfectOver = true;
 
   this.rightArrowButton.scale.x *= -1;
+
+  this.add(new RichText(game, -20, -1, 150, 'ELIGE A TU BUSCADOR:', style, this));
+
 
   this._showCase.onBeginRotation.add(function () {
     this.leftArrowButton.deactivate();
