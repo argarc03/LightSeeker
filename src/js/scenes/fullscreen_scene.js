@@ -4,7 +4,7 @@ var FramedButton = require('../interface/framedButton')
 
 var selector;
 
-var SettingsScene = {
+var FullscreenScene = {
   IntroScene: function () {
     this.game.add.audio('button', 0.1).play();
     this.game.camera.fade('#000000');
@@ -43,4 +43,4 @@ var SettingsScene = {
 };
 
 
-module.exports = SettingsScene;
+module.exports = FullscreenScene;

@@ -70,54 +70,82 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
   this.creditsButton = this.add(new FramedButton(this, game, 153, 0, 'tavern', 'tavernFrame', [{ callback: function () { this.CreditsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
   this.creditsButton._button.input.pixelPerfectClick = true;
   this.creditsButton._button.input.pixelPerfectOver = true;
-  this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 1, 2));
+  this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 0, 2));
   this.shopButton._button.input.pixelPerfectClick = true;
   this.shopButton._button.input.pixelPerfectOver = true;
   this.settingsButton = this.add(new FramedButton(this, game, 0, 27, 'settings', 'settingsFrame', [{ callback: function () { this.SettingsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
   this.settingsButton._button.input.pixelPerfectClick = true;
   this.settingsButton._button.input.pixelPerfectOver = true;
-  this.doorButton = this.add(new FramedButton(this, game, 174, 39, 'door', 'doorFrame', [{ callback: function () { this.CombatScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 1, 2));
+  this.doorButton = this.add(new FramedButton(this, game, 174, 39, 'door', 'doorFrame', [{ callback: function () { this.CombatScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 0, 2));
   this.doorButton._button.input.pixelPerfectClick = true;
   this.doorButton._button.input.pixelPerfectOver = true;
   this.crystalButton = this.add(new FramedButton(this, game, 81, 9, 'crystal', 'crystalFrame', [{ callback: function () { this.CreationScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
   this.crystalButton._button.input.pixelPerfectClick = true;
   this.crystalButton._button.input.pixelPerfectOver = true;
 
-
-  this.shopButton.deactivate();
-
-
   //version
   this.game.add.richText(148, 139, 80, "v 1.0", style);
 
   //textos de buttons
   this.game.add.richText(10, 70, 80, "OPCIONES", style);
-  this.game.add.richText(28, 119, 80, "TIENDA", style);
+  this.shopText = this.game.add.richText(28, 119, 80, "TIENDA", style);
   this.game.add.richText(60, 39, 80, "NUEVA PARTIDA", style);
   this.game.add.richText(120, 79, 80, "NUEVA BUSQUEDA", style);
   this.game.add.richText(128, 20, 80, "CREDITOS", style);
+
+  //tienda cerrada por reformas. Disculpen las molestias! ^w^
+  if (true){
+    this.shopButton.deactivate();
+    this.shopText.setAll('tint', 0x888888);
+  }
+  
 
 
   this.shopButton.onInputOver.add(function () { selector.frame = 1; });
   this.shopButton.onInputOut.add(function () { selector.frame = 0; });
   this.shopButton.onInputDown.add(function () { selector.frame = 2; });
+  this.shopButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   this.settingsButton.onInputOver.add(function () { selector.frame = 1; });
   this.settingsButton.onInputOut.add(function () { selector.frame = 0; });
   this.settingsButton.onInputDown.add(function () { selector.frame = 2; });
+  this.settingsButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   this.doorButton.onInputOver.add(function () { selector.frame = 1; });
   this.doorButton.onInputOut.add(function () { selector.frame = 0; });
   this.doorButton.onInputDown.add(function () { selector.frame = 2; });
+  this.doorButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   this.crystalButton.onInputOver.add(function () { selector.frame = 1; });
   this.crystalButton.onInputOut.add(function () { selector.frame = 0; });
   this.crystalButton.onInputDown.add(function () { selector.frame = 2; });
-  //this.crystalButton.onInputUp.add(function(){selector.frame = 0;});
+  this.crystalButton.onInputUp.add(function () { selector.frame = 1; });
+  this.crystalButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   this.creditsButton.onInputOver.add(function () { selector.frame = 1; });
   this.creditsButton.onInputOut.add(function () { selector.frame = 0; });
   this.creditsButton.onInputDown.add(function () { selector.frame = 2; });
+  this.creditsButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   //var object1 = seeker.items[0];
   //var object2 = seeker.items[1];

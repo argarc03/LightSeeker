@@ -17,13 +17,13 @@ var SettingsScene = {
     
     var style = require('../../assets/fonts/style.json');
 
-    this.game.add.richText(10, this.game.world.height, 100, 'LightSeeker Desarrollado por Turing\'s Song Studios', style);
-    this.game.add.richText(10, this.game.world.height+50, 100, 'Carlos Durán Dominguez', style);
-    this.game.add.richText(10, this.game.world.height+80, 100, 'Arturo García Cárdenas', style);
-    this.game.add.richText(10, this.game.world.height+120, 100, 'Agradecimientos a:', style);
-    this.game.add.richText(10, this.game.world.height+160, 100, 'Nuestras madres', style);
-    this.game.add.richText(10, this.game.world.height+180, 100, 'Carlos León Aznar', style);
-    this.game.add.richText(10, this.game.world.height+220, 100, '¡Gracias por jugar!', style);
+    this.game.add.richText(10, 10, 50, 'VIDEO', style);
+    this.game.add.richText(20, 30, 100, 'Pantalla completa', style);
+
+    this.game.add.richText(10, 70, 50, 'AUDIO', style);
+    this.game.add.richText(25, 90, 100, 'Volumen de sonido', style);
+    this.game.add.richText(25, 110, 100, 'Volumen de música', style);
+
 
     this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
@@ -33,11 +33,8 @@ var SettingsScene = {
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
-
-    //music
-    var music = this.game.add.audio('shoptheme', 0.1, true);
+    
     this.game.sound.stopAll();
-    music.play();
   },
   update: function(){
   //prueba cursor

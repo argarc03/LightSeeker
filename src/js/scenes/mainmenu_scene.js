@@ -3,24 +3,20 @@
 var textFunctions = require('../interface/textFunctions');
 var FramedButton = require('../interface/framedButton')
 
-var selector;
-
 var MainMenuScene = {
 
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
-
-
-
     var style = require('../../assets/fonts/style.json');
+
     //background
     this.game.add.image(0, 0, 'mainmenubackground');
 
-    selector = this.game.add.sprite(50, 50, 'cursor');
+    this.selector = this.game.add.sprite(50, 50, 'cursor');
 
     //buttons
-    this.game.add.mainMenuHUD(0, 0, selector);
+    this.game.add.mainMenuHUD(0, 0, this.selector);
     this.game.add.image(0, 0, 'shines').alpha = 0.2;
     //great crystal shine particles
     var emitterCrystal = this.game.add.emitter(100, 35, 100);
@@ -33,7 +29,7 @@ var MainMenuScene = {
 
     this.game.add.image(4, 1, 'title');
 
-    this.game.world.bringToTop(selector);
+    this.game.world.bringToTop(this.selector);
 
     //smoke
     /*var emitter = this.game.add.emitter(10, 100, 400);
@@ -58,8 +54,8 @@ var MainMenuScene = {
 
   update: function () {
     //prueba cursor
-    selector.x = this.game.input.x;
-    selector.y = this.game.input.y;
+    this.selector.x = this.game.input.x;
+    this.selector.y = this.game.input.y;
   },
 
   goFullscreen: function () {

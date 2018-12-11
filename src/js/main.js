@@ -122,7 +122,6 @@ var PreloaderScene = {
         this.game.load.spritesheet('slider','assets/images/interface/slider.png',6,3);
         //Cursor
         this.game.load.spritesheet('cursor','assets/images/interface/cursor.png',7,7);
-        this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');

@@ -86,11 +86,13 @@ FramedButton.prototype._up = function () {
         if (this._button.input.checkPointerOver(this.game.input.activePointer)) {
             this.changeFrameFrame( 'Over');
             this._do();
+            this.onInputUp.dispatch(true);
         } else {
             this.changeFrameFrame( 'Out');
+            this.onInputUp.dispatch(false);
         }
         this._pressed = false;
-        this.onInputUp.dispatch();
+        
     }
 }
 

@@ -77,6 +77,7 @@ var IntroScene = {
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
+    
 
     //this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
 
@@ -87,7 +88,7 @@ var IntroScene = {
     //Controles para cambiar de escenas
     this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(this.MainMenuScene, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(this.MainMenuScene, this);
-
+    this.game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(this.MainMenuScene, this);
   },
   update: function () {
     //prueba cursor
