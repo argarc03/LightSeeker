@@ -94,9 +94,16 @@ ActionBar.prototype.move = function(movement) {
     
 }
 
+ActionBar.prototype.activate = function() {
+    this._active = true;
+    this.reUpdate();
+    this._timer.start();
+}
+
 ActionBar.prototype.deactivate = function() {
     this._active = false;
     this._actionContiner.removeAll(true);
+    this._timer.stop();
 }
 
 module.exports = ActionBar;

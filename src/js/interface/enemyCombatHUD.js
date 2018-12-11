@@ -82,4 +82,12 @@ var EnemyCombatHUD = function (game, parent, x, y, seeker, enemy) {
 EnemyCombatHUD.prototype = Object.create(Phaser.Group.prototype);
 EnemyCombatHUD.prototype.constructor = EnemyCombatHUD;
 
+EnemyCombatHUD.prototype.deactivate = function () {
+  this._actionBar.deactivate();
+}
+
+EnemyCombatHUD.prototype.activate = function () {
+  this._actionBar.activate();
+}
+
 module.exports = EnemyCombatHUD;
