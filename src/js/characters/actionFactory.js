@@ -50,12 +50,33 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
     this.character.block = Action.block;
     this.character._preBlocking = Action.preBlocking;
     this.character._blocking = Action.blocking;
-    this.character._loop = Action.loop;
+    this.character._blockingLoop = Action.blockingLoop;
     this.character._postBlocking = Action.postBlocking;
     this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
     this.character.block.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
 }
-
+/**
+ * 
+ * @param {number[]|string[]} framesPreThornsBlocking 
+ * @param {number[]|string[]} framesThornsBlocking 
+ * @param {number[]|string[]} framesPostThornsBlocking 
+ */
+ActionFactory.prototype.thornsBlock = function(framesPreThornsBlocking, framesThornsBlocking, framesPostThornsBlocking) {
+    this.character.animations.add('preThornsBlocking', framesPreThornsBlocking, true);
+    this.character.animations.add('thornsBlocking', framesThornsBlocking, true);
+    this.character.animations.add('postThornsBlocking', framesPostThornsBlocking, true);
+    this.character.onHit.add(function(attacker,damage){
+        if(this.character.isBlocking)
+            attacker.hurt(this.character.stats.realDamage);
+    },this);
+    this.character.thornsBlock = Action.thornsBlock;
+    this.character._preThornsBlocking = Action.preThornsBlocking;
+    this.character._thornsBlocking = Action.thornsBlocking;
+    this.character._thornsBlockingLoop = Action.thornsBlockingLoop;
+    this.character._postThornsBlocking = Action.postThornsBlocking;
+    this.character.thornsBlock.totalTime = TimeCalculations.totalThornsBlockTime.bind(this.character);
+    this.character.thornsBlock.currentTime = TimeCalculations.currentThornsBlockTime.bind(this.character);
+}
 ActionFactory.prototype.useObjects = function() {
     this.character.use = Action.use;
 }

@@ -39,6 +39,7 @@ var Character = function (game, x, y, name, stats, spriteSheet, actions, particl
     this.onHpChange = new Phaser.Signal();
     this.onRest = new Phaser.Signal();
     this.onDeath = new Phaser.Signal();
+    this.onHit = new Phaser.Signal();
     //ref to Factories
     this.addAction = new ActionFactory(this);
     this.addParticle = new ParticleFactory(this);
@@ -54,6 +55,15 @@ var Character = function (game, x, y, name, stats, spriteSheet, actions, particl
 
 Character.prototype = Object.create(Phaser.Sprite.prototype);
 Character.prototype.constructor = Character;
+
+/**
+ * 
+ * @param {number} damage -
+ */
+Character.prototype.hit = function (damage, attacker) {
+    this.onHit.dispatch(attacker, damage);
+    this.hurt(damage);
+}
 
 /**
  * 

@@ -33,6 +33,25 @@ var TimeCalculations = {
                 return NaN;
         }
     },
+    totalThornsBlockTime: function() {
+        return ((this.animations._anims.preThornsBlocking._frames.length + this.animations._anims.postThornsBlocking._frames.length)
+            / this.stats.frameRate) + this.stats.blockingTime/Phaser.Timer.SECOND;
+    },
+    currentThornsBlockTime: function() {
+        switch (this.animations.currentAnim.name) {
+            case 'preThornsBlocking':
+                return (this.animations._anims.preThornsBlocking.currentFrame.index - this.animations._anims.preThornsBlocking._frames[0]) / this.stats.frameRate;
+            case 'thornsBlocking':
+                return (this.animations._anims.preThornsBlocking.currentFrame.index - this.animations._anims.thornsBlocking._frames[0] + this.animations._anims.thornsBlocking.loopCount * this.animations._anims.thornsBlocking._frames.length
+                    + this.animations._anims.preThornsBlocking._frames.length) / this.stats.frameRate;
+            case 'postThornsBlocking':
+                return (this.animations._anims.preThornsBlocking.currentFrame.index - this.animations._anims.postThornsBlocking._frames[0] +
+                    this.animations._anims.preThornsBlocking._frames.length) / this.stats.frameRate
+                    + this.stats.blockingTime/Phaser.Timer.SECOND;
+            default:
+                return NaN;
+        }
+    },
     totalIdleTime: function(){
         return (this.animations._anims.idle._frames.length)/this.stats.frameRate;
     },

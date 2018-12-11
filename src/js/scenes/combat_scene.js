@@ -19,29 +19,6 @@ var CombatScene = {
   },
   seeker: null,
   enemy: null,
-  // Buttons functions
-  attackKey: function () {
-    this.combatHUD._enemyHUD._actionBar.reUpdate();
-  },
-  blockKey: function () {
-    this.seeker.start();
-    this.enemy.start();
-  },
-  attackEnemy: function () {
-    if (true) {
-      this.enemy.attack(this.seeker);
-    }
-  },
-  blockEnemy: function () {
-    if (true) {
-      this.enemy.block();
-    }
-  },
-
-  // prototype buttons
-  hurtSeeker: function () {
-    this.seeker.hurt(1);
-  },
   init: function(seeker, dayManager, enemy, background, music, end){
     this._seeker = seeker;
     this._dayManager = dayManager;

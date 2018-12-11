@@ -109,7 +109,8 @@ var PreloaderScene = {
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarBack','assets/images/interface/actionsBarBack.png');
         this.game.load.image('actionsBarShadow','assets/images/interface/actionsBarShadow.png');
-        this.game.load.image('blockBar','assets/images/interface/blockBar.png');
+        this.game.load.image('blockBar','assets/images/interface/blockBar.png'); 
+        this.game.load.image('thornsBlockBar','assets/images/interface/thornsBlockBar.png');
         this.game.load.image('attackBar','assets/images/interface/attackBar.png');
         this.game.load.image('unknownBar','assets/images/interface/unknownBar.png');
         this.game.load.image('idleBar','assets/images/interface/idleBar.png');
