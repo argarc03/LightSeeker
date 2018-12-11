@@ -20,15 +20,23 @@ var EventScene = {
     //fadeIn
     this.camera.flash(0x000000);
 
-    var style = require('../../assets/fonts/style.json');
-    style.align = 'left';
+    var style = {
+                  "font": "Minecraft",
+                  "fill": "#fff",
+                  "fontSize": 10,
+                  "align":"center"
+                }
     
     //render background
     this.game.add.sprite(0, 0, 'eventbackground');
 
-    this.seeker = this.game.world.add(this._seeker);
-
-    this.HUD = this.game.add.eventHUD(this._seeker, this._dayManager, this._text, this._options, this._image);
+    this.seeker = this.game.add.seeker( 0, -8, this._seeker.name, this._seeker.stats, this._seeker.items, this._seeker.spriteSheet, this._seeker.actions);
+    this.seeker.hp = this._seeker.hp;
+    this.seeker.gems = this._seeker.gems;
+    this.seeker.population = this._seeker.population;
+    this.seeker.totalGems = this._seeker.totalGems;
+    this.seeker.day = this._seeker.day;
+    this.HUD = this.game.add.eventHUD(this.seeker, this._dayManager, this._text, this._options, this._image);
 
     //music
     var music = this.game.add.audio(this._music, 0.1, true);
@@ -47,6 +55,14 @@ var EventScene = {
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
+  },
+  shutdown: function() {
+    this._seeker.stats = this.seeker.stats;
+    this._seeker.hp = this.seeker.hp;
+    this._seeker.gems = this.seeker.gems;
+    this._seeker.population = this.seeker.population;
+    this._seeker.totalGems = this.seeker.totalGems;
+    this._seeker.items = this.seeker.items;
   },
 
   goFullscreen: function() {

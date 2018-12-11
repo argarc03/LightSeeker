@@ -15,6 +15,8 @@ var EnemyCombatHUD = function (game, parent, x, y, seeker, enemy) {
 
     this.healthBar = this.add(new HealthBar(game, 119, 121, enemy, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
     this._actionBar = this.add(new ActionBar(game, this, 87,122,enemy,'actionsBarFrame'));
+    enemy.onDeath.add(this._actionBar.deactivate,this._actionBar);
+    seeker.onDeath.add(this._actionBar.deactivate,this._actionBar);
 
     this.name = this.add(new ReactiveRichText(game,3+123,-1,80,textFunctions.Fun(function() {
         return this.name;

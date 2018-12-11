@@ -201,7 +201,7 @@ var PreloaderScene = {
       this.load.audio('blocking', ['assets/sounds/blocking.wav']);
       this.load.audio('button', ['assets/sounds/buttonPressed.wav']);
       //Music
-      this.load.audio('boss', ['assets/music/bosstheme.mp3']);
+      this.load.audio('bosstheme', ['assets/music/bosstheme.mp3']);
       this.load.audio('firetheme', ['assets/music/firetheme.mp3']);
       this.load.audio('shoptheme', ['assets/music/shoptheme.mp3']);
       this.load.audio('watertheme', ['assets/music/watertheme.mp3']);

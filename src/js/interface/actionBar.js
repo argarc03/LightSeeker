@@ -36,12 +36,14 @@ var ActionBar = function(game, parent, x, y, enemy, frameKey){
     this._actions = [];
     this._childIndex = 0;
     this._rightX = 31;
+    this._active = true;
 }
 
 ActionBar.prototype = Object.create(Phaser.Group.prototype);
 ActionBar.prototype.constructor = ActionBar;
 
 ActionBar.prototype.update = function() {
+    if(this._active){
     let time = this._enemy[this._enemy.actionPattern.currentAction].currentTime();
     if(!isNaN(time)){
         this._actions = [];
@@ -54,6 +56,7 @@ ActionBar.prototype.update = function() {
             i++;
         }
     }
+}
 }
 
 ActionBar.prototype._createAction = function(action) {
@@ -89,6 +92,11 @@ ActionBar.prototype.move = function(movement) {
         this._createAction(this._enemy.actionPattern.actionNumber(this._actions.length-1));
     } 
     
+}
+
+ActionBar.prototype.deactivate = function() {
+    this._active = false;
+    this._actionContiner.removeAll(true);
 }
 
 module.exports = ActionBar;

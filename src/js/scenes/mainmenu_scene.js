@@ -5,6 +5,10 @@ var FramedButton = require('../interface/framedButton')
 
 var MainMenuScene = {
 
+  init: function(seeker, dayManager){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+  },
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
@@ -16,7 +20,7 @@ var MainMenuScene = {
     this.selector = this.game.add.sprite(50, 50, 'cursor');
 
     //buttons
-    this.game.add.mainMenuHUD(0, 0, this.selector);
+    this.game.add.mainMenuHUD(0, 0, this.selector, this._seeker, this._dayManager);
     this.game.add.image(0, 0, 'shines').alpha = 0.2;
     //great crystal shine particles
     var emitterCrystal = this.game.add.emitter(100, 35, 100);

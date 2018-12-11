@@ -17,7 +17,7 @@ var FramedButton = require('./framedButton')
   this.deactivate()
 };*/
 
-var MainMenuHUD = function (game, parent, x, y, selector) {
+var MainMenuHUD = function (game, parent, x, y, selector, seeker, dayManager) {
   Phaser.Group.call(this, game, parent, selector);
   this.x = x;
   this.y = y;
@@ -89,63 +89,77 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
   //textos de buttons
   this.game.add.richText(10, 70, 80, "OPCIONES", style);
   this.shopText = this.game.add.richText(28, 119, 80, "TIENDA", style);
-  this.game.add.richText(60, 39, 80, "NUEVA PARTIDA", style);
-  this.game.add.richText(120, 79, 80, "NUEVA BUSQUEDA", style);
-  this.game.add.richText(128, 20, 80, "CREDITOS", style);
+  this.crystalText = this.game.add.richText(60, 39, 80, "NUEVA PARTIDA", style);
+  this.doorText = this.game.add.richText(120, 79, 80, "NUEVA BUSQUEDA", style);
+  this.creditsText = this.game.add.richText(128, 20, 80, "CREDITOS", style);
 
-  //tienda cerrada por reformas. Disculpen las molestias! ^w^
-  if (true){
-    this.shopButton.deactivate();
+  this.shopButton.onInputDisable.add(function () {
     this.shopText.setAll('tint', 0x888888);
-  }
-  
-
+  }, this);
+  this.crystalButton.onInputDisable.add(function () {
+    this.crystalText.setAll('tint', 0x888888);
+  }, this);
+  this.doorButton.onInputDisable.add(function () {
+    this.doorText.setAll('tint', 0x888888);
+  }, this);
 
   this.shopButton.onInputOver.add(function () { selector.frame = 1; });
   this.shopButton.onInputOut.add(function () { selector.frame = 0; });
   this.shopButton.onInputDown.add(function () { selector.frame = 2; });
-  this.shopButton.onInputUp.add(function (over) { 
-    if(over)
+  this.shopButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
 
   this.settingsButton.onInputOver.add(function () { selector.frame = 1; });
   this.settingsButton.onInputOut.add(function () { selector.frame = 0; });
   this.settingsButton.onInputDown.add(function () { selector.frame = 2; });
-  this.settingsButton.onInputUp.add(function (over) { 
-    if(over)
+  this.settingsButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
 
   this.doorButton.onInputOver.add(function () { selector.frame = 1; });
   this.doorButton.onInputOut.add(function () { selector.frame = 0; });
   this.doorButton.onInputDown.add(function () { selector.frame = 2; });
-  this.doorButton.onInputUp.add(function (over) { 
-    if(over)
+  this.doorButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
 
   this.crystalButton.onInputOver.add(function () { selector.frame = 1; });
   this.crystalButton.onInputOut.add(function () { selector.frame = 0; });
   this.crystalButton.onInputDown.add(function () { selector.frame = 2; });
   this.crystalButton.onInputUp.add(function () { selector.frame = 1; });
-  this.crystalButton.onInputUp.add(function (over) { 
-    if(over)
+  this.crystalButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
 
   this.creditsButton.onInputOver.add(function () { selector.frame = 1; });
   this.creditsButton.onInputOut.add(function () { selector.frame = 0; });
   this.creditsButton.onInputDown.add(function () { selector.frame = 2; });
-  this.creditsButton.onInputUp.add(function (over) { 
-    if(over)
+  this.creditsButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
+
+  if (!seeker) {
+    this.doorButton.deactivate();
+    this.shopButton.deactivate();
+  } else {
+    this.crystalButton.deactivate();
+  }
 
   //var object1 = seeker.items[0];
   //var object2 = seeker.items[1];

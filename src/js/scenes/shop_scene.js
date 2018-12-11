@@ -10,7 +10,10 @@ var ShopScene = {
     this.game.camera.fade('#000000');
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
-
+  init: function(seeker, dayManager){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+  },
   create: function () {
     //fadeIn
     this.camera.flash('#000000');

@@ -1,4 +1,5 @@
 var DayFunctions = require('../../js/manager/dayFunctions');
+var Enemies = require('../enemies/enemies.json');
 
 var Day0 = {
     DayGenerator: function (seeker, dayManager) {
@@ -8,7 +9,15 @@ var Day0 = {
         return {
             text: 'Esto es un texto de prueba2',
             image: 'eventImageError',
-            options: [{ text: 'Seguir', callback: DayFunctions.NextDay, arguments: [] }],
+            options: [ { text: 'Seguir', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] },
+                       { text: 'Combatir', callback: DayFunctions.Combat, arguments:[   seeker, 
+                                                                                        dayManager, 
+                                                                                        Enemies.LordRagno, 
+                                                                                        'combatbackground', 
+                                                                                        'bosstheme', 
+                                                                                        function(){DayFunctions.NextDay(seeker, dayManager)}
+                        ]}
+                ],
             music: 'intro'
         }
     }

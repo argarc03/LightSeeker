@@ -33,6 +33,9 @@ var CreationScene = {
     this.selector.x = this.game.input.x;
     this.selector.y = this.game.input.y;
   },
+  shutdown: function() {
+    this.game.camera.onFadeComplete.removeAll();
+  },
   goFullscreen: function () {
     if (this.game.scale.isFullScreen) {
       this.game.scale.stopFullScreen();

@@ -12,8 +12,13 @@ var SettingsScene = {
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
   NewGame: function (seeker, name) {
-    var seeker = new Seeker(this.game, 0, -8, name, seeker.stats, seeker.items, seeker.spriteSheet, seeker.actions);
     var dayManager = new DayManager(seeker, this.game);
+    seeker.hp = seeker.stats.health;
+    seeker.gems = 0;
+    seeker.population = 50;
+    seeker.totalGems = 100;
+    seeker.day = 0;
+    seeker.name = name;
     dayManager.newDay();
   },
   init: function (seeker) {
