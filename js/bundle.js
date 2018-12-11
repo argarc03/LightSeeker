@@ -24,7 +24,16 @@ module.exports={
         "attack": {"name": "Golpetazo","description":"Realiza un fuerte golpe con su arma.", "icon": "attackIcon"},
         "block": {"name": "Coraza","description":"Se protege con su hombrera.", "icon": "blockIcon"},
         "ultimate": {"name": "Furia ancestral","description":"Aumenta su velocidad desatando su ira.", "icon": "ultimateIcon"},
-        "avaliable": true
+        "avaliable": true,
+        "spriteSheet":"seekerBruteAnimations",
+        "actions":{
+            "idle":[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
+            "attack":[[24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000],
+            "block":[[48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000],
+            "die":[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]],
+            "useObjects":[]
+          },
+          "items":[]
     },
     "Harpy": {
         "stats": {"health": 0, "damage":0, "defense":0, "speed":0, "perception":0},
@@ -42,13 +51,60 @@ module.exports={
     }
 }
 },{}],3:[function(require,module,exports){
+var DayFunctions = require('../../js/manager/dayFunctions');
+var textFunctions = require('../../js/interface/textFunctions');
+
+var Day0 = {
+    DayGenerator: function (seeker, dayManager) {
+        return 'Ritual';
+    },
+    Ritual: function (seeker, dayManager) {
+
+        return {
+            text: ['"El Ritual"\n\n Has sido elegido por el Gran Cristal. De ti depende todos los habitantes de Spiliag. Tu misión: recolectar y traer contigo todas las Gemas de Luz que puedas. ¡Confiamos en ti ', textFunctions.Fun(function(){return this.name},seeker), '!'],
+                image: 'eventImageError',
+                    options: [{ text: 'Empezar Búsqueda', callback: DayFunctions.NextDay, arguments: [] }],
+                        music: 'intro'
+        }
+    }
+}
+
+module.exports = Day0;
+},{"../../js/interface/textFunctions":49,"../../js/manager/dayFunctions":52}],4:[function(require,module,exports){
+var DayFunctions = require('../../js/manager/dayFunctions');
+
+var Day0 = {
+    DayGenerator: function (seeker, dayManager) {
+        return 'Luces';
+    },
+    Luces: function (seeker, dayManager) {
+        return {
+            text: 'Esto es un texto de prueba2',
+            image: 'eventImageError',
+            options: [{ text: 'Seguir', callback: DayFunctions.NextDay, arguments: [] }],
+            music: 'intro'
+        }
+    }
+}
+
+module.exports = Day0;
+},{"../../js/manager/dayFunctions":52}],5:[function(require,module,exports){
+'use strict'
+
+var Days={
+    day0: require('./day0'),
+    day1: require('./day1')
+}
+
+module.exports = Days;
+},{"./day0":3,"./day1":4}],6:[function(require,module,exports){
 module.exports={
     "font": "Minecraft",
     "fill": "#fff",
     "fontSize": 10,
     "align":"center"
 }
-},{}],4:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict'
 
 var Item = require('../../js/characters/item');
@@ -71,7 +127,7 @@ var Items = {
 module.exports = Items;
 
 
-},{"../../js/characters/item":13}],5:[function(require,module,exports){
+},{"../../js/characters/item":16}],8:[function(require,module,exports){
 'use strict'
 
 var bossPattern = function(character, seeker) { 
@@ -90,7 +146,7 @@ var patterns = {
 
 
 module.exports = patterns;
-},{}],6:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict'
 /**
  * 
@@ -196,7 +252,7 @@ var Action = {
 }
 
 module.exports = Action;
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict'
 
 var Action = require('./action.js');
@@ -271,7 +327,7 @@ ActionFactory.prototype.die = function(framesDying) {
 }
 
 module.exports = ActionFactory;
-},{"./action.js":6,"./timeCalculations.js":17}],8:[function(require,module,exports){
+},{"./action.js":9,"./timeCalculations.js":20}],11:[function(require,module,exports){
 'use strict'
 
 var ActionPattern = function (pattern, seeker, character) {
@@ -319,7 +375,7 @@ Object.defineProperty(ActionPattern.prototype, 'nextAction', {
 });
 
 module.exports = ActionPattern;
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict'
 
 var CoolDown = require('./coolDown');
@@ -401,7 +457,7 @@ SeekerActionFactory.prototype.die = function (framesDying) {
 }
 
 module.exports = SeekerActionFactory;
-},{"./action":6,"./actionFactory":7,"./coolDown":11,"./timeCalculations":17}],10:[function(require,module,exports){
+},{"./action":9,"./actionFactory":10,"./coolDown":14,"./timeCalculations":20}],13:[function(require,module,exports){
 /**
 * @author       Carlos Durán Domínguez <carduran@ucm.es>
 * @copyright    2018 Turing's Songs Studios© 
@@ -512,7 +568,7 @@ Object.defineProperty(Character.prototype, 'name',{
 });
 
 module.exports = Character;
-},{"./actionFactory":7,"./particleFactory.js":14,"./stats":16}],11:[function(require,module,exports){
+},{"./actionFactory":10,"./particleFactory.js":17,"./stats":19}],14:[function(require,module,exports){
 'use strict'
 
 var TimerAlterations = require('./timerAlterations');
@@ -566,7 +622,7 @@ var CoolDown = {
 }
 
 module.exports = CoolDown;
-},{"./timerAlterations":18}],12:[function(require,module,exports){
+},{"./timerAlterations":21}],15:[function(require,module,exports){
 'use strict'
 
 var Character = require('./character');
@@ -611,7 +667,7 @@ Enemy.prototype.start = function(){
 }
 
 module.exports = Enemy;
-},{"./actionPattern":8,"./character":10}],13:[function(require,module,exports){
+},{"./actionPattern":11,"./character":13}],16:[function(require,module,exports){
 'use strict'
 
 var _use = function(use, that) {
@@ -637,7 +693,7 @@ Item.prototype.destroy = function() {
 }
 
 module.exports = Item;
-},{}],14:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict'
 
 var ParticleFactory  = function (character) {
@@ -668,7 +724,7 @@ ParticleFactory.prototype.blood = function (x = this.character.width / 2, y = th
 }
 
 module.exports = ParticleFactory;
-},{}],15:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 var Character = require('./character.js');
@@ -694,6 +750,7 @@ var Seeker = function (game, x, y, name, stats, items, spriteSheet, actions) {
     for(var action in actions){
         this.addAction[action](...actions[action]);
     }
+    this.day = 0;
     this.gems = 42;
     this.population = 103;
     this.totalGems = 569;
@@ -728,7 +785,7 @@ Seeker.prototype.start = function(){
 }
 
 module.exports = Seeker;
-},{"../../assets/items/items":4,"./actionSeekerFactory.js":9,"./character.js":10,"./item":13}],16:[function(require,module,exports){
+},{"../../assets/items/items":7,"./actionSeekerFactory.js":12,"./character.js":13,"./item":16}],19:[function(require,module,exports){
 'use strict'
 
 var Stats = function (damage, defense, speed, health, perception, tempDamage = undefined, tempDefense = undefined, tempSpeed = undefined, tempHealth = undefined, tempPerception = undefined) {
@@ -941,7 +998,7 @@ Stats.prototype.update = function() {
 };
 
 module.exports = Stats;
-},{}],17:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict'
 
 var TimeCalculations = {
@@ -989,7 +1046,7 @@ var TimeCalculations = {
 }
 
 module.exports = TimeCalculations;
-},{}],18:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict'
 
 var TimerAlterations = {
@@ -1000,7 +1057,7 @@ var TimerAlterations = {
 }
 
 module.exports = TimerAlterations;
-},{}],19:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 // var Phaser = require('phaser');
 
 var Character = require('./characters/character');
@@ -1103,8 +1160,8 @@ fun = function (Phaser) {
         return new ScrollText(this.game, parent, x, y, width, height, text, style);
     }
 
-    Phaser.GameObjectFactory.prototype.eventHUD = function (seeker, text, options, parent = this.game.world) {
-        return new EventHUD(this.game, parent, seeker, text, options);
+    Phaser.GameObjectFactory.prototype.eventHUD = function (seeker, dayManager, text, options, image, parent = this.game.world) {
+        return new EventHUD(this.game, parent, seeker, dayManager, text, options, image);
     }
 
     Phaser.GameObjectFactory.prototype.optionMenu = function (buttonsMenu, group) {
@@ -1146,7 +1203,7 @@ fun = function (Phaser) {
 }
 
 module.exports = fun;
-},{"./characters/character":10,"./characters/enemy":12,"./characters/seeker":15,"./interface/actionButton":21,"./interface/bar":22,"./interface/buttonMenu":23,"./interface/circleWithSectors":25,"./interface/combatHUD":26,"./interface/creationHUD":27,"./interface/enemyCombatHUD":28,"./interface/eventHUD":29,"./interface/framedButton":30,"./interface/healthBar":31,"./interface/infoWindow":32,"./interface/mainMenuHUD":33,"./interface/optionMenu":34,"./interface/reactiveBar":35,"./interface/reactiveContinuousBar":37,"./interface/reactiveRichText":38,"./interface/richText":39,"./interface/scrollText":40,"./interface/seekerCombatHUD":41,"./interface/windowFrame":47}],20:[function(require,module,exports){
+},{"./characters/character":13,"./characters/enemy":15,"./characters/seeker":18,"./interface/actionButton":24,"./interface/bar":25,"./interface/buttonMenu":26,"./interface/circleWithSectors":28,"./interface/combatHUD":29,"./interface/creationHUD":30,"./interface/enemyCombatHUD":31,"./interface/eventHUD":32,"./interface/framedButton":33,"./interface/healthBar":34,"./interface/infoWindow":35,"./interface/mainMenuHUD":36,"./interface/optionMenu":37,"./interface/reactiveBar":38,"./interface/reactiveContinuousBar":40,"./interface/reactiveRichText":41,"./interface/richText":42,"./interface/scrollText":43,"./interface/seekerCombatHUD":44,"./interface/windowFrame":50}],23:[function(require,module,exports){
 'use strict'
 
 var ReactiveBar = require('./reactiveBar');
@@ -1241,7 +1298,7 @@ ActionBar.prototype.move = function(movement) {
 }
 
 module.exports = ActionBar;
-},{"./reactiveBar":35,"./reactiveCircleBar":36}],21:[function(require,module,exports){
+},{"./reactiveBar":38,"./reactiveCircleBar":39}],24:[function(require,module,exports){
 'use strict'
 var FramedButton = require('./framedButton');
 var ReactiveBar = require('./reactiveBar');
@@ -1283,7 +1340,7 @@ ActionButton.prototype.deactivate = function() {
 }
 
 module.exports = ActionButton;
-},{"./framedButton":30,"./reactiveBar":35,"./reactiveRichText":38,"./textFunctions":46}],22:[function(require,module,exports){
+},{"./framedButton":33,"./reactiveBar":38,"./reactiveRichText":41,"./textFunctions":49}],25:[function(require,module,exports){
 'use strict'
 
 var Bar = function (game, parent, x, y, key, frame = null) {
@@ -1363,7 +1420,7 @@ Object.defineProperty(Bar.prototype, 'height', {
 });
 
 module.exports = Bar;
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('./framedButton');
@@ -1398,7 +1455,7 @@ ButtonMenu.prototype.select = function() {
 
 module.exports = ButtonMenu;
 
-},{"./framedButton":30}],24:[function(require,module,exports){
+},{"./framedButton":33}],27:[function(require,module,exports){
 'use strict'
 
 var CircleWithSectors = require('./circleWithSectors');
@@ -1442,7 +1499,7 @@ Object.defineProperty(CircleBar.prototype, 'percentage', {
 });
 
 module.exports = CircleBar;
-},{"./circleWithSectors":25}],25:[function(require,module,exports){
+},{"./circleWithSectors":28}],28:[function(require,module,exports){
 'use strict'
 
 
@@ -1476,7 +1533,7 @@ CircleWithSector.prototype = Object.create(Phaser.Graphics.prototype);
 CircleWithSector.prototype.constructor = CircleWithSector;
 
 module.exports = CircleWithSector;
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict'
 
 var EnemyCombatHUD = require('./enemyCombatHUD');
@@ -1535,7 +1592,7 @@ CombatHUD.prototype._pause = function(){
 }
 
 module.exports = CombatHUD;
-},{"./enemyCombatHUD":28,"./framedButton":30,"./optionMenu":34,"./richText":39,"./seekerCombatHUD":41}],27:[function(require,module,exports){
+},{"./enemyCombatHUD":31,"./framedButton":33,"./optionMenu":37,"./richText":42,"./seekerCombatHUD":44}],30:[function(require,module,exports){
 'use strict'
 //var ActionButton = require('./actionButton');
 //var HealthBar = require('./healthBar');
@@ -1558,7 +1615,7 @@ var ShowCase = require('./showCase');
   this.deactivate()
 };*/
 
-var CreationHUD = function (game, parent, x, y, exitFunction, context) {
+var CreationHUD = function (game, parent, x, y, selector, context) {
   Phaser.Group.call(this, game, parent);
   this.x = x;
   this.y = y;
@@ -1566,28 +1623,74 @@ var CreationHUD = function (game, parent, x, y, exitFunction, context) {
   var style2 = { font: 'Minecraft', fill: '#000000', fontSize: 10 };
   var style3 = { font: 'Minecraft', fill: '#000000', fontSize: 10, align: 'center' };
 
+  this.MainMenuScene = function () {
+    this.game.add.audio('button', 0.1).play();
+    this.game.camera.fade('#000000');
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
+  };
+
   this.NameScene = function () {
     this.game.add.audio('button', 0.1).play();
     //fadeOut
     this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function () { this.game.state.start('name'); }, parent);
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('name', true, false, this._showCase.character()); }, this);
   };
 
   this.add(new Phaser.Image(game, 0, 0, 'creationinterface'));
 
   this._showCase = this.add(new ShowCase(game, this, 0, 0, require('../../assets/characters/characters.json')));
 
+  this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 20, 22, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
+
   this.leftArrowButton = this.add(new FramedButton(this, game, 49, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
   this.rightArrowButton = this.add(new FramedButton(this, game, 151, 55, 'arrow', 'arrowFrame', [{ callback: this._showCase.rotate, context: this._showCase, arguments: [-1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
-  this.nextStateButton = this.add(new FramedButton(this, game, 150, 0, 'crystal', 'crystalFrame', [{ callback: this.NameScene, context: context, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.nextStateButton = this.add(new FramedButton(this, game, 134, 13, 'ritualButton', 'ritualFrame', [{ callback: this.NameScene, context: this, arguments: [1] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
 
-  this.nextStateButtonText = this.add(new RichText(game, 145, 17, 50, 'INICIAR RITUAL', style3, this));
+  this.nextStateButtonText = this.add(new RichText(game, 141, 17, 50, 'INICIAR RITUAL', style3, this));
   this.nextStateButton._button.input.pixelPerfectClick = true;
   this.nextStateButton._button.input.pixelPerfectOver = true;
 
   this.rightArrowButton.scale.x *= -1;
+
+  this.leftArrowButton.onInputOver.add(function () { selector.frame = 1; });
+  this.leftArrowButton.onInputOut.add(function () { selector.frame = 0; });
+  this.leftArrowButton.onInputDown.add(function () { selector.frame = 2; });
+  this.leftArrowButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
+
+  this.rightArrowButton.onInputOver.add(function () { selector.frame = 1; });
+  this.rightArrowButton.onInputOut.add(function () { selector.frame = 0; });
+  this.rightArrowButton.onInputDown.add(function () { selector.frame = 2; });
+  this.rightArrowButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
+
+  this.nextStateButton.onInputOver.add(function () { selector.frame = 1; });
+  this.nextStateButton.onInputOut.add(function () { selector.frame = 0; });
+  this.nextStateButton.onInputDown.add(function () { selector.frame = 2; });
+  this.nextStateButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
+
+  this.backButton.onInputOver.add(function () { selector.frame = 1; });
+  this.backButton.onInputOut.add(function () { selector.frame = 0; });
+  this.backButton.onInputDown.add(function () { selector.frame = 2; });
+  this.backButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
+    
+  this.add(new RichText(game, -20, -1, 150, 'ELIGE A TU BUSCADOR:', style, this));
 
   this._showCase.onBeginRotation.add(function () {
     this.leftArrowButton.deactivate();
@@ -1595,24 +1698,32 @@ var CreationHUD = function (game, parent, x, y, exitFunction, context) {
     this.nextStateButton.deactivate();
     this.nextStateButton._button.tint = 0x555555;
     this.nextStateButtonText.text = '';
+    this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.active = false;
+    this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.active = false;
   }, this);
 
   this._showCase.onEndRotation.add(function () {
     this.leftArrowButton.activate();
     this.rightArrowButton.activate();
+    this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.active = true;
+    this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.active = true;
     if (this._showCase.isAvaliable()) {
       this.nextStateButton.activate();
       this.nextStateButton._button.tint = 0xFFFFFF;
       this.nextStateButtonText.text = 'INICIAR RITUAL';
     }
   }, this);
+
+
+  this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.add(function(key, direction){this.rotate(direction)}, this._showCase,0,1);
+  this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.add(function(key, direction){this.rotate(direction)}, this._showCase,0,-1);
 }
 
 CreationHUD.prototype = Object.create(Phaser.Group.prototype);
 CreationHUD.prototype.constructor = CreationHUD;
 
 module.exports = CreationHUD;
-},{"../../assets/characters/characters.json":2,"./framedButton":30,"./reactiveRichText":38,"./richText":39,"./showCase":42,"./statMarker":45,"./textFunctions":46}],28:[function(require,module,exports){
+},{"../../assets/characters/characters.json":2,"./framedButton":33,"./reactiveRichText":41,"./richText":42,"./showCase":45,"./statMarker":48,"./textFunctions":49}],31:[function(require,module,exports){
 'use strict'
 
 var ActionBar = require('./actionBar');
@@ -1696,7 +1807,7 @@ EnemyCombatHUD.prototype = Object.create(Phaser.Group.prototype);
 EnemyCombatHUD.prototype.constructor = EnemyCombatHUD;
 
 module.exports = EnemyCombatHUD;
-},{"./actionBar":20,"./healthBar":31,"./reactiveRichText":38,"./textFunctions":46}],29:[function(require,module,exports){
+},{"./actionBar":23,"./healthBar":34,"./reactiveRichText":41,"./textFunctions":49}],32:[function(require,module,exports){
 'use strict'
 
 var ScrollText = require('./scrollText');
@@ -1707,7 +1818,7 @@ var Slider = require('./slider');
 var FramedButton = require('./framedButton');
 var RichText = require('./richText');
 
-var EventHUD = function (game, parent, seeker, text, options) {
+var EventHUD = function (game, parent, seeker, dayManager, text, options, image) {
     Phaser.Group.call(this, game, parent);
     for (let element in options) {
         options[element].text;
@@ -1780,7 +1891,7 @@ var EventHUD = function (game, parent, seeker, text, options) {
         this.options[i].button = this.add(new FramedButton(this, game, 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 'optionBack', 'optionFrame', [{
             callback: options[i].callback,
             context: options[i].context,
-            arguments: options[i].arguments
+            arguments: [seeker,this.game,dayManager]
         }], 0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
         this.options[i].text = this.add(new RichText(game, 2 + 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 100, options[i].text, style));
         this.options[i].button.deactivate();
@@ -1797,17 +1908,17 @@ var EventHUD = function (game, parent, seeker, text, options) {
         this.options[i].button = this.add(new FramedButton(this, game, 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 'optionBack', 'optionFrame', [{
             callback: options[i].callback,
             context: options[i].context,
-            arguments: options[i].arguments
+            arguments: [seeker,this.game,dayManager]
         }], 0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
         this.options[i].text = this.add(new RichText(game, 2 + 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 100, options[i].text, style));
         this.options[i].button.deactivate();
         this.options[i].text.visible = false;
     }
 
-    this.imageFrame = this.add(new Phaser.Sprite(game, 2, 42, 'eventImage'));
+    this.imageFrame = this.add(new Phaser.Sprite(game, 2, 42, image));
 
     this.day = this.add(new ReactiveRichText(game, 26, 27, 40, textFunctions.Fun(function () {
-        return '1';//hay que
+        return this.day.toString();
     }, seeker), style4, this, seeker.stats.onPerceptionChange));
 
     this.pauseButton = this.add(new FramedButton(this, game, 190, 2, 'pauseButton', 'pauseButtonFrame',[{callback: EventHUD.prototype._pause, context:this, arguments:[]}],0xFFFFFF,0x000000,0x676767, 0x222222, 0x676767));
@@ -1856,7 +1967,7 @@ EventHUD.prototype._pause = function(){
 module.exports = EventHUD;
 
 
-},{"../../assets/fonts/style.json":3,"./framedButton":30,"./healthBar":31,"./reactiveRichText":38,"./richText":39,"./scrollText":40,"./slider":43,"./textFunctions":46}],30:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"./framedButton":33,"./healthBar":34,"./reactiveRichText":41,"./richText":42,"./scrollText":43,"./slider":46,"./textFunctions":49}],33:[function(require,module,exports){
 
 
 
@@ -1945,11 +2056,13 @@ FramedButton.prototype._up = function () {
         if (this._button.input.checkPointerOver(this.game.input.activePointer)) {
             this.changeFrameFrame( 'Over');
             this._do();
+            this.onInputUp.dispatch(true);
         } else {
             this.changeFrameFrame( 'Out');
+            this.onInputUp.dispatch(false);
         }
         this._pressed = false;
-        this.onInputUp.dispatch();
+        
     }
 }
 
@@ -1993,7 +2106,7 @@ FramedButton.prototype.changeFrameFrame = function (frame) {
 }
 
 module.exports = FramedButton;
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 'use strict'
 
 var Bar = require('./bar.js');
@@ -2025,7 +2138,7 @@ HealthBar.prototype.constructor = HealthBar;
 
 
 module.exports = HealthBar;
-},{"./bar.js":22,"./reactiveContinuousBar.js":37,"./reactiveRichText.js":38,"./textFunctions":46}],32:[function(require,module,exports){
+},{"./bar.js":25,"./reactiveContinuousBar.js":40,"./reactiveRichText.js":41,"./textFunctions":49}],35:[function(require,module,exports){
 'use strict'
 
 var WindowFrame = require('./windowFrame');
@@ -2046,7 +2159,7 @@ InfoWindow.prototype = Object.create(Phaser.Group.prototype);
 InfoWindow.prototype.constructor = InfoWindow;
 
 module.exports = InfoWindow;
-},{"./richText":39,"./scrollText":40,"./windowFrame":47}],33:[function(require,module,exports){
+},{"./richText":42,"./scrollText":43,"./windowFrame":50}],36:[function(require,module,exports){
 'use strict'
 //var ActionButton = require('./actionButton');
 //var HealthBar = require('./healthBar');
@@ -2092,7 +2205,7 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
     this.game.add.audio('button', 0.1).play();
     //fadeOut
     this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function () { this.game.state.start('combat'); }, parent);
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('combat', true, false, 'hola', 'semos', 'ah'); }, parent);
   };
 
   this.CreditsScene = function () {
@@ -2119,54 +2232,82 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
   this.creditsButton = this.add(new FramedButton(this, game, 153, 0, 'tavern', 'tavernFrame', [{ callback: function () { this.CreditsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
   this.creditsButton._button.input.pixelPerfectClick = true;
   this.creditsButton._button.input.pixelPerfectOver = true;
-  this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
+  this.shopButton = this.add(new FramedButton(this, game, 0, 87, 'shop', 'shopFrame', [{ callback: function () { this.ShopScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 0, 2));
   this.shopButton._button.input.pixelPerfectClick = true;
   this.shopButton._button.input.pixelPerfectOver = true;
   this.settingsButton = this.add(new FramedButton(this, game, 0, 27, 'settings', 'settingsFrame', [{ callback: function () { this.SettingsScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
   this.settingsButton._button.input.pixelPerfectClick = true;
   this.settingsButton._button.input.pixelPerfectOver = true;
-  this.doorButton = this.add(new FramedButton(this, game, 174, 39, 'door', 'doorFrame', [{ callback: function () { this.CombatScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 1, 2));
+  this.doorButton = this.add(new FramedButton(this, game, 174, 39, 'door', 'doorFrame', [{ callback: function () { this.CombatScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1, 0, 2));
   this.doorButton._button.input.pixelPerfectClick = true;
   this.doorButton._button.input.pixelPerfectOver = true;
   this.crystalButton = this.add(new FramedButton(this, game, 81, 9, 'crystal', 'crystalFrame', [{ callback: function () { this.CreationScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767, 1, 0, 1));
   this.crystalButton._button.input.pixelPerfectClick = true;
   this.crystalButton._button.input.pixelPerfectOver = true;
 
-
-  //this.doorButton.deactivate();
-
-
   //version
   this.game.add.richText(148, 139, 80, "v 1.0", style);
 
   //textos de buttons
   this.game.add.richText(10, 70, 80, "OPCIONES", style);
-  this.game.add.richText(28, 119, 80, "TIENDA", style);
+  this.shopText = this.game.add.richText(28, 119, 80, "TIENDA", style);
   this.game.add.richText(60, 39, 80, "NUEVA PARTIDA", style);
   this.game.add.richText(120, 79, 80, "NUEVA BUSQUEDA", style);
   this.game.add.richText(128, 20, 80, "CREDITOS", style);
+
+  //tienda cerrada por reformas. Disculpen las molestias! ^w^
+  if (true){
+    this.shopButton.deactivate();
+    this.shopText.setAll('tint', 0x888888);
+  }
+  
 
 
   this.shopButton.onInputOver.add(function () { selector.frame = 1; });
   this.shopButton.onInputOut.add(function () { selector.frame = 0; });
   this.shopButton.onInputDown.add(function () { selector.frame = 2; });
+  this.shopButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   this.settingsButton.onInputOver.add(function () { selector.frame = 1; });
   this.settingsButton.onInputOut.add(function () { selector.frame = 0; });
   this.settingsButton.onInputDown.add(function () { selector.frame = 2; });
+  this.settingsButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   this.doorButton.onInputOver.add(function () { selector.frame = 1; });
   this.doorButton.onInputOut.add(function () { selector.frame = 0; });
   this.doorButton.onInputDown.add(function () { selector.frame = 2; });
+  this.doorButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   this.crystalButton.onInputOver.add(function () { selector.frame = 1; });
   this.crystalButton.onInputOut.add(function () { selector.frame = 0; });
   this.crystalButton.onInputDown.add(function () { selector.frame = 2; });
-  //this.crystalButton.onInputUp.add(function(){selector.frame = 0;});
+  this.crystalButton.onInputUp.add(function () { selector.frame = 1; });
+  this.crystalButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   this.creditsButton.onInputOver.add(function () { selector.frame = 1; });
   this.creditsButton.onInputOut.add(function () { selector.frame = 0; });
   this.creditsButton.onInputDown.add(function () { selector.frame = 2; });
+  this.creditsButton.onInputUp.add(function (over) { 
+    if(over)
+      selector.frame = 1;
+    else
+    selector.frame = 0;});
 
   //var object1 = seeker.items[0];
   //var object2 = seeker.items[1];
@@ -2234,7 +2375,7 @@ MainMenuHUD.prototype = Object.create(Phaser.Group.prototype);
 MainMenuHUD.prototype.constructor = MainMenuHUD;
 
 module.exports = MainMenuHUD;
-},{"./framedButton":30,"./reactiveRichText":38,"./textFunctions":46}],34:[function(require,module,exports){
+},{"./framedButton":33,"./reactiveRichText":41,"./textFunctions":49}],37:[function(require,module,exports){
 'use strict';
 
 var ButtonMenu = require('./buttonMenu');
@@ -2320,7 +2461,7 @@ OptionMenu.prototype.enter = function() {
 }
 
 module.exports = OptionMenu;
-},{"./buttonMenu":23,"./windowFrame":47}],35:[function(require,module,exports){
+},{"./buttonMenu":26,"./windowFrame":50}],38:[function(require,module,exports){
 'use strict'
 
 var Bar = require('./bar.js');
@@ -2342,7 +2483,7 @@ ReactiveBar.prototype.changePercentage = function () {
 }
 
 module.exports = ReactiveBar;
-},{"./bar.js":22}],36:[function(require,module,exports){
+},{"./bar.js":25}],39:[function(require,module,exports){
 'use strict'
 
 var CircleBar = require('./circleBar');
@@ -2364,7 +2505,7 @@ ReactiveCircleBar.prototype.changePercentage = function () {
 }
 
 module.exports = ReactiveCircleBar;
-},{"./circleBar":24}],37:[function(require,module,exports){
+},{"./circleBar":27}],40:[function(require,module,exports){
 'use strict'
 
 var ReactiveBar = require('./reactiveBar.js');
@@ -2437,7 +2578,7 @@ ReactiveContinuousBar.prototype.reChangePercentage = function () {
 }
 
 module.exports = ReactiveContinuousBar;
-},{"./reactiveBar.js":35}],38:[function(require,module,exports){
+},{"./reactiveBar.js":38}],41:[function(require,module,exports){
 'use strict';
 
 var RichText = require('./richText.js');
@@ -2454,7 +2595,7 @@ ReactiveRichText.prototype = Object.create(RichText.prototype);
 ReactiveRichText.prototype.constructor = ReactiveRichText;
 
 module.exports = ReactiveRichText;
-},{"./richText.js":39}],39:[function(require,module,exports){
+},{"./richText.js":42}],42:[function(require,module,exports){
 'use strict';
 
 
@@ -2646,7 +2787,7 @@ Object.defineProperty(RichText.prototype, 'text',{
 });
 
 module.exports = RichText;
-},{}],40:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 'use strict'
 
 var ReactiveRichText = require('./reactiveRichText');
@@ -2691,7 +2832,7 @@ Object.defineProperty(ScrollText.prototype, 'text',{
 });
 module.exports = ScrollText;
 
-},{"./reactiveRichText":38}],41:[function(require,module,exports){
+},{"./reactiveRichText":41}],44:[function(require,module,exports){
 'use strict'
 var ActionButton = require('./actionButton');
 var HealthBar = require('./healthBar');
@@ -2711,7 +2852,7 @@ var deactivateActionButton = function () {
   this.deactivate()
 };
 
-var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy) {
+var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy, selector) {
   Phaser.Group.call(this, game, parent);
   this.x = x;
   this.y = y;
@@ -2915,7 +3056,7 @@ SeekerCombatHUD.prototype.unFreeze = function() {
 }
 
 module.exports = SeekerCombatHUD;
-},{"./actionButton":21,"./framedButton":30,"./healthBar":31,"./reactiveRichText":38,"./textFunctions":46}],42:[function(require,module,exports){
+},{"./actionButton":24,"./framedButton":33,"./healthBar":34,"./reactiveRichText":41,"./textFunctions":49}],45:[function(require,module,exports){
 'use strict'
 
 var StatMarker = require('./statMarker');
@@ -3013,8 +3154,12 @@ ShowCase.prototype.isAvaliable = function(){
     return this._characters[Object.keys(this._characters)[this._current]].avaliable;
 }
 
+ShowCase.prototype.character = function() {
+    return this._characters[Object.keys(this._characters)[this._current]];
+}
+
 module.exports = ShowCase;
-},{"./richText":39,"./statMarker":45}],43:[function(require,module,exports){
+},{"./richText":42,"./statMarker":48}],46:[function(require,module,exports){
 'use strict'
 
 var SliderImage = require('./sliderImage');
@@ -3070,7 +3215,7 @@ Slider.prototype.move = function (movement) {
 }
 
 module.exports = Slider;
-},{"./sliderImage":44}],44:[function(require,module,exports){
+},{"./sliderImage":47}],47:[function(require,module,exports){
 'use strict'
 
 var SliderImage = function(game, parent, x, y, key, height) {
@@ -3089,7 +3234,7 @@ SliderImage.prototype = Object.create(Phaser.Group.prototype);
 SliderImage.prototype.constructor = SliderImage;
 
 module.exports = SliderImage;
-},{}],45:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 'use strict'
 
 var StatMarker = function(game, parent, x, y, xSpace, maxPoints, currentPoints, pointKey, emptyKey, color) {
@@ -3134,7 +3279,7 @@ Object.defineProperty(StatMarker.prototype, 'currentPoints', {
     }
 });
 module.exports = StatMarker;
-},{}],46:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 
 var functions = {
 Fun: function (func, context) {
@@ -3229,7 +3374,7 @@ VariableNumber: function (numberfunction, context, delay) {
 }
 }
 module.exports = functions;
-},{}],47:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict'
 
 
@@ -3333,7 +3478,7 @@ WindowFrame.prototype.resize = function(width, height) {
 }
 
 module.exports = WindowFrame;
-},{}],48:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 //PREGUNTAS
@@ -3354,7 +3499,6 @@ var CreationScene = require('./scenes/creation_scene.js');
 var NameScene = require('./scenes/name_scene.js');
 var FullscreenScene = require('./scenes/fullscreen_scene.js');
 var TextFunctions = require('./interface/textFunctions');
-
  var webFontLoading = {
   active: function() {
     var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
@@ -3432,6 +3576,7 @@ var PreloaderScene = {
         this.game.load.spritesheet('logo', 'assets/images/interface/logo.png', 61, 69);
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
+        this.game.load.image('eventImageError','assets/images/interface/eventImageError.png');
         this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
         this.game.load.image('emptyItem','assets/images/interface/emptyItem.png');
         this.game.load.image('backIcon','assets/images/interface/backIcon.png');
@@ -3458,7 +3603,6 @@ var PreloaderScene = {
         this.game.load.spritesheet('slider','assets/images/interface/slider.png',6,3);
         //Cursor
         this.game.load.spritesheet('cursor','assets/images/interface/cursor.png',7,7);
-        this.game.load.image('infoCursor','assets/images/interface/infoCursor.png');
         //HealthBar
         this.game.load.image('healthBar','assets/images/interface/healthBar.png');
         this.game.load.image('damageBar','assets/images/interface/damageBar.png');
@@ -3502,6 +3646,8 @@ var PreloaderScene = {
         this.game.load.spritesheet('crystalFrame', 'assets/images/interface/crystalFrame.png');
         this.game.load.image('arrow', 'assets/images/interface/arrow.png');
         this.game.load.image('arrowFrame', 'assets/images/interface/arrowFrame.png');
+        this.game.load.image('ritualButton', 'assets/images/interface/ritualButton.png');
+        this.game.load.image('ritualFrame', 'assets/images/interface/ritualFrame.png');
 
       //BACKGROUNDS
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
@@ -3549,10 +3695,10 @@ var PreloaderScene = {
     //PLUGINS
       this.game.add.plugin(PhaserInput.Plugin);
   },
-  
+
   create: function () {
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-      PreloaderScene.game.state.start('fullscreen');
+      PreloaderScene.game.state.start('intro');
   }
 
 };
@@ -3562,7 +3708,49 @@ window.onload = function () {
   
 
 };
-},{"../assets/fonts/style.json":3,"./gameFactory":19,"./interface/textFunctions":46,"./scenes/combat_scene.js":49,"./scenes/creation_scene.js":50,"./scenes/credits_scene.js":51,"./scenes/event_scene.js":52,"./scenes/fullscreen_scene.js":53,"./scenes/intro_scene.js":54,"./scenes/mainmenu_scene.js":55,"./scenes/name_scene.js":56,"./scenes/settings_scene.js":57,"./scenes/shop_scene.js":58,"webfontloader":1}],49:[function(require,module,exports){
+},{"../assets/fonts/style.json":6,"./gameFactory":22,"./interface/textFunctions":49,"./scenes/combat_scene.js":54,"./scenes/creation_scene.js":55,"./scenes/credits_scene.js":56,"./scenes/event_scene.js":57,"./scenes/fullscreen_scene.js":58,"./scenes/intro_scene.js":59,"./scenes/mainmenu_scene.js":60,"./scenes/name_scene.js":61,"./scenes/settings_scene.js":62,"./scenes/shop_scene.js":63,"webfontloader":1}],52:[function(require,module,exports){
+'use strict'
+
+var DayFunctions = {
+    NextDay: function(seeker, game, dayManager) {
+        seeker.day++;
+        dayManager.newDay();
+    }
+}
+
+module.exports = DayFunctions;
+},{}],53:[function(require,module,exports){
+'use strict'
+var Days = require('../../assets/days/days');
+
+var DayManager = function(seeker, game){
+    this._seeker = seeker;
+    this._game = game;
+}
+
+DayManager.prototype.newDay = function(){
+    
+    var days = Days['day' + this._seeker.day];
+    this.goEvent(days[days.DayGenerator(this._seeker, this)](this._seeker,this));
+    
+
+}
+
+DayManager.prototype.goCombat = function(day) {
+
+}
+
+DayManager.prototype.goEvent = function(day) {
+    this._game.state.start('event',true, false, this._seeker, this,...Object.values(day));
+}
+
+DayManager.prototype.generateDay = function(seeker, day) {
+
+}
+
+module.exports = DayManager;
+
+},{"../../assets/days/days":5}],54:[function(require,module,exports){
 'use strict';
 
 var Stats = require('../characters/stats');
@@ -3606,6 +3794,8 @@ var CombatScene = {
   // prototype buttons
   hurtSeeker: function () {
     this.seeker.hurt(1);
+  },
+  init: function(){
   },
 
   create: function () {
@@ -3693,6 +3883,7 @@ var a = require('../../assets/patterns/patterns');
     
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //music
     var music = this.game.add.audio('firetheme', 0.1, true);
@@ -3740,17 +3931,12 @@ var a = require('../../assets/patterns/patterns');
 
 module.exports = CombatScene;
 
-},{"../../assets/fonts/style.json":3,"../../assets/patterns/patterns":5,"../characters/item":13,"../characters/stats":16,"../interface/textFunctions":46}],50:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"../../assets/patterns/patterns":8,"../characters/item":16,"../characters/stats":19,"../interface/textFunctions":49}],55:[function(require,module,exports){
 'use strict';
 
+var FramedButton = require('../interface/framedButton')
 
 var CreationScene = {
-  MainMenuScene: function () {
-    this.game.add.audio('button', 0.1).play();
-    this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
-  },
-
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
@@ -3760,15 +3946,16 @@ var CreationScene = {
     //background
     this.game.add.image(0, 0, 'creationbackground');
 
-    this.game.add.creationHUD(0, 0, this.MainMenuScene, this);
-
-    //exitButton = this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
-
     //prueba cursor
     this.selector = this.game.add.sprite(50, 50, 'cursor');
 
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+    this.game.add.creationHUD(0, 0, this.selector, this);
+    
+    this.game.world.bringToTop(this.selector);
+
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //music
     var music = this.game.add.audio('intro', 0.1, true);
@@ -3779,13 +3966,21 @@ var CreationScene = {
     //prueba cursor
     this.selector.x = this.game.input.x;
     this.selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 
 
 module.exports = CreationScene;
 
-},{"../../assets/fonts/style.json":3}],51:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}],56:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -3819,8 +4014,9 @@ var CreditsScene = {
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
 
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //music
     var music = this.game.add.audio('credits', 0.1, true);
@@ -3836,13 +4032,21 @@ var CreditsScene = {
   //prueba cursor
   selector.x = this.game.input.x;
   selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 
 
 module.exports = CreditsScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],52:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}],57:[function(require,module,exports){
 'use strict';
 
 var selector;
@@ -3853,11 +4057,17 @@ var EventScene = {
     this.game.state.start('mainmenu');
 
   },
-
+  init: function(seeker, dayManager, text, image, options, music){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+    this._text = text;
+    this._image = image;
+    this._options = options;
+    this._music = music;
+  },
   create: function () {
     //fadeIn
-    this.camera.flash(0x000000); //ESTO NO FUNCIONA Y NO SE POR QUE AAAAAAAA
-
+    this.camera.flash(0x000000);
 
     var style = require('../../assets/fonts/style.json');
     style.align = 'left';
@@ -3865,47 +4075,21 @@ var EventScene = {
     //render background
     this.game.add.sprite(0, 0, 'eventbackground');
 
-    this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(10, 3, 1, 20, 1), 'seekerBruteAnimations');
+    this.seeker = this.game.world.add(this._seeker);
 
-    this.HUD = this.game.add.eventHUD(this.seeker, '"Brillos bajo tierra"\n\n Avanzando por los oscuros túneles, avistas un tenue brillo a lo lejos. Cuando te acercas, te das cuenta de que ese brillo sale de la tierra, emergiendo y flotando como si de polvo se tratase. La luz que emite es agradable y te resulta familiar.',
-     [{text: '1. Excavar', callback: function(){console.log('Jeje, NO CAVO');
-        this.HUD.reset('Pasas horas horadando la roca con tu pico hasta que escuchas un sonido metálico. Sigues picando alrededor del hallazgo pero sólo consigues desenterrar una gran esfera inamovible. Cansado por el trabajo vano decides reemprender tu viaje. ',
-          [{text: '1. Continuar', callback: EventScene.MainMenuScene, context: EventScene, arguments: []}])}, context: this, arguments: []},
-     {text: '2. Descansar', callback: function(){console.log('¡NO PUEDO DORMIR!');}, context: this, arguments: []},
-     {text: '3. No hacer nada', callback: function(){console.log('YA ESTOY HACIENDO ALGO');}, context: this, arguments: []}])
-
-    /*var g = this.game.add.graphics(1, 0);
-    for (let i = 0; i < 75; i++) {
-      g.beginFill(0xffffff);
-      g.drawRect(2 * i, 0, 1, 1);
-      g.beginFill(0x000000);
-      g.drawRect(2 * i + 1, 0, 1, 1);
-    }
-    g.angle = 90;
-    var ge = this.game.add.graphics(0, 0);
-    for (let i = 0; i < 100; i++) {
-      ge.beginFill(0xffffff);
-      ge.drawRect(2 * i, 0, 1, 1);
-      ge.beginFill(0x000000);
-      ge.drawRect(2 * i + 1, 0, 1, 1);
-    }*/
-
+    this.HUD = this.game.add.eventHUD(this._seeker, this._dayManager, this._text, this._options, this._image);
 
     //music
-    var music = this.game.add.audio('watertheme', 0.1, true);
+    var music = this.game.add.audio(this._music, 0.1, true);
     this.game.sound.stopAll();
     music.play();
 
-
-    //para ir a fullscreen pulsar F4
+    //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
-
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
-    //selector.loadTexture('infoCursor');
   },
 
   update: function () {
@@ -3929,14 +4113,14 @@ var EventScene = {
 
 module.exports = EventScene;
 
-},{"../../assets/fonts/style.json":3,"../characters/stats":16}],53:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"../characters/stats":19}],58:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
 
 var selector;
 
-var SettingsScene = {
+var FullscreenScene = {
   IntroScene: function () {
     this.game.add.audio('button', 0.1).play();
     this.game.camera.fade('#000000');
@@ -3975,9 +4159,9 @@ var SettingsScene = {
 };
 
 
-module.exports = SettingsScene;
+module.exports = FullscreenScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],54:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}],59:[function(require,module,exports){
 'use strict';
 
 var selector;
@@ -3988,7 +4172,6 @@ var IntroScene = {
     this.game.camera.fade('#000000');
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
-
 
   appear(object, duration, delay, funct) {
     object.alpha = 0;
@@ -4016,9 +4199,8 @@ var IntroScene = {
 
     //intro music
     var intro = this.game.add.audio('intro', 0.1, false);
-    this.game.add.tween(intro).to( { }, 7500, "Linear", true, 7500).onStart.add(function(){ intro.play();}, this);
-    
-   
+    this.game.add.tween(intro).to({}, 7500, "Linear", true, 7500).onStart.add(function () { intro.play(); }, this);
+
     this.appear(this.game.add.sprite(70, 30, 'logo')
       .animations.add('play', Array.apply(null, { length: 22 }).map(Function.call, Number))
       ._parent.play('play', 7)._parent, 4000);
@@ -4055,10 +4237,11 @@ var IntroScene = {
     //espera a que acabe intro
     this.game.time.events.add(Phaser.Timer.SECOND * 80, this.MainMenuScene, this);
 
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
-
-
-
+    
 
     //this.game.add.optionMenu([['botonDeAbajo',165,115,'button',this.MainMenuScene,this,1,0,2,1,{}]]);
 
@@ -4069,12 +4252,20 @@ var IntroScene = {
     //Controles para cambiar de escenas
     this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(this.MainMenuScene, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(this.MainMenuScene, this);
-
+    this.game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(this.MainMenuScene, this);
   },
   update: function () {
     //prueba cursor
     //selector.x = this.game.input.x;
     //selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 
@@ -4083,30 +4274,26 @@ var IntroScene = {
 
 module.exports = IntroScene;
 
-},{"../../assets/fonts/style.json":3}],55:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6}],60:[function(require,module,exports){
 'use strict';
 
 var textFunctions = require('../interface/textFunctions');
 var FramedButton = require('../interface/framedButton')
-
-var selector;
 
 var MainMenuScene = {
 
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
-
-
-
     var style = require('../../assets/fonts/style.json');
+
     //background
     this.game.add.image(0, 0, 'mainmenubackground');
 
-    selector = this.game.add.sprite(50, 50, 'cursor');
+    this.selector = this.game.add.sprite(50, 50, 'cursor');
 
     //buttons
-    this.game.add.mainMenuHUD(0, 0, selector);
+    this.game.add.mainMenuHUD(0, 0, this.selector);
     this.game.add.image(0, 0, 'shines').alpha = 0.2;
     //great crystal shine particles
     var emitterCrystal = this.game.add.emitter(100, 35, 100);
@@ -4119,7 +4306,7 @@ var MainMenuScene = {
 
     this.game.add.image(4, 1, 'title');
 
-    this.game.world.bringToTop(selector);
+    this.game.world.bringToTop(this.selector);
 
     //smoke
     /*var emitter = this.game.add.emitter(10, 100, 400);
@@ -4135,14 +4322,6 @@ var MainMenuScene = {
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
-    //Controles para moverse entre botones
-    /*this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(a.goUp, this);//no funcionaaa aaaaaaaaaa
-    this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(a.goDown, this);
-    this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function(){console.log("enter")}, this);
-
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.CreditsScene, this);*/
-
 
     //music
     var music = this.game.add.audio('mainmenutheme', 0.1, true);
@@ -4152,8 +4331,8 @@ var MainMenuScene = {
 
   update: function () {
     //prueba cursor
-    selector.x = this.game.input.x;
-    selector.y = this.game.input.y;
+    this.selector.x = this.game.input.x;
+    this.selector.y = this.game.input.y;
   },
 
   goFullscreen: function () {
@@ -4168,11 +4347,12 @@ var MainMenuScene = {
 
 module.exports = MainMenuScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30,"../interface/textFunctions":46}],56:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"../interface/framedButton":33,"../interface/textFunctions":49}],61:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
-
+var Seeker = require('../characters/seeker');
+var DayManager = require('../manager/dayManager');
 var selector;
 
 var SettingsScene = {
@@ -4181,7 +4361,14 @@ var SettingsScene = {
     this.game.camera.fade('#000000');
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
-
+  NewGame: function (seeker, name) {
+    var seeker = new Seeker(this.game, 0, -8, name, seeker.stats, seeker.items, seeker.spriteSheet, seeker.actions);
+    var dayManager = new DayManager(seeker, this.game);
+    dayManager.newDay();
+  },
+  init: function (seeker) {
+    this._tmpSeeker = seeker;
+  },
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
@@ -4217,14 +4404,15 @@ var SettingsScene = {
     emitter3.gravity = 0;
     emitter3.flow(20000, 100);
 
+    this.game.add.richText(0, 5, 200, 'EL RITUAL HA COMENZADO.', style);
+    this.game.add.richText(0, 16, 200, 'YA NO HAY VUELTA ATRAS.', style);
+    this.game.add.richText(0, 34, 200, 'NOMBRA A TU BUSCADOR:', style);
+    this.game.add.image(60, 108, 'textBox').alpha = 0.8;
 
-    this.game.add.richText(0, 20, 200, 'NAME YOUR VESSEL', style);
-    this.game.add.image(60,108,'textBox').alpha = 0.8;
-
-    this.game.add.image(62,-30,'seekerBruteAnimations');
+    this.game.add.image(62, -30, this._tmpSeeker.spriteSheet);
 
     //this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
-    this.hola = this.game.add.inputField(40,100,{
+    this.hola = this.game.add.inputField(40, 100, {
       font: '10px Minecraft',
       width: 150,
       padding: 8,
@@ -4237,31 +4425,60 @@ var SettingsScene = {
       width: 100,
       height: 1,
       selectionColor: '#FF00FF',
-      cursorColor : '#FFFFFF'
+      cursorColor: '#FFFFFF'
     });
     this.hola.text.style.fill = '#FFFFFF';
-    this.hola.domElement.setMax(8,0);
-    this.hola.cursor.y+=2;
+    this.hola.domElement.setMax(7, 0);
+    this.hola.cursor.y += 2;
     this.hola.input.useHandCursor = false;
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
 
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
+    //input name
+    this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function (key, seeker, name) {
+      if (this.hola.value !== ''){
+        this.NewGame(seeker, this.hola.value);
+        this.hola.destroy();
+    }
+    }, this, 0, this._tmpSeeker);
+
+    this.hola.blockInput = false;
+    this.hola.focus = false;
+
+    PhaserInput.onKeyboardClose.add(function (seeker, name) {
+      if (this.hola.value !== ''){
+        this.NewGame(seeker, this.hola.value);
+        this.hola.destroy();
+      }
+    }, this, 0, this._tmpSeeker);
     
+    this.hola.focusOutOnEnter = false;
+
+
   },
   update: function () {
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],57:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"../characters/seeker":18,"../interface/framedButton":33,"../manager/dayManager":53}],62:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4281,38 +4498,44 @@ var SettingsScene = {
     
     var style = require('../../assets/fonts/style.json');
 
-    this.game.add.richText(10, this.game.world.height, 100, 'LightSeeker Desarrollado por Turing\'s Song Studios', style);
-    this.game.add.richText(10, this.game.world.height+50, 100, 'Carlos Durán Dominguez', style);
-    this.game.add.richText(10, this.game.world.height+80, 100, 'Arturo García Cárdenas', style);
-    this.game.add.richText(10, this.game.world.height+120, 100, 'Agradecimientos a:', style);
-    this.game.add.richText(10, this.game.world.height+160, 100, 'Nuestras madres', style);
-    this.game.add.richText(10, this.game.world.height+180, 100, 'Carlos León Aznar', style);
-    this.game.add.richText(10, this.game.world.height+220, 100, '¡Gracias por jugar!', style);
+    this.game.add.richText(10, 10, 50, 'VIDEO', style);
+    this.game.add.richText(20, 30, 100, 'Pantalla completa', style);
+
+    this.game.add.richText(10, 70, 50, 'AUDIO', style);
+    this.game.add.richText(25, 90, 100, 'Volumen de sonido', style);
+    this.game.add.richText(25, 110, 100, 'Volumen de música', style);
+
 
     this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
 
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
-
-    //music
-    var music = this.game.add.audio('shoptheme', 0.1, true);
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
+    
     this.game.sound.stopAll();
-    music.play();
   },
   update: function(){
   //prueba cursor
   selector.x = this.game.input.x;
   selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}],58:[function(require,module,exports){
+},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}],63:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4342,8 +4565,9 @@ var ShopScene = {
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
 
-    //Controles para cambiar de escenas
-    this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.MainMenuScene, this);
+    //para ir a fullscreen pulsar F11
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //music
     var music = this.game.add.audio('shoptheme', 0.1, true);
@@ -4354,10 +4578,18 @@ var ShopScene = {
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
+  },
+  goFullscreen: function () {
+    if (this.game.scale.isFullScreen) {
+      this.game.scale.stopFullScreen();
+    }
+    else {
+      this.game.scale.startFullScreen(false);
+    }
   }
 };
 
 
 module.exports = ShopScene;
 
-},{"../../assets/fonts/style.json":3,"../interface/framedButton":30}]},{},[48]);
+},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}]},{},[51]);
