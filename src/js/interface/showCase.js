@@ -95,4 +95,8 @@ ShowCase.prototype.isAvaliable = function(){
     return this._characters[Object.keys(this._characters)[this._current]].avaliable;
 }
 
+ShowCase.prototype.character = function() {
+    return this._characters[Object.keys(this._characters)[this._current]];
+}
+
 module.exports = ShowCase;

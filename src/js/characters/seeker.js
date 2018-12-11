@@ -23,6 +23,7 @@ var Seeker = function (game, x, y, name, stats, items, spriteSheet, actions) {
     for(var action in actions){
         this.addAction[action](...actions[action]);
     }
+    this.day = 0;
     this.gems = 42;
     this.population = 103;
     this.totalGems = 569;

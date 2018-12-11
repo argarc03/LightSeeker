@@ -18,7 +18,6 @@ var CreationScene = require('./scenes/creation_scene.js');
 var NameScene = require('./scenes/name_scene.js');
 var FullscreenScene = require('./scenes/fullscreen_scene.js');
 var TextFunctions = require('./interface/textFunctions');
-
  var webFontLoading = {
   active: function() {
     var game = new Phaser.Game(200, 150, Phaser.AUTO, 'game');
@@ -96,6 +95,7 @@ var PreloaderScene = {
         this.game.load.spritesheet('logo', 'assets/images/interface/logo.png', 61, 69);
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
         this.game.load.image('eventImage','assets/images/interface/eventImage.png');
+        this.game.load.image('eventImageError','assets/images/interface/eventImageError.png');
         this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
         this.game.load.image('emptyItem','assets/images/interface/emptyItem.png');
         this.game.load.image('backIcon','assets/images/interface/backIcon.png');

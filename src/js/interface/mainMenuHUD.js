@@ -43,7 +43,7 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
     this.game.add.audio('button', 0.1).play();
     //fadeOut
     this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function () { this.game.state.start('combat'); }, parent);
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('combat', true, false, 'hola', 'semos', 'ah'); }, parent);
   };
 
   this.CreditsScene = function () {

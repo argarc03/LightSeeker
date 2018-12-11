@@ -100,8 +100,8 @@ fun = function (Phaser) {
         return new ScrollText(this.game, parent, x, y, width, height, text, style);
     }
 
-    Phaser.GameObjectFactory.prototype.eventHUD = function (seeker, text, options, parent = this.game.world) {
-        return new EventHUD(this.game, parent, seeker, text, options);
+    Phaser.GameObjectFactory.prototype.eventHUD = function (seeker, dayManager, text, options, image, parent = this.game.world) {
+        return new EventHUD(this.game, parent, seeker, dayManager, text, options, image);
     }
 
     Phaser.GameObjectFactory.prototype.optionMenu = function (buttonsMenu, group) {

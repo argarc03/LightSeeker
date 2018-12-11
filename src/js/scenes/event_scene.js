@@ -8,10 +8,17 @@ var EventScene = {
     this.game.state.start('mainmenu');
 
   },
-
+  init: function(seeker, dayManager, text, image, options, music){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+    this._text = text;
+    this._image = image;
+    this._options = options;
+    this._music;
+  },
   create: function () {
     //fadeIn
-    this.camera.flash(0x000000); //ESTO NO FUNCIONA Y NO SE POR QUE AAAAAAAA
+    this.camera.flash(0x000000); 
 
 
     var style = require('../../assets/fonts/style.json');
@@ -20,34 +27,12 @@ var EventScene = {
     //render background
     this.game.add.sprite(0, 0, 'eventbackground');
 
-    this.seeker = this.game.add.seeker(0, -8, 'Carlos L.', new Stats(10, 3, 1, 20, 1), 'seekerBruteAnimations');
+    this.seeker = this.game.world.add(this._seeker);
 
-    this.HUD = this.game.add.eventHUD(this.seeker, '"Brillos bajo tierra"\n\n Avanzando por los oscuros túneles, avistas un tenue brillo a lo lejos. Cuando te acercas, te das cuenta de que ese brillo sale de la tierra, emergiendo y flotando como si de polvo se tratase. La luz que emite es agradable y te resulta familiar.',
-     [{text: '1. Excavar', callback: function(){console.log('Jeje, NO CAVO');
-        this.HUD.reset('Pasas horas horadando la roca con tu pico hasta que escuchas un sonido metálico. Sigues picando alrededor del hallazgo pero sólo consigues desenterrar una gran esfera inamovible. Cansado por el trabajo vano decides reemprender tu viaje. ',
-          [{text: '1. Continuar', callback: EventScene.MainMenuScene, context: EventScene, arguments: []}])}, context: this, arguments: []},
-     {text: '2. Descansar', callback: function(){console.log('¡NO PUEDO DORMIR!');}, context: this, arguments: []},
-     {text: '3. No hacer nada', callback: function(){console.log('YA ESTOY HACIENDO ALGO');}, context: this, arguments: []}])
-
-    /*var g = this.game.add.graphics(1, 0);
-    for (let i = 0; i < 75; i++) {
-      g.beginFill(0xffffff);
-      g.drawRect(2 * i, 0, 1, 1);
-      g.beginFill(0x000000);
-      g.drawRect(2 * i + 1, 0, 1, 1);
-    }
-    g.angle = 90;
-    var ge = this.game.add.graphics(0, 0);
-    for (let i = 0; i < 100; i++) {
-      ge.beginFill(0xffffff);
-      ge.drawRect(2 * i, 0, 1, 1);
-      ge.beginFill(0x000000);
-      ge.drawRect(2 * i + 1, 0, 1, 1);
-    }*/
-
+    this.HUD = this.game.add.eventHUD(this._seeker, this._dayManager, this._text, this._options, this._image);
 
     //music
-    var music = this.game.add.audio('watertheme', 0.1, true);
+    var music = this.game.add.audio(this._music, 0.1, true);
     this.game.sound.stopAll();
     music.play();
 
