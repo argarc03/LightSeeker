@@ -3,8 +3,8 @@
 var Character = require('./character');
 var ActionPattern = require('./actionPattern');
 
-var Enemy = function(game, x, y, name, stats, spriteSheet, actions, seeker, pattern){
-    Character.call(this, game, x, y, name, stats, spriteSheet, actions);
+var Enemy = function(game, x, y, name, stats, spriteSheet, actions, particles, seeker, pattern){
+    Character.call(this, game, x, y, name, stats, spriteSheet, actions, particles);
     this.actionPattern = new ActionPattern(pattern, seeker, this);
     this.seeker = seeker;
     this._lastActionEvent;

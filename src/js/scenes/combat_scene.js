@@ -57,18 +57,16 @@ var CombatScene = {
     //render background
     var combatbackground = this.game.add.image(0, 0, 'combatbackground');
     //render seeker //tope de nombre caracteres = 9
-    this.seeker = this.game.add.seeker( 0, -8, this._seeker.name, this._seeker.stats, this._seeker.items, this._seeker.spriteSheet, this._seeker.actions);
+    this.seeker = this.game.add.seeker( 0, -8, this._seeker.name, this._seeker.stats, this._seeker.items, this._seeker.spriteSheet, this._seeker.actions, this._seeker.particles);
     this.seeker.hp = this._seeker.hp;
     this.seeker.gems = this._seeker.gems;
     this.seeker.population = this._seeker.population;
     this.seeker.totalGems = this._seeker.totalGems;
     this.seeker.day = this._seeker.day;
-    //this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
     //render enemy
     var a = require('../../assets/patterns/patterns');
     this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, this._enemy.name, this._enemy.stats, this._enemy.spriteSheet, 
-    this._enemy.actions,this.seeker, a[this._enemy.pattern]);
-    //this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
+    this._enemy.actions, this._enemy.particles, this.seeker, a[this._enemy.pattern]);
 
     //interface
     this.combatHUD = this.game.add.combatHUD(0, 0, this.seeker, this.enemy);

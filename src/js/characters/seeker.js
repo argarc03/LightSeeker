@@ -16,8 +16,8 @@ var Items = require('../../assets/items/items');
  * @param {Stats} stats -
  * @param {string} spriteSheet -
 */
-var Seeker = function (game, x, y, name, stats, items, spriteSheet, actions) {
-    Character.call(this, game, x, y, name, stats, spriteSheet);
+var Seeker = function (game, x, y, name, stats, items, spriteSheet, actions, particles) {
+    Character.call(this, game, x, y, name, stats, spriteSheet,[], particles);
     this.addAction = new SeekerActionFactory(this);
     
     for(var action in actions){

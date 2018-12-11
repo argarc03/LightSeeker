@@ -23,7 +23,7 @@ var Stats = require('./stats');
  * @param {string} spriteSheet -
  * @param {string, arguments} actions -
 */
-var Character = function (game, x, y, name, stats, spriteSheet, actions) {
+var Character = function (game, x, y, name, stats, spriteSheet, actions, particles) {
     Phaser.Sprite.call(this, game, x, y, spriteSheet)
     this._name = name;
     this.onNameChange = new Phaser.Signal();
@@ -45,6 +45,10 @@ var Character = function (game, x, y, name, stats, spriteSheet, actions) {
 
     for(var action in actions){
         this.addAction[action](...actions[action]);
+    }
+    
+    for(var particle in particles){
+        this.addParticle[particle](...particles[particle]);
     }
 }
 

@@ -27,19 +27,19 @@ var CreationHUD = require('./interface/creationHUD');
  * 
  */
 fun = function (Phaser) {
-    Phaser.GameObjectFactory.prototype.character = function (x, y, name, stats, spriteSheet, actions, group) {
+    Phaser.GameObjectFactory.prototype.character = function (x, y, name, stats, spriteSheet, actions, particles, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Character(this.game, x, y, name, stats, spriteSheet, actions));
+        return group.add(new Character(this.game, x, y, name, stats, spriteSheet, actions, particles));
     }
 
-    Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, objects, spriteSheet, actions, group) {
+    Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, objects, spriteSheet, actions, particles, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Seeker(this.game, x, y, name, stats, objects, spriteSheet, actions));
+        return group.add(new Seeker(this.game, x, y, name, stats, objects, spriteSheet, actions, particles));
     }
 
-    Phaser.GameObjectFactory.prototype.enemy = function (x, y, name, stats, spriteSheet, actions, seeker, pattern, group) {
+    Phaser.GameObjectFactory.prototype.enemy = function (x, y, name, stats, spriteSheet, actions, particles, seeker, pattern, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Enemy(this.game, x, y, name, stats, spriteSheet, actions, seeker, pattern));
+        return group.add(new Enemy(this.game, x, y, name, stats, spriteSheet, actions, particles, seeker, pattern));
     }
 
     Phaser.GameObjectFactory.prototype.bar = function (x, y, key, frame, parent = this.game.world) {
