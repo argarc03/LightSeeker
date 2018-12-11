@@ -59,7 +59,7 @@ var SettingsScene = {
     this.game.add.richText(0, 34, 200, 'NOMBRA A TU BUSCADOR:', style);
     this.game.add.image(60, 108, 'textBox').alpha = 0.8;
 
-    this.game.add.image(62, -30, 'seekerBruteAnimations');
+    this.game.add.image(62, -30, this._tmpSeeker.spriteSheet);
 
     //this.backButton = this.game.world.add(new FramedButton(this.game.world, this.game, 179, 130, 'backIcon', 'backFrame', [{ callback: function () { this.MainMenuScene(); }, context: this, arguments: [] }], 0x676767, 0xffffff, 0x000000, 0x222222, 0x676767));
     this.hola = this.game.add.inputField(40, 100, {

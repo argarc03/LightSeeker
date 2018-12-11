@@ -41,7 +41,6 @@ var EventScene = {
 
     //prueba cursor
     selector = this.game.add.sprite(50, 50, 'cursor');
-    //selector.loadTexture('infoCursor');
   },
 
   update: function () {

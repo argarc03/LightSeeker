@@ -94,11 +94,8 @@ var CreationHUD = function (game, parent, x, y, selector, context) {
       selector.frame = 1;
     else
     selector.frame = 0;});
-
-
-
+    
   this.add(new RichText(game, -20, -1, 150, 'ELIGE A TU BUSCADOR:', style, this));
-
 
   this._showCase.onBeginRotation.add(function () {
     this.leftArrowButton.deactivate();
@@ -106,17 +103,25 @@ var CreationHUD = function (game, parent, x, y, selector, context) {
     this.nextStateButton.deactivate();
     this.nextStateButton._button.tint = 0x555555;
     this.nextStateButtonText.text = '';
+    this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.active = false;
+    this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.active = false;
   }, this);
 
   this._showCase.onEndRotation.add(function () {
     this.leftArrowButton.activate();
     this.rightArrowButton.activate();
+    this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.active = true;
+    this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.active = true;
     if (this._showCase.isAvaliable()) {
       this.nextStateButton.activate();
       this.nextStateButton._button.tint = 0xFFFFFF;
       this.nextStateButtonText.text = 'INICIAR RITUAL';
     }
   }, this);
+
+
+  this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.add(function(key, direction){this.rotate(direction)}, this._showCase,0,1);
+  this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.add(function(key, direction){this.rotate(direction)}, this._showCase,0,-1);
 }
 
 CreationHUD.prototype = Object.create(Phaser.Group.prototype);

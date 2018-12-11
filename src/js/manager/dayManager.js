@@ -9,7 +9,7 @@ var DayManager = function(seeker, game){
 DayManager.prototype.newDay = function(){
     
     var days = Days['day' + this._seeker.day];
-    this.goEvent(days[days.DayGenerator(this._seeker, this)]);
+    this.goEvent(days[days.DayGenerator(this._seeker, this)](this._seeker,this));
     
 
 }
