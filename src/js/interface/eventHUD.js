@@ -8,7 +8,7 @@ var Slider = require('./slider');
 var FramedButton = require('./framedButton');
 var RichText = require('./richText');
 
-var EventHUD = function (game, parent, seeker, text, options) {
+var EventHUD = function (game, parent, seeker, dayManager, text, options, image) {
     Phaser.Group.call(this, game, parent);
     for (let element in options) {
         options[element].text;
@@ -81,7 +81,7 @@ var EventHUD = function (game, parent, seeker, text, options) {
         this.options[i].button = this.add(new FramedButton(this, game, 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 'optionBack', 'optionFrame', [{
             callback: options[i].callback,
             context: options[i].context,
-            arguments: options[i].arguments
+            arguments: [seeker,this.game,dayManager]
         }], 0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
         this.options[i].text = this.add(new RichText(game, 2 + 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 100, options[i].text, style));
         this.options[i].button.deactivate();
@@ -98,17 +98,18 @@ var EventHUD = function (game, parent, seeker, text, options) {
         this.options[i].button = this.add(new FramedButton(this, game, 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 'optionBack', 'optionFrame', [{
             callback: options[i].callback,
             context: options[i].context,
-            arguments: options[i].arguments
+            arguments: [seeker,this.game,dayManager]
         }], 0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
         this.options[i].text = this.add(new RichText(game, 2 + 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 100, options[i].text, style));
         this.options[i].button.deactivate();
         this.options[i].text.visible = false;
     }
 
-    this.imageFrame = this.add(new Phaser.Sprite(game, 2, 42, 'eventImage'));
+    this.imageFrame = this.add(new Phaser.Sprite(game, 2, 42, image));
 
     this.day = this.add(new ReactiveRichText(game, 26, 27, 40, textFunctions.Fun(function () {
-        return '1';//hay que
+        console.log(this.day);
+        return this.day.toString();
     }, seeker), style4, this, seeker.stats.onPerceptionChange));
 
     this.pauseButton = this.add(new FramedButton(this, game, 190, 2, 'pauseButton', 'pauseButtonFrame',[{callback: EventHUD.prototype._pause, context:this, arguments:[]}],0xFFFFFF,0x000000,0x676767, 0x222222, 0x676767));

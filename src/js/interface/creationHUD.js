@@ -38,7 +38,7 @@ var CreationHUD = function (game, parent, x, y, selector, context) {
     this.game.add.audio('button', 0.1).play();
     //fadeOut
     this.game.camera.fade('#000000');
-    this.game.camera.onFadeComplete.add(function () { this.game.state.start('name'); }, parent);
+    this.game.camera.onFadeComplete.add(function () { this.game.state.start('name', true, false, this._showCase.character()); }, this);
   };
 
   this.add(new Phaser.Image(game, 0, 0, 'creationinterface'));

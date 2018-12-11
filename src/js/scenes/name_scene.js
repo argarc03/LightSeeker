@@ -1,7 +1,8 @@
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
-
+var Seeker = require('../characters/seeker');
+var DayManager = require('../manager/dayManager');
 var selector;
 
 var SettingsScene = {
@@ -10,7 +11,14 @@ var SettingsScene = {
     this.game.camera.fade('#000000');
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
-
+  NewGame : function(seeker, name){
+    var seeker = new Seeker(this.game,0, -8, name, seeker.stats, seeker.items, seeker.spriteSheet,seeker.actions);
+    var dayManager = new DayManager(seeker,this.game);
+    dayManager.newDay();
+  },
+  init: function(seeker){
+    this._tmpSeeker = seeker;
+  },
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
@@ -79,8 +87,15 @@ var SettingsScene = {
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
+    
+    this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(function(key, seeker, name){
+      this.NewGame(seeker, this.hola.value);
+    }, this, 0, this._tmpSeeker);
+
+    
   },
   update: function () {
+    console.log(this.hola.value);
     //prueba cursor
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;

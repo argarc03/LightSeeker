@@ -42,6 +42,8 @@ var CombatScene = {
   hurtSeeker: function () {
     this.seeker.hurt(1);
   },
+  init: function(){
+  },
 
   create: function () {
     //fadeIn
