@@ -1,7 +1,7 @@
 var DayFunctions = require('../../js/manager/dayFunctions');
 var Enemies = require('../enemies/enemies.json');
 
-var Day2 = {
+var Day3 = {
     DayGenerator: function (seeker, dayManager) {
         return 'CuevaFungimantica';
     },
@@ -12,12 +12,12 @@ var Day2 = {
             options: [{
                 text: 'Investigar', callback: DayFunctions.Event, arguments: [seeker,
                     dayManager,
-                    Day2.CuevaFungimanticaInvestigar]
+                    Day3.CuevaFungimanticaInvestigar]
             },
             {
                 text: 'Evitar', callback: DayFunctions.Event, arguments: [seeker,
                     dayManager,
-                    Day2.CuevaFungimanticaEvitar
+                    Day3.CuevaFungimanticaEvitar
                 ]
             }
             ],
@@ -32,10 +32,10 @@ var Day2 = {
             image: 'eventImageError',
             options: [{ text: 'Guardarlo', callback: DayFunctions.Event, arguments: [seeker,
                 dayManager,
-                Day2.CuevaFungimanticaVolver] },
+                Day3.CuevaFungimanticaVolver] },
             { text: 'Salir', callback: DayFunctions.Event, arguments: [seeker,
                 dayManager,
-                Day2.CuevaFungimanticaVolver] }
+                Day3.CuevaFungimanticaVolver] }
             ],
             music: 'intro'
         }
@@ -59,7 +59,7 @@ var Day2 = {
                 text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
                     dayManager,
                     Enemies.Fungi,
-                    'watercombatbackground',
+                    'waterbackground',
                     'watertheme',
                     function () { DayFunctions.NextDay(seeker, dayManager) }
                 ]
@@ -70,4 +70,4 @@ var Day2 = {
     }
 }
 
-module.exports = Day2;
+module.exports = Day3;

@@ -8,18 +8,17 @@ var Day1 = {
     EcoDesafortunado: function (seeker, dayManager) {
         return {
             text: ['"Eco desafortunado"\n\nCuando te das cuenta ya estás muy lejos de tu hogar...\n',
-                'Una enorme grieta en el suelo se interpone en tu camino. Escuchas unos ruidos que provienen del fondo. Se podría bordearla o explorar su interior.',
-                'Una araña giga'],
+                'Una enorme grieta en el suelo se interpone en tu camino. Escuchas unos ruidos que provienen del fondo. Se podría bordearla o explorar su interior.'],
             image: 'eventImageError',
             options: [{
                 text: 'Intentar cruzar', callback: DayFunctions.Event, arguments: [seeker,
                     dayManager,
-                    day1.EcoDesafortunadoCruzar]
+                    Day1.EcoDesafortunadoCruzar]
             },
             {
                 text: 'Explorar', callback: DayFunctions.Event, arguments: [seeker,
                     dayManager,
-                    day1.EcoDesafortunadoExplorar
+                    Day1.EcoDesafortunadoExplorar
                 ]
             }
             ],

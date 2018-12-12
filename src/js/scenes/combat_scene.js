@@ -32,7 +32,7 @@ var CombatScene = {
     this.camera.flash('#000000');
 
     //render background
-    var combatbackground = this.game.add.image(0, 0, 'combatbackground');
+    var combatbackground = this.game.add.image(0, 0, this._background);
     //render seeker //tope de nombre caracteres = 9
     this.seeker = this.game.add.seeker( 0, -8, this._seeker.name, this._seeker.stats, this._seeker.items, this._seeker.spriteSheet, this._seeker.actions, this._seeker.particles);
     this.seeker.hp = this._seeker.hp;
