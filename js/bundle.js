@@ -4079,6 +4079,7 @@ var PreloaderScene = {
         
 
         
+        
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarBack','assets/images/interface/actionsBarBack.png');
