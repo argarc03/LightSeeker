@@ -36,6 +36,7 @@ var Day1 = {
         }
     },
 
+    
     EcoDesafortunadoExplorar: function (seeker, dayManager) {
         return {
             text: ['¡Una criatura aparece de entre las sombras y se abalanza contra ti!'],
