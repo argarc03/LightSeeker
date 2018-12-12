@@ -104,16 +104,17 @@ var PreloaderScene = {
         this.game.load.image('blockedIcon','assets/images/interface/blockedIcon.png');
         this.game.load.image('textBox','assets/images/interface/textBox.png');
         //Event Images
+        this.game.load.image('fungiCaveAttackEventImage','assets/images/interface/fungiattack_eventimage.png');
+        this.game.load.image('ritualEventImage','assets/images/interface/ritual_eventimage.png');
+        this.game.load.image('ritualAcceptedEventImage','assets/images/interface/ritualaccepted_eventimage.png');
+        this.game.load.image('ritualDeniedEventImage','assets/images/interface/ritualdenied_eventimage.png');
         this.game.load.image('eventImageError','assets/images/interface/eventImageError.png');
         this.game.load.image('undershineEventImage','assets/images/interface/undershine_eventimage.png');
         this.game.load.image('spiderEventImage','assets/images/interface/spider_eventimage.png');
         this.game.load.image('spiderAttackEventImage','assets/images/interface/spiderattack_eventimage.png');
         this.game.load.image('fungiCaveEventImage','assets/images/interface/fungicave_eventimage.png');
         this.game.load.image('fungiCavePotionEventImage','assets/images/interface/potionfound_eventimage.png');
-        this.game.load.image('fungiCaveAttackEventImage','assets/images/interface/fungiattack_eventimage.png');
-        this.game.load.image('ritualEventImage','assets/images/interface/ritual_eventimage.png');
-        this.game.load.image('ritualAcceptedEventImage','assets/images/interface/ritualaccepted_eventimage.png');
-        this.game.load.image('ritualDeniedEventImage','assets/images/interface/ritualdenied_eventimage.png');
+        
 
         
         //Actions Bar
