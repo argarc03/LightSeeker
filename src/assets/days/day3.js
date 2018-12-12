@@ -3,29 +3,18 @@ var Enemies = require('../enemies/enemies.json');
 
 var Day3 = {
     DayGenerator: function (seeker, dayManager) {
-        return 'CuevaFungimantica';
+        return 'EncuentroLordRagno';
     },
-    CuevaFungimantica: function (seeker, dayManager) {
+    EncuentroLordRagno: function (seeker, dayManager) {
         return {
-            text: ['"Cueva misteriosa"\n\nTe encuentras con una cueva que desprende un fuerte olor a humedad. El terreno se encuentra cubierto de una sustancia gelatinosa.'],
+            text: ['FIN DE LA DEMO'],
             image: 'eventImageError',
-            options: [{
-                text: 'Investigar', callback: DayFunctions.Event, arguments: [seeker,
-                    dayManager,
-                    Day3.CuevaFungimanticaInvestigar]
-            },
-            {
-                text: 'Evitar', callback: DayFunctions.Event, arguments: [seeker,
-                    dayManager,
-                    Day3.CuevaFungimanticaEvitar
-                ]
-            }
-            ],
+            options: [],
             music: 'intro'
         }
     },
 
-    CuevaFungimanticaInvestigar: function (seeker, dayManager) {
+    /*CuevaFungimanticaInvestigar: function (seeker, dayManager) {
         return {
             text: ['Alcanzado el final de la cavidad subterránea, observas una figura humanoide apoyada en la pared. Cuando te aproximas, te percatas de que es un cadáver.',
         'De su cinturón, cuelga un vial con un icor verde.'],
@@ -67,7 +56,7 @@ var Day3 = {
             ],
             music: 'intro'
         }
-    }
+    }*/
 }
 
 module.exports = Day3;

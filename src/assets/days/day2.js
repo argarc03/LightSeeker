@@ -8,7 +8,7 @@ var Day2 = {
     CuevaFungimantica: function (seeker, dayManager) {
         return {
             text: ['"Cueva misteriosa"\n\nTe encuentras con una cueva que desprende un fuerte olor a humedad. El terreno se encuentra cubierto de una sustancia gelatinosa.'],
-            image: 'eventImageError',
+            image: 'fungiCaveEventImage',
             options: [{
                 text: 'Investigar', callback: DayFunctions.Event, arguments: [seeker,
                     dayManager,
@@ -29,7 +29,7 @@ var Day2 = {
         return {
             text: ['Alcanzado el final de la cavidad subterránea, observas una figura humanoide apoyada en la pared. Cuando te aproximas, te percatas de que es un cadáver.',
         'De su cinturón, cuelga un vial con un icor verde.'],
-            image: 'eventImageError',
+            image: 'fungiCavePotionEventImage',
             options: [{ text: 'Guardarlo', callback: DayFunctions.Event, arguments: [seeker,
                 dayManager,
                 Day2.CuevaFungimanticaVolver] },
@@ -44,7 +44,7 @@ var Day2 = {
     CuevaFungimanticaEvitar: function (seeker, dayManager) {
         return {
             text: ['Pasas de largo sin darle importancia a lo que pudiese encontrarse dentro.'],
-            image: 'eventImageError',
+            image: 'fungiCaveEventImage',
             options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }],
             music: 'intro'
         }
@@ -54,7 +54,7 @@ var Day2 = {
         return {
             text: ['Cuando estás a punto de salir de la cueva, del suelo emerge un enorme hongo que obstaculiza la salida.',
             'Cuando te acercas un poco más, unas espinas salen de su pileo. Parece que tendrás que acabar con él si quieres proseguir tu camino.'],
-            image: 'eventImageError',
+            image: 'fungiCaveAttackEventImage',
             options: [{
                 text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
                     dayManager,

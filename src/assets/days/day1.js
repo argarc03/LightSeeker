@@ -9,7 +9,7 @@ var Day1 = {
         return {
             text: ['"Eco desafortunado"\n\nCuando te das cuenta ya estás muy lejos de tu hogar...\n',
                 'Una enorme grieta en el suelo se interpone en tu camino. Escuchas unos ruidos que provienen del fondo. Se podría bordearla o explorar su interior.'],
-            image: 'eventImageError',
+            image: 'spiderEventImage',
             options: [{
                 text: 'Intentar cruzar', callback: DayFunctions.Event, arguments: [seeker,
                     dayManager,
@@ -29,7 +29,7 @@ var Day1 = {
     EcoDesafortunadoCruzar: function (seeker, dayManager) {
         return {
             text: ['Consigues saltar el acantilado sin ningún percance y prosigues tu viaje.'],
-            image: 'eventImageError',
+            image: 'spiderEventImage',
             options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }
             ],
             music: 'intro'
@@ -39,7 +39,7 @@ var Day1 = {
     EcoDesafortunadoExplorar: function (seeker, dayManager) {
         return {
             text: ['¡Una criatura aparece de entre las sombras y se abalanza contra ti!'],
-            image: 'eventImageError',
+            image: 'spiderAttackEventImage',
             options: [{
                 text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
                     dayManager,
