@@ -11,6 +11,7 @@ var ReactiveContinuousBar = function (game, parent, x, y, key, percentageFunctio
     this._increaseSpeed = this.bar.width / increaseSpeed;
     this._decreaseSpeed = this.bar.width / decreaseSpeed;
     this.timer = null;
+    ReactiveContinuousBar.prototype.changePercentage.call(this);
 }
 
 ReactiveContinuousBar.prototype = Object.create(ReactiveBar.prototype);

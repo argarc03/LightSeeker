@@ -27,5 +27,12 @@ var HealthBar = function (game, x, y, character, voidKey, healKey, damageKey, he
 HealthBar.prototype = Object.create(Phaser.Group.prototype);
 HealthBar.prototype.constructor = HealthBar;
 
+HealthBar.prototype.activate = function() {
+        this.damageBar.percentage = this.damageBar.percentageFunction();
+        this.healBar.percentage = this.healBar.percentageFunction();
+        this.healthBar.percentage = this.healthBar.percentageFunction();
+        this.hpText.write();
+}
+
 
 module.exports = HealthBar;

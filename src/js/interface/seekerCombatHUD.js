@@ -228,12 +228,14 @@ SeekerCombatHUD.prototype.deactivate = function() {
   this.blockButton.deactivate();
   this.item1Button.deactivate();
   this.item2Button.deactivate();
+
 }
 
 SeekerCombatHUD.prototype.activate = function () {
   this.ultimateButton.activate();
   this.attackButton.activate();
   this.blockButton.activate();
+  this.healthBar.activate();
   if(this.seeker.items[0])
     this.item1Button.activate();
   if(this.seeker.items[1])
