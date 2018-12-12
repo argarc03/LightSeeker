@@ -1,26 +1,59 @@
 var DayFunctions = require('../../js/manager/dayFunctions');
 var Enemies = require('../enemies/enemies.json');
 
-var Day0 = {
+var Day1 = {
     DayGenerator: function (seeker, dayManager) {
-        return 'Luces';
+        return 'EcoDesafortunado';
     },
-    Luces: function (seeker, dayManager) {
+    EcoDesafortunado: function (seeker, dayManager) {
         return {
-            text: 'Esto es un texto de prueba2',
+            text: ['"Eco desafortunado"\n\nCuando te das cuenta ya estás muy lejos de tu hogar...\n',
+                'Una enorme grieta en el suelo se interpone en tu camino. Escuchas unos ruidos que provienen del fondo. Se podría bordearla o explorar su interior.',
+                'Una araña giga'],
             image: 'eventImageError',
-            options: [ { text: 'Seguir', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] },
-                       { text: 'Combatir', callback: DayFunctions.Combat, arguments:[   seeker, 
-                                                                                        dayManager, 
-                                                                                        Enemies.Spider, 
-                                                                                        'combatbackground', 
-                                                                                        'bosstheme', 
-                                                                                        function(){DayFunctions.NextDay(seeker, dayManager)}
-                        ]}
-                ],
+            options: [{
+                text: 'Intentar cruzar', callback: DayFunctions.Event, arguments: [seeker,
+                    dayManager,
+                    day1.EcoDesafortunadoCruzar]
+            },
+            {
+                text: 'Explorar', callback: DayFunctions.Event, arguments: [seeker,
+                    dayManager,
+                    day1.EcoDesafortunadoExplorar
+                ]
+            }
+            ],
+            music: 'intro'
+        }
+    },
+
+    EcoDesafortunadoCruzar: function (seeker, dayManager) {
+        return {
+            text: ['Consigues saltar el acantilado sin ningún percance y prosigues tu viaje.'],
+            image: 'eventImageError',
+            options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }
+            ],
+            music: 'intro'
+        }
+    },
+
+    EcoDesafortunadoExplorar: function (seeker, dayManager) {
+        return {
+            text: ['¡Una criatura aparece de entre las sombras y se abalanza contra ti!'],
+            image: 'eventImageError',
+            options: [{
+                text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
+                    dayManager,
+                    Enemies.Spider,
+                    'combatbackground',
+                    'firetheme',
+                    function () { DayFunctions.NextDay(seeker, dayManager) }
+                ]
+            }
+            ],
             music: 'intro'
         }
     }
 }
 
-module.exports = Day0;
+module.exports = Day1;
