@@ -1,8 +1,8 @@
 {
     "LordRagno":{
         "name":"Lord Ragno",
-        "stats": {"damage": 5, "defense": 10, "speed": 1, "health": 1, "perception": 3}, 
-        "spriteSheet":"spiderAnimations", 
+        "stats": {"damage": 5, "defense": 10, "speed": 1, "health": 14, "perception": 3}, 
+        "spriteSheet":"lordRagnoAnimations", 
         "actions":{
             "idle":[[0, 1, 2, 3, 4, 5]],
             "attack":[[24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]],
@@ -16,7 +16,7 @@
     },
     "Fungi":{
         "name":"Fungi",
-        "stats": {"damage": 6, "defense": 20, "speed": 1, "health": 10, "perception": 1}, 
+        "stats": {"damage": 6, "defense": 4, "speed": 1, "health": 8, "perception": 1}, 
         "spriteSheet":"fungiAnimations", 
         "actions":{
             "idle":[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
@@ -24,8 +24,23 @@
             "die":[[32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]]
         },
         "particles":{
-            "blood": [40, 93, 10, "blueBlood"]
+            "blood": [40, 93, 10, "cianBlood"]
         },
         "pattern":"fungi"
+    },
+    "Spider":{
+        "name":"Spider",
+        "stats": {"damage": 1, "defense": 1, "speed": 3, "health": 3, "perception": 1}, 
+        "spriteSheet":"spiderAnimations", 
+        "actions":{
+            "idle":[[0, 1, 2, 3]],
+            "attack":[[12,13,14,15], [16,17,18,19]],
+            "block":[[24, 25, 26, 27], [27, 28], [29, 30, 31]],
+            "die":[[36, 37,38,39,40,41,42,43,44,45,46,47]]
+        },
+        "particles":{
+            "blood": [40, 107, 10, "greenBlood"]
+        },
+        "pattern":"spider"
     }
 }

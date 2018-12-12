@@ -151,7 +151,7 @@ var Action = {
      * 
      */
     die() {
-        this.animations.play('dying', this.frameRate, false);+
+        this.animations.play('dying', 10, false);
         this.onDeath.dispatch();
     },
 

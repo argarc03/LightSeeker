@@ -26,7 +26,8 @@ SeekerActionFactory.prototype.attack = function (framesPreAttacking, framesAttac
     this.character.coolDown.attack.onStart = new Phaser.Signal();
     this.character.coolDown.attack.onWhile = new Phaser.Signal();
     this.character.coolDown.attack.onEnd = new Phaser.Signal();
-    this.character.coolDown.attack.global = globalCoolDown;
+    this.character.coolDown.attack.global = function(){
+        return this.attack.totalTime()*1000+globalCoolDown*this.stats.coolDownFactor}.bind(this.character);
 
     this.character.attack = function (target) {
         if (!this.coolDown.attack.running) {
@@ -42,7 +43,8 @@ SeekerActionFactory.prototype.attack = function (framesPreAttacking, framesAttac
         let a = this.coolDown.attack.nextTick - this.coolDown.attack._now;
         return a<0?NaN:a;
     }.bind(this.character);
-    this.character.attack.coolDownTime = selfCoolDown;
+    this.character.attack.coolDownTime = function(){
+        return this.attack.totalTime()*1000+selfCoolDown*this.stats.coolDownFactor}.bind(this.character);
 }
 
 SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlocking, framesPostBlocking, globalCoolDown, selfCoolDown) {
@@ -52,7 +54,8 @@ SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlockin
     this.character.coolDown.block.onStart = new Phaser.Signal();
     this.character.coolDown.block.onWhile = new Phaser.Signal();
     this.character.coolDown.block.onEnd = new Phaser.Signal();
-    this.character.coolDown.block.global = globalCoolDown;
+    this.character.coolDown.block.global = function(){
+        return this.block.totalTime()*1000+globalCoolDown*this.stats.coolDownFactor}.bind(this.character);
 
     this.character.block = function () {
         if (!this.coolDown.block.running) {
@@ -70,7 +73,8 @@ SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlockin
         let a = this.coolDown.block.nextTick - this.coolDown.block._now;
         return a<0?NaN:a;
     }.bind(this.character);
-    this.character.block.coolDownTime = selfCoolDown;
+    this.character.block.coolDownTime = function(){
+        return this.block.totalTime()*1000+selfCoolDown*this.stats.coolDownFactor}.bind(this.character);
 }
 
 

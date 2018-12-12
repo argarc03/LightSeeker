@@ -181,6 +181,7 @@ var PreloaderScene = {
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
       this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
+      this.game.load.image('cianBlood','assets/images/particles/cianBlood.png');
       this.game.load.spritesheet('crystalShines','assets/images/particles/crystalShines.png',3,3);
       this.game.load.spritesheet('smoke','assets/images/particles/smoke.png',4,4);
       this.game.load.spritesheet('creationParticles','assets/images/particles/creationParticles.png',8,8);
@@ -193,8 +194,9 @@ var PreloaderScene = {
         this.game.load.spritesheet('seekerHarpySiluette','assets/images/seeker/seekerHarpySiluette.png',80,120);
         this.game.load.spritesheet('seekerWarlockSiluette','assets/images/seeker/seekerWarlockSiluette.png',80,120);
         //Enemies
-        this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
+        this.game.load.spritesheet('lordRagnoAnimations', 'assets/images/enemies/lordRagnoAnimations.png',80,120);
         this.game.load.spritesheet('fungiAnimations', 'assets/images/enemies/fungiAnimations.png',80,120);
+        this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
     //SOUNDS
       //Effects
       this.load.audio('attacking', ['assets/sounds/attacking.wav']);

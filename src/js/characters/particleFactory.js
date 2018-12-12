@@ -1,6 +1,6 @@
 'use strict'
 
-var ParticleFactory  = function (character) {
+var ParticleFactory = function (character) {
     this.character = character;
 }
 
@@ -15,8 +15,17 @@ ParticleFactory.prototype.blood = function (x = this.character.width / 2, y = th
     this.character.bleed.minParticleScale = 1;
     this.character.bleed.maxParticleScale = 2;
     this.character.bleed.bounce = 0;
-    this.character._damaged = function (damage) {
 
+    
+
+    //this.character.game.worldbleed.particleBringToTop = true;
+    //this.character.game.world.bringToTop(this.character.bleed);
+
+
+    //let b = this.character.game.world.bringToTop(this.character.bleed);
+    //console.log(b);
+    this.character._damaged = function (damage) {
+        this.bleed.parent.bringToTop(this.bleed);
         let angle = this.game.rnd.angle();
         let radius = this.game.rnd.frac() * this.bleed.radius;
         this.bleed.emitX = radius * Math.sin(Math.PI / 180 * angle) + this.bleed.x;

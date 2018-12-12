@@ -13,7 +13,7 @@ var SettingsScene = {
   },
   NewGame: function (seeker, name) {
     var dayManager = new DayManager(seeker, this.game);
-    seeker.hp = seeker.stats.health;
+    seeker.hp = seeker.stats.health*5;
     seeker.gems = 0;
     seeker.population = 50;
     seeker.totalGems = 100;

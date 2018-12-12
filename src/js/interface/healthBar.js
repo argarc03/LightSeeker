@@ -6,7 +6,7 @@ var ReactiveRichText = require('./reactiveRichText.js');
 var textFunction = require('./textFunctions')
 
 var hpPercentage = function () {
-        return this.hp / this.stats.health * 100;
+        return this.hp / this.stats.maxHp * 100;
 }
 
 var HealthBar = function (game, x, y, character, voidKey, healKey, damageKey, healthKey, frameKey, style, delay, speed, voidFrame, healFrame, damageFrame, healthFrame, parent) {
@@ -19,7 +19,7 @@ var HealthBar = function (game, x, y, character, voidKey, healKey, damageKey, he
         this.healthBar = this.add(new ReactiveContinuousBar(game, this, 0, 0, healthKey, hpPercentage, character, character.onHpChange, 0, delay, speed, speed, healthFrame));
         this.hpText = this.add(new ReactiveRichText(game, 0, -2, this.voidBar.width, [textFunction.VariableNumber(function () { return this.hp; }, character, speed),
                 '/',
-        textFunction.VariableNumber(function () { return this.stats.health }, character, 1000)], style, this, [character.onHpChange, character.stats.onHealthChange]));
+        textFunction.VariableNumber(function () { return this.stats.maxHp; }, character, 1000)], style, this, [character.onHpChange, character.stats.onHealthChange]));
         this.frame = this.add(new Phaser.Sprite(game, -1, -1, frameKey));
         
 }

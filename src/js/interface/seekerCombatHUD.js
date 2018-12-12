@@ -28,7 +28,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy, selector) {
 
   this.blockButton = this.add(new ActionButton(this, game, 44, 132, 'blockIcon', 'actionFrame','blockIcon', [{callback: seeker.block, context: seeker, arguments: []}], 
     function () {
-      return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
+      return (1 - this.block.timeToCoolDown() / this.block.coolDownTime()) * 100;
     }, seeker, function () {
     let a = this.block.timeToCoolDown() / 1000;
     if (isNaN(a)) {
@@ -44,7 +44,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy, selector) {
 
   this.attackButton = this.add(new ActionButton(this, game, 25, 132, 'attackIcon', 'actionFrame','attackIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
    function () {
-      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
+      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime()) * 100;
     }, seeker, function () {
     let a = this.attack.timeToCoolDown() / 1000;
     if (isNaN(a)) {
@@ -61,7 +61,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy, selector) {
 
   this.ultimateButton = this.add(new ActionButton(this, game, 64, 132, 'ultimateIcon', 'actionFrame','ultimateIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
    function () {
-      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
+      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime()) * 100;
     }, seeker, function () {
     let a = this.attack.timeToCoolDown() / 1000;
     if (isNaN(a)) {

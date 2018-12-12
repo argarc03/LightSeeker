@@ -8,7 +8,11 @@ var bossPattern = function(character, seeker) {
 };
 
 var patterns = {
-    normal: [ {action: "idle", repetitions: 5}, {action: "attack"}, {action: "idle", repetitions: 4},  {action: "block"}],
+    spider: [ {action: "idle", repetitions: 4}, {action: "block"}, {action: "idle", repetitions: 4},  {action: "attack"},
+        {action: "idle", repetitions: 4}, {action: "block"}, {action: "idle", repetitions: 4},  {action: "attack"},
+        {action: "idle", repetitions: 4}, {action: "block"}, {action: "idle", repetitions: 8},  {action: "attack", repetitions: 2} ],
+    lordRagno: [ {action: "idle", repetitions: 5}, {action: "attack"}, {action: "idle", repetitions: 4},  {action: "block"}],
+
     fungi: [{action: "idle", repetitions: 4},  {action: "thornsBlock"}],
     anormal: [{action: "idle"}],
     boss: [{action: bossPattern}]
