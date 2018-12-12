@@ -2573,13 +2573,6 @@ var HealthBar = function (game, x, y, character, voidKey, healKey, damageKey, he
 HealthBar.prototype = Object.create(Phaser.Group.prototype);
 HealthBar.prototype.constructor = HealthBar;
 
-HealthBar.prototype.activate = function() {
-        this.damageBar.percentage = this.damageBar.percentageFunction();
-        this.healBar.percentage = this.healBar.percentageFunction();
-        this.healthBar.percentage = this.healthBar.percentageFunction();
-        this.hpText.write();
-}
-
 
 module.exports = HealthBar;
 },{"./bar.js":28,"./reactiveContinuousBar.js":43,"./reactiveRichText.js":44,"./textFunctions":52}],38:[function(require,module,exports){
@@ -2983,7 +2976,6 @@ var ReactiveContinuousBar = function (game, parent, x, y, key, percentageFunctio
     this._increaseSpeed = this.bar.width / increaseSpeed;
     this._decreaseSpeed = this.bar.width / decreaseSpeed;
     this.timer = null;
-    ReactiveContinuousBar.prototype.changePercentage.call(this);
 }
 
 ReactiveContinuousBar.prototype = Object.create(ReactiveBar.prototype);
@@ -3532,14 +3524,12 @@ SeekerCombatHUD.prototype.deactivate = function() {
   this.blockButton.deactivate();
   this.item1Button.deactivate();
   this.item2Button.deactivate();
-
 }
 
 SeekerCombatHUD.prototype.activate = function () {
   this.ultimateButton.activate();
   this.attackButton.activate();
   this.blockButton.activate();
-  this.healthBar.activate();
   if(this.seeker.items[0])
     this.item1Button.activate();
   if(this.seeker.items[1])
