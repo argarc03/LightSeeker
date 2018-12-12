@@ -114,10 +114,7 @@ var PreloaderScene = {
         this.game.load.image('spiderAttackEventImage','assets/images/interface/spiderattack_eventimage.png');
         this.game.load.image('fungiCaveEventImage','assets/images/interface/fungicave_eventimage.png');
         this.game.load.image('fungiCavePotionEventImage','assets/images/interface/potionfound_eventimage.png');
-        
 
-        
-        
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarBack','assets/images/interface/actionsBarBack.png');
@@ -229,12 +226,18 @@ var PreloaderScene = {
       this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.mp3']);
     //PLUGINS
       this.game.add.plugin(PhaserInput.Plugin);
+      this.load1 = false;
+      this.load2 = false;
   },
 
-  create: function () {
+  create: function () {      
+      
+  },
+  update() {
+    if(this.load.hasLoaded && this.game.load.hasLoaded){
       this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
       PreloaderScene.game.state.start('intro');
-      
+    }
   }
 
 };
