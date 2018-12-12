@@ -20,7 +20,7 @@ g,0<d.length&&(d=za[d[0]])&&(a.c[e]=d))}a.c[e]||(d=za[e])&&(a.c[e]=d);for(d=0;d<
 },{}],2:[function(require,module,exports){
 module.exports={
     "Brute": {
-        "stats": {"health": 2, "damage":3, "defense":2, "speed":1, "perception":1},
+        "stats": {"health": 4, "damage":3, "defense":3, "speed":1, "perception":1},
         "attack": {"name": "Golpetazo","description":"Realiza un fuerte golpe con su arma.", "icon": "attackIcon"},
         "block": {"name": "Coraza","description":"Se protege con su hombrera.", "icon": "blockIcon"},
         "ultimate": {"name": "Furia ancestral","description":"Aumenta su velocidad desatando su ira.", "icon": "ultimateIcon"},
@@ -28,22 +28,25 @@ module.exports={
         "spriteSheet":"seekerBruteAnimations",
         "actions":{
             "idle":[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
-            "attack":[[24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000],
-            "block":[[48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000],
+            "attack":[[24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 1000, 3500],
+            "block":[[48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 1000, 3500],
             "die":[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]],
             "useObjects":[]
           },
-          "items":[]
+          "items":[],
+          "particles":{
+              "blood": [39, 98, 10, "blueBlood"]
+          }
     },
     "Harpy": {
-        "stats": {"health": 0, "damage":0, "defense":0, "speed":0, "perception":0},
+        "stats": {"health": 2, "damage":2, "defense":1, "speed":3, "perception":3},
         "attack": {"name": "?????","description":"?????", "icon": "attackIcon"},
         "block": {"name": "?????","description":"?????", "icon": "blockIcon"},
         "ultimate": {"name": "?????","description":"?????", "icon": "ultimateIcon"},
         "avaliable": false
     },
     "Warlock": {
-        "stats": {"health": 0, "damage":0, "defense":0, "speed":0, "perception":0},
+        "stats": {"health": 1, "damage":5, "defense":1, "speed":1, "perception":2},
         "attack": {"name": "?????","description":"?????", "icon": "attackIcon"},
         "block": {"name": "?????","description":"?????", "icon": "blockIcon"},
         "ultimate": {"name": "?????","description":"?????", "icon": "ultimateIcon"},
@@ -59,52 +62,296 @@ var Day0 = {
         return 'Ritual';
     },
     Ritual: function (seeker, dayManager) {
-
         return {
-            text: ['"El Ritual"\n\n Has sido elegido por el Gran Cristal. De ti depende todos los habitantes de Spiliag. Tu misión: recolectar y traer contigo todas las Gemas de Luz que puedas. ¡Confiamos en ti ', textFunctions.Fun(function(){return this.name},seeker), '!'],
-                image: 'eventImageError',
-                    options: [{ text: 'Empezar Búsqueda', callback: DayFunctions.NextDay, arguments: [] }],
+            text: ['"El Ritual"\n\n Has sido elegido por el Gran Cristal. De ti dependen todos los habitantes de Spiliag. Tu misión: recolectar y traer contigo todas las Gemas de Luz que puedas. ¡Confiamos en ti ', textFunctions.Fun(function(){return this.name},seeker), '!'],
+                image: 'ritualEventImage',
+                    options: [{ text: '"Iré, es mi deber"', callback: DayFunctions.Event, arguments: [seeker, dayManager, Day0.RitualYes] },
+                              { text: '"Me niego"', callback: DayFunctions.Event, arguments: [seeker, dayManager, Day0.RitualNo] }],
+                        music: 'intro'
+        }
+    },
+    RitualYes: function (seeker, dayManager) {
+        return {
+            text: ['Agradecido, tu pueblo se arrodilla ante tí. Te das la vuelta y partes hacia el peligro, te detienes al cruzar el gran portón, éste se cierra provocando un gran estruendo. Inspiras y liberas el aire justo cuando retomas el paso.'],
+                image: 'ritualAcceptedEventImage',
+                    options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }],
+                        music: 'intro'
+        }
+    },
+    RitualNo: function (seeker, dayManager) {
+        return {
+            text: ['El asombro de todo el pueblo llena las cavernas, el chamán, anonadado, te pregunta:\n-¿Por qué haces ésto?, ahora tienes el poder del Gran Cristal, sin tu ayuda moriremos en poco tiempo.\n Los ojos de todos los que te han acompañado durante tu vida se fijan en tí.'],
+                image: 'ritualDeniedEventImage',
+                    options: [{ text: '"Entiendo"', callback: DayFunctions.Event, arguments: [seeker, dayManager, Day0.RitualYes] },
+                              { text: '"¡He dicho que no!"', callback: DayFunctions.Event, arguments: [seeker, dayManager, Day0.RitualNo] }],
                         music: 'intro'
         }
     }
 }
 
 module.exports = Day0;
-},{"../../js/interface/textFunctions":49,"../../js/manager/dayFunctions":52}],4:[function(require,module,exports){
+},{"../../js/interface/textFunctions":52,"../../js/manager/dayFunctions":55}],4:[function(require,module,exports){
 var DayFunctions = require('../../js/manager/dayFunctions');
+var Enemies = require('../enemies/enemies.json');
 
-var Day0 = {
+var Day1 = {
     DayGenerator: function (seeker, dayManager) {
-        return 'Luces';
+        return 'EcoDesafortunado';
     },
-    Luces: function (seeker, dayManager) {
+    EcoDesafortunado: function (seeker, dayManager) {
         return {
-            text: 'Esto es un texto de prueba2',
-            image: 'eventImageError',
-            options: [{ text: 'Seguir', callback: DayFunctions.NextDay, arguments: [] }],
+            text: ['"Eco desafortunado"\n\nCuando te das cuenta ya estás muy lejos de tu hogar...\n',
+                'Una enorme grieta en el suelo se interpone en tu camino. Escuchas unos ruidos que provienen del fondo. Se podría bordearla o explorar su interior.'],
+            image: 'spiderEventImage',
+            options: [{
+                text: 'Intentar cruzar', callback: DayFunctions.Event, arguments: [seeker,
+                    dayManager,
+                    Day1.EcoDesafortunadoCruzar]
+            },
+            {
+                text: 'Explorar', callback: DayFunctions.Event, arguments: [seeker,
+                    dayManager,
+                    Day1.EcoDesafortunadoExplorar
+                ]
+            }
+            ],
+            music: 'intro'
+        }
+    },
+
+    EcoDesafortunadoCruzar: function (seeker, dayManager) {
+        return {
+            text: ['Consigues saltar el acantilado sin ningún percance y prosigues tu viaje.'],
+            image: 'spiderEventImage',
+            options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }
+            ],
+            music: 'intro'
+        }
+    },
+
+    EcoDesafortunadoExplorar: function (seeker, dayManager) {
+        return {
+            text: ['¡Una criatura aparece de entre las sombras y se abalanza contra ti!'],
+            image: 'spiderAttackEventImage',
+            options: [{
+                text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
+                    dayManager,
+                    Enemies.Spider,
+                    'combatbackground',
+                    'firetheme',
+                    function () { DayFunctions.NextDay(seeker, dayManager) }
+                ]
+            }
+            ],
             music: 'intro'
         }
     }
 }
 
-module.exports = Day0;
-},{"../../js/manager/dayFunctions":52}],5:[function(require,module,exports){
+module.exports = Day1;
+},{"../../js/manager/dayFunctions":55,"../enemies/enemies.json":8}],5:[function(require,module,exports){
+var DayFunctions = require('../../js/manager/dayFunctions');
+var Enemies = require('../enemies/enemies.json');
+
+var Day2 = {
+    DayGenerator: function (seeker, dayManager) {
+        return 'CuevaFungimantica';
+    },
+    CuevaFungimantica: function (seeker, dayManager) {
+        return {
+            text: ['"Cueva misteriosa"\n\nTe encuentras con una cueva que desprende un fuerte olor a humedad. El terreno se encuentra cubierto de una sustancia gelatinosa.'],
+            image: 'fungiCaveEventImage',
+            options: [{
+                text: 'Investigar', callback: DayFunctions.Event, arguments: [seeker,
+                    dayManager,
+                    Day2.CuevaFungimanticaInvestigar]
+            },
+            {
+                text: 'Evitar', callback: DayFunctions.Event, arguments: [seeker,
+                    dayManager,
+                    Day2.CuevaFungimanticaEvitar
+                ]
+            }
+            ],
+            music: 'intro'
+        }
+    },
+
+    CuevaFungimanticaInvestigar: function (seeker, dayManager) {
+        return {
+            text: ['Alcanzado el final de la cavidad subterránea, observas una figura humanoide apoyada en la pared. Cuando te aproximas, te percatas de que es un cadáver.',
+        'De su cinturón, cuelga un vial con un icor verde.'],
+            image: 'fungiCavePotionEventImage',
+            options: [{ text: 'Guardarlo', callback: DayFunctions.Event, arguments: [seeker,
+                dayManager,
+                Day2.CuevaFungimanticaVolver] },
+            { text: 'Salir', callback: DayFunctions.Event, arguments: [seeker,
+                dayManager,
+                Day2.CuevaFungimanticaVolver] }
+            ],
+            music: 'intro'
+        }
+    },
+
+    CuevaFungimanticaEvitar: function (seeker, dayManager) {
+        return {
+            text: ['Pasas de largo sin darle importancia a lo que pudiese encontrarse dentro.'],
+            image: 'fungiCaveEventImage',
+            options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }],
+            music: 'intro'
+        }
+    },
+
+    CuevaFungimanticaVolver: function (seeker, dayManager) {
+        return {
+            text: ['Cuando estás a punto de salir de la cueva, del suelo emerge un enorme hongo que obstaculiza la salida.',
+            'Cuando te acercas un poco más, unas espinas salen de su pileo. Parece que tendrás que acabar con él si quieres proseguir tu camino.'],
+            image: 'fungiCaveAttackEventImage',
+            options: [{
+                text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
+                    dayManager,
+                    Enemies.Fungi,
+                    'watercombatbackground',
+                    'watertheme',
+                    function () { DayFunctions.NextDay(seeker, dayManager) }
+                ]
+            }
+            ],
+            music: 'intro'
+        }
+    }
+}
+
+module.exports = Day2;
+},{"../../js/manager/dayFunctions":55,"../enemies/enemies.json":8}],6:[function(require,module,exports){
+var DayFunctions = require('../../js/manager/dayFunctions');
+var Enemies = require('../enemies/enemies.json');
+
+var Day3 = {
+    DayGenerator: function (seeker, dayManager) {
+        return 'EncuentroLordRagno';
+    },
+    EncuentroLordRagno: function (seeker, dayManager) {
+        return {
+            text: ['FIN DE LA DEMO'],
+            image: 'eventImageError',
+            options: [],
+            music: 'intro'
+        }
+    },
+
+    /*CuevaFungimanticaInvestigar: function (seeker, dayManager) {
+        return {
+            text: ['Alcanzado el final de la cavidad subterránea, observas una figura humanoide apoyada en la pared. Cuando te aproximas, te percatas de que es un cadáver.',
+        'De su cinturón, cuelga un vial con un icor verde.'],
+            image: 'eventImageError',
+            options: [{ text: 'Guardarlo', callback: DayFunctions.Event, arguments: [seeker,
+                dayManager,
+                Day3.CuevaFungimanticaVolver] },
+            { text: 'Salir', callback: DayFunctions.Event, arguments: [seeker,
+                dayManager,
+                Day3.CuevaFungimanticaVolver] }
+            ],
+            music: 'intro'
+        }
+    },
+
+    CuevaFungimanticaEvitar: function (seeker, dayManager) {
+        return {
+            text: ['Pasas de largo sin darle importancia a lo que pudiese encontrarse dentro.'],
+            image: 'eventImageError',
+            options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }],
+            music: 'intro'
+        }
+    },
+
+    CuevaFungimanticaVolver: function (seeker, dayManager) {
+        return {
+            text: ['Cuando estás a punto de salir de la cueva, del suelo emerge un enorme hongo que obstaculiza la salida.',
+            'Cuando te acercas un poco más, unas espinas salen de su pileo. Parece que tendrás que acabar con él si quieres proseguir tu camino.'],
+            image: 'eventImageError',
+            options: [{
+                text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
+                    dayManager,
+                    Enemies.Fungi,
+                    'waterbackground',
+                    'watertheme',
+                    function () { DayFunctions.NextDay(seeker, dayManager) }
+                ]
+            }
+            ],
+            music: 'intro'
+        }
+    }*/
+}
+
+module.exports = Day3;
+},{"../../js/manager/dayFunctions":55,"../enemies/enemies.json":8}],7:[function(require,module,exports){
 'use strict'
 
 var Days={
     day0: require('./day0'),
-    day1: require('./day1')
+    day1: require('./day1'),
+    day2: require('./day2'),
+    day3: require('./day3')
 }
 
 module.exports = Days;
-},{"./day0":3,"./day1":4}],6:[function(require,module,exports){
+},{"./day0":3,"./day1":4,"./day2":5,"./day3":6}],8:[function(require,module,exports){
+module.exports={
+    "LordRagno":{
+        "name":"Lord Ragno",
+        "stats": {"damage": 5, "defense": 6, "speed": 1, "health": 10, "perception": 4}, 
+        "spriteSheet":"lordRagnoAnimations", 
+        "actions":{
+            "idle":[[0, 1, 2, 3, 4, 5]],
+            "attack":[[24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]],
+            "block":[[48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]],
+            "die":[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]]
+        },
+        "particles":{
+            "blood": [40, 93, 10, "greenBlood"]
+        },
+        "pattern":"lordRagno"
+    },
+    "Fungi":{
+        "name":"Fungi",
+        "stats": {"damage": 3, "defense": 4, "speed": 1, "health": 6, "perception": 2}, 
+        "spriteSheet":"fungiAnimations", 
+        "actions":{
+            "idle":[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
+            "thornsBlock":[[16, 17, 18, 19, 20,21], [22, 23], [24, 25, 26, 27,28]],
+            "die":[[32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]]
+        },
+        "particles":{
+            "blood": [40, 93, 10, "cianBlood"]
+        },
+        "pattern":"fungi"
+    },
+    "Spider":{
+        "name":"Spider",
+        "stats": {"damage": 1, "defense": 1, "speed": 3, "health": 3, "perception": 1}, 
+        "spriteSheet":"spiderAnimations", 
+        "actions":{
+            "idle":[[0, 1, 2, 3]],
+            "attack":[[12,13,14,15], [16,17,18,19]],
+            "block":[[24, 25, 26, 27], [27, 28], [29, 30, 31]],
+            "die":[[36, 37,38,39,40,41,42,43,44,45,46,47]]
+        },
+        "particles":{
+            "blood": [40, 107, 10, "greenBlood"]
+        },
+        "pattern":"spider"
+    }
+}
+},{}],9:[function(require,module,exports){
 module.exports={
     "font": "Minecraft",
     "fill": "#fff",
     "fontSize": 10,
     "align":"center"
 }
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict'
 
 var Item = require('../../js/characters/item');
@@ -127,7 +374,7 @@ var Items = {
 module.exports = Items;
 
 
-},{"../../js/characters/item":16}],8:[function(require,module,exports){
+},{"../../js/characters/item":19}],11:[function(require,module,exports){
 'use strict'
 
 var bossPattern = function(character, seeker) { 
@@ -138,7 +385,15 @@ var bossPattern = function(character, seeker) {
 };
 
 var patterns = {
-    normal: [ {action: "idle", repetitions: 5}, {action: "attack"}, {action: "idle", repetitions: 4},  {action: "block"}],
+    spider: [ {action: "idle", repetitions: 4}, {action: "block"}, {action: "idle", repetitions: 4},  {action: "attack"},
+        {action: "idle", repetitions: 4}, {action: "block"}, {action: "idle", repetitions: 4},  {action: "attack"},
+        {action: "idle", repetitions: 4}, {action: "block"}, {action: "idle", repetitions: 8},  {action: "attack", repetitions: 2} ],
+
+    lordRagno: [ {action: "idle", repetitions: 7}, {action: "attack"}, {action: "idle", repetitions: 6},  {action: "block"},
+        {action: "idle", repetitions: 6},  {action: "block"}],
+
+    fungi: [{action: "idle", repetitions: 1},  {action: "thornsBlock"},
+        {action: "idle", repetitions: 1},  {action: "thornsBlock", repetitions: 2}],
     anormal: [{action: "idle"}],
     boss: [{action: bossPattern}]
 }
@@ -146,7 +401,7 @@ var patterns = {
 
 
 module.exports = patterns;
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict'
 /**
  * 
@@ -181,7 +436,7 @@ var Action = {
     attacking(target) {
         this.animations.play('attacking', this.stats.frameRate, false);
         if (arguments[2] !== null) {
-            arguments[2].hurt(this.stats.realDamage);
+            arguments[2].hit(this.stats.realDamage,this);
         };
         this.animations._anims.attacking.onComplete.add(this.idle, this);
 
@@ -205,12 +460,12 @@ var Action = {
     blocking() {
         this.isBlocking = true;
         this.animations.play('blocking', this.stats.frameRate, true);
-        this.animations._anims.blocking.onLoop.add(this._loop, this);
+        this.animations._anims.blocking.onLoop.add(this._blockingLoop, this);
     },
     /**
      * 
      */
-    loop() {
+    blockingLoop() {
         if (this.animations._anims.blocking.loopCount >= (this.stats.blockingTime / this.animations._anims.blocking._frames.length * this.stats.frameRate / Phaser.Timer.SECOND)){
             this._postBlocking();
         }
@@ -226,9 +481,82 @@ var Action = {
     /**
      * 
      */
+    block() {
+        this._preBlocking();
+    },
+    /**
+     * 
+     */
+    preBlocking() {
+        this.animations.play('preBlocking', this.stats.frameRate, false);
+        this.animations._anims.preBlocking.onComplete.add(this._blocking, this);
+    },
+    /**
+     * 
+     */
+    blocking() {
+        this.isBlocking = true;
+        this.animations.play('blocking', this.stats.frameRate, true);
+        this.animations._anims.blocking.onLoop.add(this._blockingLoop, this);
+    },
+    /**
+     * 
+     */
+    blockingLoop() {
+        if (this.animations._anims.blocking.loopCount >= (this.stats.blockingTime / this.animations._anims.blocking._frames.length * this.stats.frameRate / Phaser.Timer.SECOND)){
+            this._postBlocking();
+        }
+    },
+    /**
+     * 
+     */
+    postBlocking() {
+        this.isBlocking = false;
+        this.animations.play('postBlocking', this.stats.frameRate, false);
+        this.animations._anims.postBlocking.onComplete.add(this.idle, this);
+    },/**
+    * 
+    */
+   thornsBlock() {
+       this._preThornsBlocking();
+   },
+   /**
+    * 
+    */
+   preThornsBlocking() {
+       this.animations.play('preThornsBlocking', this.stats.frameRate, false);
+       this.animations._anims.preThornsBlocking.onComplete.add(this._thornsBlocking, this);
+   },
+   /**
+    * 
+    */
+   thornsBlocking() {
+       this.isBlocking = true;
+       this.animations.play('thornsBlocking', this.stats.frameRate, true);
+       this.animations._anims.thornsBlocking.onLoop.add(this._thornsBlockingLoop, this);
+   },
+   /**
+    * 
+    */
+   thornsBlockingLoop() {
+       if (this.animations._anims.thornsBlocking.loopCount >= (this.stats.blockingTime / this.animations._anims.thornsBlocking._frames.length * this.stats.frameRate / Phaser.Timer.SECOND)){
+           this._postThornsBlocking();
+       }
+   },
+   /**
+    * 
+    */
+   postThornsBlocking() {
+       this.isBlocking = false;
+       this.animations.play('postThornsBlocking', this.stats.frameRate, false);
+       this.animations._anims.postThornsBlocking.onComplete.add(this.idle, this);
+   },
+    /**
+     * 
+     */
     die() {
+        this.animations.play('dying', 10, false);
         this.onDeath.dispatch();
-        this.animations.play('dying', this.frameRate, false);
     },
 
     /**
@@ -252,7 +580,7 @@ var Action = {
 }
 
 module.exports = Action;
-},{}],10:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict'
 
 var Action = require('./action.js');
@@ -305,12 +633,33 @@ ActionFactory.prototype.block = function(framesPreBlocking, framesBlocking, fram
     this.character.block = Action.block;
     this.character._preBlocking = Action.preBlocking;
     this.character._blocking = Action.blocking;
-    this.character._loop = Action.loop;
+    this.character._blockingLoop = Action.blockingLoop;
     this.character._postBlocking = Action.postBlocking;
     this.character.block.totalTime = TimeCalculations.totalBlockTime.bind(this.character);
     this.character.block.currentTime = TimeCalculations.currentBlockTime.bind(this.character);
 }
-
+/**
+ * 
+ * @param {number[]|string[]} framesPreThornsBlocking 
+ * @param {number[]|string[]} framesThornsBlocking 
+ * @param {number[]|string[]} framesPostThornsBlocking 
+ */
+ActionFactory.prototype.thornsBlock = function(framesPreThornsBlocking, framesThornsBlocking, framesPostThornsBlocking) {
+    this.character.animations.add('preThornsBlocking', framesPreThornsBlocking, true);
+    this.character.animations.add('thornsBlocking', framesThornsBlocking, true);
+    this.character.animations.add('postThornsBlocking', framesPostThornsBlocking, true);
+    this.character.onHit.add(function(attacker,damage){
+        if(this.character.isBlocking)
+            attacker.hurt(this.character.stats.realDamage);
+    },this);
+    this.character.thornsBlock = Action.thornsBlock;
+    this.character._preThornsBlocking = Action.preThornsBlocking;
+    this.character._thornsBlocking = Action.thornsBlocking;
+    this.character._thornsBlockingLoop = Action.thornsBlockingLoop;
+    this.character._postThornsBlocking = Action.postThornsBlocking;
+    this.character.thornsBlock.totalTime = TimeCalculations.totalThornsBlockTime.bind(this.character);
+    this.character.thornsBlock.currentTime = TimeCalculations.currentThornsBlockTime.bind(this.character);
+}
 ActionFactory.prototype.useObjects = function() {
     this.character.use = Action.use;
 }
@@ -327,7 +676,7 @@ ActionFactory.prototype.die = function(framesDying) {
 }
 
 module.exports = ActionFactory;
-},{"./action.js":9,"./timeCalculations.js":20}],11:[function(require,module,exports){
+},{"./action.js":12,"./timeCalculations.js":23}],14:[function(require,module,exports){
 'use strict'
 
 var ActionPattern = function (pattern, seeker, character) {
@@ -375,7 +724,7 @@ Object.defineProperty(ActionPattern.prototype, 'nextAction', {
 });
 
 module.exports = ActionPattern;
-},{}],12:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict'
 
 var CoolDown = require('./coolDown');
@@ -404,7 +753,8 @@ SeekerActionFactory.prototype.attack = function (framesPreAttacking, framesAttac
     this.character.coolDown.attack.onStart = new Phaser.Signal();
     this.character.coolDown.attack.onWhile = new Phaser.Signal();
     this.character.coolDown.attack.onEnd = new Phaser.Signal();
-    this.character.coolDown.attack.global = globalCoolDown;
+    this.character.coolDown.attack.global = function(){
+        return this.attack.totalTime()*1000+globalCoolDown*this.stats.coolDownFactor}.bind(this.character);
 
     this.character.attack = function (target) {
         if (!this.coolDown.attack.running) {
@@ -420,7 +770,8 @@ SeekerActionFactory.prototype.attack = function (framesPreAttacking, framesAttac
         let a = this.coolDown.attack.nextTick - this.coolDown.attack._now;
         return a<0?NaN:a;
     }.bind(this.character);
-    this.character.attack.coolDownTime = selfCoolDown;
+    this.character.attack.coolDownTime = function(){
+        return this.attack.totalTime()*1000+selfCoolDown*this.stats.coolDownFactor}.bind(this.character);
 }
 
 SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlocking, framesPostBlocking, globalCoolDown, selfCoolDown) {
@@ -430,7 +781,8 @@ SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlockin
     this.character.coolDown.block.onStart = new Phaser.Signal();
     this.character.coolDown.block.onWhile = new Phaser.Signal();
     this.character.coolDown.block.onEnd = new Phaser.Signal();
-    this.character.coolDown.block.global = globalCoolDown;
+    this.character.coolDown.block.global = function(){
+        return this.block.totalTime()*1000+globalCoolDown*this.stats.coolDownFactor}.bind(this.character);
 
     this.character.block = function () {
         if (!this.coolDown.block.running) {
@@ -448,7 +800,8 @@ SeekerActionFactory.prototype.block = function (framesPreBlocking, framesBlockin
         let a = this.coolDown.block.nextTick - this.coolDown.block._now;
         return a<0?NaN:a;
     }.bind(this.character);
-    this.character.block.coolDownTime = selfCoolDown;
+    this.character.block.coolDownTime = function(){
+        return this.block.totalTime()*1000+selfCoolDown*this.stats.coolDownFactor}.bind(this.character);
 }
 
 
@@ -457,7 +810,7 @@ SeekerActionFactory.prototype.die = function (framesDying) {
 }
 
 module.exports = SeekerActionFactory;
-},{"./action":9,"./actionFactory":10,"./coolDown":14,"./timeCalculations":20}],13:[function(require,module,exports){
+},{"./action":12,"./actionFactory":13,"./coolDown":17,"./timeCalculations":23}],16:[function(require,module,exports){
 /**
 * @author       Carlos Durán Domínguez <carduran@ucm.es>
 * @copyright    2018 Turing's Songs Studios© 
@@ -483,7 +836,7 @@ var Stats = require('./stats');
  * @param {string} spriteSheet -
  * @param {string, arguments} actions -
 */
-var Character = function (game, x, y, name, stats, spriteSheet, actions) {
+var Character = function (game, x, y, name, stats, spriteSheet, actions, particles) {
     Phaser.Sprite.call(this, game, x, y, spriteSheet)
     this._name = name;
     this.onNameChange = new Phaser.Signal();
@@ -499,6 +852,7 @@ var Character = function (game, x, y, name, stats, spriteSheet, actions) {
     this.onHpChange = new Phaser.Signal();
     this.onRest = new Phaser.Signal();
     this.onDeath = new Phaser.Signal();
+    this.onHit = new Phaser.Signal();
     //ref to Factories
     this.addAction = new ActionFactory(this);
     this.addParticle = new ParticleFactory(this);
@@ -506,10 +860,23 @@ var Character = function (game, x, y, name, stats, spriteSheet, actions) {
     for(var action in actions){
         this.addAction[action](...actions[action]);
     }
+    
+    for(var particle in particles){
+        this.addParticle[particle](...particles[particle]);
+    }
 }
 
 Character.prototype = Object.create(Phaser.Sprite.prototype);
 Character.prototype.constructor = Character;
+
+/**
+ * 
+ * @param {number} damage -
+ */
+Character.prototype.hit = function (damage, attacker) {
+    this.onHit.dispatch(attacker, damage);
+    this.hurt(damage);
+}
 
 /**
  * 
@@ -568,7 +935,7 @@ Object.defineProperty(Character.prototype, 'name',{
 });
 
 module.exports = Character;
-},{"./actionFactory":10,"./particleFactory.js":17,"./stats":19}],14:[function(require,module,exports){
+},{"./actionFactory":13,"./particleFactory.js":20,"./stats":22}],17:[function(require,module,exports){
 'use strict'
 
 var TimerAlterations = require('./timerAlterations');
@@ -581,17 +948,17 @@ var CoolDown = {
      * @param {number} time 
      */
     addAllTime(event) {
-        this.coolDown[event].nextTick = this[event].coolDownTime + this.coolDown[event]._now;
+        this.coolDown[event].nextTick = this[event].coolDownTime() + this.coolDown[event]._now;
         this.coolDown[event].start();
         this.coolDown[event].onStart.dispatch();
         for (let timer in this.coolDown) {
             if(timer!==event){
                 if (this.coolDown[timer].running) {
-                    this.coolDown[timer].nextTick += this.coolDown[event].global;
+                    this.coolDown[timer].nextTick += this.coolDown[event].global();
                 } else {
                     this.coolDown[timer].start();
                     this.coolDown[timer].onStart.dispatch();
-                    this.coolDown[timer].nextTick = this.coolDown[event].global + this.coolDown[event]._now;
+                    this.coolDown[timer].nextTick = this.coolDown[event].global() + this.coolDown[event]._now;
                     CoolDown.signalEmiter.call(this, timer);
                 }
             }
@@ -622,14 +989,14 @@ var CoolDown = {
 }
 
 module.exports = CoolDown;
-},{"./timerAlterations":21}],15:[function(require,module,exports){
+},{"./timerAlterations":24}],18:[function(require,module,exports){
 'use strict'
 
 var Character = require('./character');
 var ActionPattern = require('./actionPattern');
 
-var Enemy = function(game, x, y, name, stats, spriteSheet, actions, seeker, pattern){
-    Character.call(this, game, x, y, name, stats, spriteSheet, actions);
+var Enemy = function(game, x, y, name, stats, spriteSheet, actions, particles, seeker, pattern){
+    Character.call(this, game, x, y, name, stats, spriteSheet, actions, particles);
     this.actionPattern = new ActionPattern(pattern, seeker, this);
     this.seeker = seeker;
     this._lastActionEvent;
@@ -641,7 +1008,7 @@ var Enemy = function(game, x, y, name, stats, spriteSheet, actions, seeker, patt
     },this);
     this.onDeath.add(function() {
         this.act = function () {};
-        this.game.time.events.remove(this._lastActionEvent);
+        this.patternTimer.removeAll();
     }, this)
 }
 
@@ -667,7 +1034,7 @@ Enemy.prototype.start = function(){
 }
 
 module.exports = Enemy;
-},{"./actionPattern":11,"./character":13}],16:[function(require,module,exports){
+},{"./actionPattern":14,"./character":16}],19:[function(require,module,exports){
 'use strict'
 
 var _use = function(use, that) {
@@ -693,10 +1060,10 @@ Item.prototype.destroy = function() {
 }
 
 module.exports = Item;
-},{}],17:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict'
 
-var ParticleFactory  = function (character) {
+var ParticleFactory = function (character) {
     this.character = character;
 }
 
@@ -711,8 +1078,17 @@ ParticleFactory.prototype.blood = function (x = this.character.width / 2, y = th
     this.character.bleed.minParticleScale = 1;
     this.character.bleed.maxParticleScale = 2;
     this.character.bleed.bounce = 0;
-    this.character._damaged = function (damage) {
 
+    
+
+    //this.character.game.worldbleed.particleBringToTop = true;
+    //this.character.game.world.bringToTop(this.character.bleed);
+
+
+    //let b = this.character.game.world.bringToTop(this.character.bleed);
+    //console.log(b);
+    this.character._damaged = function (damage) {
+        this.bleed.parent.bringToTop(this.bleed);
         let angle = this.game.rnd.angle();
         let radius = this.game.rnd.frac() * this.bleed.radius;
         this.bleed.emitX = radius * Math.sin(Math.PI / 180 * angle) + this.bleed.x;
@@ -724,7 +1100,7 @@ ParticleFactory.prototype.blood = function (x = this.character.width / 2, y = th
 }
 
 module.exports = ParticleFactory;
-},{}],18:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 var Character = require('./character.js');
@@ -743,8 +1119,8 @@ var Items = require('../../assets/items/items');
  * @param {Stats} stats -
  * @param {string} spriteSheet -
 */
-var Seeker = function (game, x, y, name, stats, items, spriteSheet, actions) {
-    Character.call(this, game, x, y, name, stats, spriteSheet);
+var Seeker = function (game, x, y, name, stats, items, spriteSheet, actions, particles) {
+    Character.call(this, game, x, y, name, stats, spriteSheet,[], particles);
     this.addAction = new SeekerActionFactory(this);
     
     for(var action in actions){
@@ -785,203 +1161,209 @@ Seeker.prototype.start = function(){
 }
 
 module.exports = Seeker;
-},{"../../assets/items/items":7,"./actionSeekerFactory.js":12,"./character.js":13,"./item":16}],19:[function(require,module,exports){
+},{"../../assets/items/items":10,"./actionSeekerFactory.js":15,"./character.js":16,"./item":19}],22:[function(require,module,exports){
 'use strict'
 
 var Stats = function (damage, defense, speed, health, perception, tempDamage = undefined, tempDefense = undefined, tempSpeed = undefined, tempHealth = undefined, tempPerception = undefined) {
     this._damage = damage;
-    this._tempDamage = tempDamage===undefined?damage:tempDamage;
+    this._tempDamage = tempDamage === undefined ? damage : tempDamage;
     this.onDamageChange = new Phaser.Signal();
     this._defense = defense;
-    this._tempDefense = tempDefense===undefined?defense:tempDefense;
+    this._tempDefense = tempDefense === undefined ? defense : tempDefense;
     this.onDefenseChange = new Phaser.Signal();
     this._speed = speed;
-    this._tempSpeed = tempSpeed===undefined?speed:tempSpeed;
+    this._tempSpeed = tempSpeed === undefined ? speed : tempSpeed;
     this.onSpeedChange = new Phaser.Signal();
     this._health = health;
-    this._tempHealth = tempHealth===undefined?health:tempHealth;
+    this._tempHealth = tempHealth === undefined ? health : tempHealth;
     this.onHealthChange = new Phaser.Signal();
     this._perception = perception;
-    this._tempPerception = tempPerception===undefined?perception:tempPerception;
+    this._tempPerception = tempPerception === undefined ? perception : tempPerception;
     this.onPerceptionChange = new Phaser.Signal();
 }
 
-Stats.prototype.damagedNotBlocked = function(damage) {
+Stats.prototype.damagedNotBlocked = function (damage) {
     return Math.max(0, damage - this.realBlock);
 }
 
-Object.defineProperty(Stats.prototype, 'frameRate',{
-    get: function() {
-        return 10 * this.tempSpeed;
+Object.defineProperty(Stats.prototype, 'frameRate', {
+    get: function () {
+        return 10 + this.tempSpeed / ((this.tempSpeed + 100)) * 50;
     }
 });
 
-Object.defineProperty(Stats.prototype, 'realBlock',{
-    get: function() {
-        return this.tempDefense;
+Object.defineProperty(Stats.prototype, 'realBlock', {
+    get: function () {
+        return this.tempDefense * 2;
     }
 });
 
-Object.defineProperty(Stats.prototype, 'realDamage',{
-    get: function() {
-        return this.tempDamage;
+Object.defineProperty(Stats.prototype, 'realDamage', {
+    get: function () {
+        return this.tempDamage * 2;
     }
 });
 
-Object.defineProperty(Stats.prototype, 'blockingTime',{
-    get: function() {
-        return Phaser.Timer.SECOND;
+Object.defineProperty(Stats.prototype, 'blockingTime', {
+    get: function () {
+        return Phaser.Timer.SECOND / 2 + Phaser.Timer.SECOND * this.tempHealth / ((this.tempHealth + 9)) * 2;
     }
 });
 
-Object.defineProperty(Stats.prototype, 'maxHp',{
-    get: function() {
-        return this._tempHealth
+Object.defineProperty(Stats.prototype, 'maxHp', {
+    get: function () {
+        return this._tempHealth * 5;
     }
 });
 
-Object.defineProperty(Stats.prototype, 'tempDamage',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'tempDamage', {
+    get: function () {
         return this._tempDamage;
     },
-    set: function(value) {
+    set: function (value) {
         this._tempDamage = value;
         this.onDamageChange.dispatch();
     }
 });
 
-Object.defineProperty(Stats.prototype, 'damage',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'damage', {
+    get: function () {
         return this._damage;
     },
-    set: function(value) {
+    set: function (value) {
         this._damage = value;
         this.onDamageChange.dispatch();
     }
 });
 
-Stats.prototype.resetDamage = function() {
+Stats.prototype.resetDamage = function () {
     this.damage = this.tempDamage;
 };
 
-Stats.prototype.updateDamage = function() {
+Stats.prototype.updateDamage = function () {
     this.tempDamage = this.damage;
 };
 
-Object.defineProperty(Stats.prototype, 'defense',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'defense', {
+    get: function () {
         return this._defense;
     },
-    set: function(value) {
+    set: function (value) {
         this._defense = value;
         this.onDefenseChange.dispatch();
     }
 });
 
-Object.defineProperty(Stats.prototype, 'tempDefense',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'tempDefense', {
+    get: function () {
         return this._tempDefense;
     },
-    set: function(value) {
+    set: function (value) {
         this._tempDefense = value;
         this.onDefenseChange.dispatch();
     }
 });
 
-Stats.prototype.resetDefense = function() {
+Stats.prototype.resetDefense = function () {
     this.defense = this.tempDefense;
 };
 
-Stats.prototype.updateDefense = function() {
+Stats.prototype.updateDefense = function () {
     this.tempDefense = this.defense;
 };
 
-Object.defineProperty(Stats.prototype, 'speed',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'speed', {
+    get: function () {
         return this._speed;
     },
-    set: function(value) {
+    set: function (value) {
         this._speed = value;
         this.onSpeedChange.dispatch();
     }
 });
 
-Object.defineProperty(Stats.prototype, 'tempSpeed',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'tempSpeed', {
+    get: function () {
         return this._tempSpeed;
     },
-    set: function(value) {
+    set: function (value) {
         this._tempSpeed = value;
         this.onSpeedChange.dispatch();
     }
 });
 
-Stats.prototype.resetSpeed = function() {
+Stats.prototype.resetSpeed = function () {
     this.speed = this.tempSpeed;
 };
 
-Stats.prototype.updateSpeed = function() {
+Stats.prototype.updateSpeed = function () {
     this.tempSpeed = this.speed;
 };
 
-Object.defineProperty(Stats.prototype, 'health',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'health', {
+    get: function () {
         return this._health
     },
-    set: function(value) {
+    set: function (value) {
         this._health = value;
         this.onHealthChange.dispatch();
     }
 });
 
-Object.defineProperty(Stats.prototype, 'tempHealth',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'tempHealth', {
+    get: function () {
         return this._tempHealth
     },
-    set: function(value) {
+    set: function (value) {
         this._tempHealth = value;
         this.onHealthChange.dispatch();
     }
 });
 
-Stats.prototype.resetHealth = function() {
+Stats.prototype.resetHealth = function () {
     this.health = this.tempHealth;
 };
 
-Stats.prototype.updateHealth = function() {
+Stats.prototype.updateHealth = function () {
     this.tempHealth = this.health;
 };
 
 
-Object.defineProperty(Stats.prototype, 'perception',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'perception', {
+    get: function () {
         return this._perception
     },
-    set: function(value) {
+    set: function (value) {
         this._perception = value;
         this.onPerceptionChange.dispatch();
     }
 });
 
-Object.defineProperty(Stats.prototype, 'tempPerception',{
-    get: function() {
+Object.defineProperty(Stats.prototype, 'tempPerception', {
+    get: function () {
         return this._tempPerception
     },
-    set: function(value) {
+    set: function (value) {
         this._tempPerception = value;
         this.onPerceptionChange.dispatch();
     }
 });
 
-Stats.prototype.resetPerception = function() {
+Object.defineProperty(Stats.prototype, 'coolDownFactor', {
+    get: function () {
+        return (99-this.tempSpeed)/98;
+    }
+});
+
+Stats.prototype.resetPerception = function () {
     this.perception = this.tempPerception;
 };
 
-Stats.prototype.updatePerception = function() {
+Stats.prototype.updatePerception = function () {
     this.tempPerception = this.perception;
 };
 
-Stats.prototype.reset = function() {
+Stats.prototype.reset = function () {
     this.resetDamage();
     this.resetDefense();
     this.resetHealth();
@@ -989,7 +1371,7 @@ Stats.prototype.reset = function() {
     this.resetPerception();
 };
 
-Stats.prototype.update = function() {
+Stats.prototype.update = function () {
     this.updateDamage();
     this.updateDefense();
     this.updateHealth();
@@ -998,7 +1380,7 @@ Stats.prototype.update = function() {
 };
 
 module.exports = Stats;
-},{}],20:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict'
 
 var TimeCalculations = {
@@ -1034,6 +1416,25 @@ var TimeCalculations = {
                 return NaN;
         }
     },
+    totalThornsBlockTime: function() {
+        return ((this.animations._anims.preThornsBlocking._frames.length + this.animations._anims.postThornsBlocking._frames.length)
+            / this.stats.frameRate) + this.stats.blockingTime/Phaser.Timer.SECOND;
+    },
+    currentThornsBlockTime: function() {
+        switch (this.animations.currentAnim.name) {
+            case 'preThornsBlocking':
+                return (this.animations._anims.preThornsBlocking.currentFrame.index - this.animations._anims.preThornsBlocking._frames[0]) / this.stats.frameRate;
+            case 'thornsBlocking':
+                return (this.animations._anims.preThornsBlocking.currentFrame.index - this.animations._anims.thornsBlocking._frames[0] + this.animations._anims.thornsBlocking.loopCount * this.animations._anims.thornsBlocking._frames.length
+                    + this.animations._anims.preThornsBlocking._frames.length) / this.stats.frameRate;
+            case 'postThornsBlocking':
+                return (this.animations._anims.preThornsBlocking.currentFrame.index - this.animations._anims.postThornsBlocking._frames[0] +
+                    this.animations._anims.preThornsBlocking._frames.length) / this.stats.frameRate
+                    + this.stats.blockingTime/Phaser.Timer.SECOND;
+            default:
+                return NaN;
+        }
+    },
     totalIdleTime: function(){
         return (this.animations._anims.idle._frames.length)/this.stats.frameRate;
     },
@@ -1046,7 +1447,7 @@ var TimeCalculations = {
 }
 
 module.exports = TimeCalculations;
-},{}],21:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict'
 
 var TimerAlterations = {
@@ -1057,7 +1458,7 @@ var TimerAlterations = {
 }
 
 module.exports = TimerAlterations;
-},{}],22:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 // var Phaser = require('phaser');
 
 var Character = require('./characters/character');
@@ -1087,19 +1488,19 @@ var CreationHUD = require('./interface/creationHUD');
  * 
  */
 fun = function (Phaser) {
-    Phaser.GameObjectFactory.prototype.character = function (x, y, name, stats, spriteSheet, actions, group) {
+    Phaser.GameObjectFactory.prototype.character = function (x, y, name, stats, spriteSheet, actions, particles, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Character(this.game, x, y, name, stats, spriteSheet, actions));
+        return group.add(new Character(this.game, x, y, name, stats, spriteSheet, actions, particles));
     }
 
-    Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, objects, spriteSheet, actions, group) {
+    Phaser.GameObjectFactory.prototype.seeker = function (x, y, name, stats, objects, spriteSheet, actions, particles, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Seeker(this.game, x, y, name, stats, objects, spriteSheet, actions));
+        return group.add(new Seeker(this.game, x, y, name, stats, objects, spriteSheet, actions, particles));
     }
 
-    Phaser.GameObjectFactory.prototype.enemy = function (x, y, name, stats, spriteSheet, actions, seeker, pattern, group) {
+    Phaser.GameObjectFactory.prototype.enemy = function (x, y, name, stats, spriteSheet, actions, particles, seeker, pattern, group) {
         if (group === undefined) { group = this.world; }
-        return group.add(new Enemy(this.game, x, y, name, stats, spriteSheet, actions, seeker, pattern));
+        return group.add(new Enemy(this.game, x, y, name, stats, spriteSheet, actions, particles, seeker, pattern));
     }
 
     Phaser.GameObjectFactory.prototype.bar = function (x, y, key, frame, parent = this.game.world) {
@@ -1193,8 +1594,8 @@ fun = function (Phaser) {
         return new InfoWindow(parent, this.game, x, y, width, height, windowKey, text, style);
     }
 
-    Phaser.GameObjectFactory.prototype.mainMenuHUD = function (x, y, selector, parent = this.game.world) {
-        return new MainMenuHUD(this.game, parent, x, y, selector);
+    Phaser.GameObjectFactory.prototype.mainMenuHUD = function (x, y, selector, seeker = undefined, dayManager = undefined, parent = this.game.world) {
+        return new MainMenuHUD(this.game, parent, x, y, selector, seeker, dayManager);
     }
 
     Phaser.GameObjectFactory.prototype.creationHUD = function (x, y, exitFunction, context, parent = this.game.world) {
@@ -1203,7 +1604,7 @@ fun = function (Phaser) {
 }
 
 module.exports = fun;
-},{"./characters/character":13,"./characters/enemy":15,"./characters/seeker":18,"./interface/actionButton":24,"./interface/bar":25,"./interface/buttonMenu":26,"./interface/circleWithSectors":28,"./interface/combatHUD":29,"./interface/creationHUD":30,"./interface/enemyCombatHUD":31,"./interface/eventHUD":32,"./interface/framedButton":33,"./interface/healthBar":34,"./interface/infoWindow":35,"./interface/mainMenuHUD":36,"./interface/optionMenu":37,"./interface/reactiveBar":38,"./interface/reactiveContinuousBar":40,"./interface/reactiveRichText":41,"./interface/richText":42,"./interface/scrollText":43,"./interface/seekerCombatHUD":44,"./interface/windowFrame":50}],23:[function(require,module,exports){
+},{"./characters/character":16,"./characters/enemy":18,"./characters/seeker":21,"./interface/actionButton":27,"./interface/bar":28,"./interface/buttonMenu":29,"./interface/circleWithSectors":31,"./interface/combatHUD":32,"./interface/creationHUD":33,"./interface/enemyCombatHUD":34,"./interface/eventHUD":35,"./interface/framedButton":36,"./interface/healthBar":37,"./interface/infoWindow":38,"./interface/mainMenuHUD":39,"./interface/optionMenu":40,"./interface/reactiveBar":41,"./interface/reactiveContinuousBar":43,"./interface/reactiveRichText":44,"./interface/richText":45,"./interface/scrollText":46,"./interface/seekerCombatHUD":47,"./interface/windowFrame":53}],26:[function(require,module,exports){
 'use strict'
 
 var ReactiveBar = require('./reactiveBar');
@@ -1242,12 +1643,14 @@ var ActionBar = function(game, parent, x, y, enemy, frameKey){
     this._actions = [];
     this._childIndex = 0;
     this._rightX = 31;
+    this._active = true;
 }
 
 ActionBar.prototype = Object.create(Phaser.Group.prototype);
 ActionBar.prototype.constructor = ActionBar;
 
 ActionBar.prototype.update = function() {
+    if(this._active){
     let time = this._enemy[this._enemy.actionPattern.currentAction].currentTime();
     if(!isNaN(time)){
         this._actions = [];
@@ -1260,6 +1663,7 @@ ActionBar.prototype.update = function() {
             i++;
         }
     }
+}
 }
 
 ActionBar.prototype._createAction = function(action) {
@@ -1297,8 +1701,20 @@ ActionBar.prototype.move = function(movement) {
     
 }
 
+ActionBar.prototype.activate = function() {
+    this._active = true;
+    this.reUpdate();
+    this._timer.start();
+}
+
+ActionBar.prototype.deactivate = function() {
+    this._active = false;
+    this._actionContiner.removeAll(true);
+    this._timer.stop();
+}
+
 module.exports = ActionBar;
-},{"./reactiveBar":38,"./reactiveCircleBar":39}],24:[function(require,module,exports){
+},{"./reactiveBar":41,"./reactiveCircleBar":42}],27:[function(require,module,exports){
 'use strict'
 var FramedButton = require('./framedButton');
 var ReactiveBar = require('./reactiveBar');
@@ -1340,7 +1756,7 @@ ActionButton.prototype.deactivate = function() {
 }
 
 module.exports = ActionButton;
-},{"./framedButton":33,"./reactiveBar":38,"./reactiveRichText":41,"./textFunctions":49}],25:[function(require,module,exports){
+},{"./framedButton":36,"./reactiveBar":41,"./reactiveRichText":44,"./textFunctions":52}],28:[function(require,module,exports){
 'use strict'
 
 var Bar = function (game, parent, x, y, key, frame = null) {
@@ -1420,7 +1836,7 @@ Object.defineProperty(Bar.prototype, 'height', {
 });
 
 module.exports = Bar;
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('./framedButton');
@@ -1455,7 +1871,7 @@ ButtonMenu.prototype.select = function() {
 
 module.exports = ButtonMenu;
 
-},{"./framedButton":33}],27:[function(require,module,exports){
+},{"./framedButton":36}],30:[function(require,module,exports){
 'use strict'
 
 var CircleWithSectors = require('./circleWithSectors');
@@ -1499,7 +1915,7 @@ Object.defineProperty(CircleBar.prototype, 'percentage', {
 });
 
 module.exports = CircleBar;
-},{"./circleWithSectors":28}],28:[function(require,module,exports){
+},{"./circleWithSectors":31}],31:[function(require,module,exports){
 'use strict'
 
 
@@ -1533,7 +1949,7 @@ CircleWithSector.prototype = Object.create(Phaser.Graphics.prototype);
 CircleWithSector.prototype.constructor = CircleWithSector;
 
 module.exports = CircleWithSector;
-},{}],29:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 'use strict'
 
 var EnemyCombatHUD = require('./enemyCombatHUD');
@@ -1552,29 +1968,29 @@ var CombatHUD = function (game, parent, x, y, seeker, enemy) {
     this._pause = false;
     this._seeker = seeker;
     this._enemy = enemy;
-    this.pauseButton = this.add(new FramedButton(this, game, 190, 2, 'pauseButton', 'pauseButtonFrame',[{callback: CombatHUD.prototype._pause, context:this, arguments:[]}],0xFFFFFF,0x000000,0x676767, 0x222222, 0x676767));
-    this.pauseMenu = this.add(new OptionMenu(game,40,15,120,120,[
-        [ 'hola', 10, 16, 'optionBack', 'optionFrame', 
-        [{callback: CombatHUD.prototype._pause, context:this, arguments:[]}],
-        0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA,
-        {leftButton: undefined, rightButton: undefined, upButton: undefined, downButton: undefined} ],
-        [ 'hola', 10, 30, 'optionBack', 'optionFrame', 
-        [{callback: this.game.state.start, context:this.game.state, arguments:['mainmenu']}],
-        0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA,
-        {leftButton: undefined, rightButton: undefined, upButton: undefined, downButton: undefined} ],
-    ],'infoWindow',this));
+    this.pauseButton = this.add(new FramedButton(this, game, 190, 2, 'pauseButton', 'pauseButtonFrame', [{ callback: CombatHUD.prototype._pause, context: this, arguments: [] }], 0xFFFFFF, 0x000000, 0x676767, 0x222222, 0x676767));
+    this.pauseMenu = this.add(new OptionMenu(game, 40, 15, 120, 120, [
+        ['hola', 10, 16, 'optionBack', 'optionFrame',
+            [{ callback: CombatHUD.prototype._pause, context: this, arguments: [] }],
+            0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA,
+            { leftButton: undefined, rightButton: undefined, upButton: undefined, downButton: undefined }],
+        ['hola', 10, 30, 'optionBack', 'optionFrame',
+            [{ callback: this.game.state.start, context: this.game.state, arguments: ['mainmenu'] }],
+            0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA,
+            { leftButton: undefined, rightButton: undefined, upButton: undefined, downButton: undefined }],
+    ], 'infoWindow', this));
     this.pauseMenu.visible = false;
-    this.pauseMenu.add(new RichText(game,0,5,120,'PAUSA',{align: 'center'},this));
-    this.pauseMenu.add(new RichText(game,0,16,120,'VOLVER',{align: 'center'},this));
-    this.pauseMenu.add(new RichText(game,0,30,120,'IR AL MENU',{align: 'center'},this));
+    this.pauseMenu.add(new RichText(game, 0, 5, 120, 'PAUSA', { align: 'center' }, this));
+    this.pauseMenu.add(new RichText(game, 0, 16, 120, 'VOLVER', { align: 'center' }, this));
+    this.pauseMenu.add(new RichText(game, 0, 30, 120, 'IR AL MENU', { align: 'center' }, this));
 }
 
 
 CombatHUD.prototype = Object.create(Phaser.Group.prototype);
 CombatHUD.prototype.constructor = CombatHUD;
 
-CombatHUD.prototype._pause = function(){
-    if(this._pause){
+CombatHUD.prototype._pause = function () {
+    if (this._pause) {
         this._seeker.start();
         this._enemy.start();
         this.pauseMenu.visible = false;
@@ -1591,8 +2007,18 @@ CombatHUD.prototype._pause = function(){
     this._pause = !this._pause;
 }
 
+CombatHUD.prototype.deactivate = function () {
+    this._seekerHUD.deactivate();
+    this._enemyHUD.deactivate();
+}
+
+CombatHUD.prototype.activate = function () {
+    this._seekerHUD.activate();
+    this._enemyHUD.activate();
+}
+
 module.exports = CombatHUD;
-},{"./enemyCombatHUD":31,"./framedButton":33,"./optionMenu":37,"./richText":42,"./seekerCombatHUD":44}],30:[function(require,module,exports){
+},{"./enemyCombatHUD":34,"./framedButton":36,"./optionMenu":40,"./richText":45,"./seekerCombatHUD":47}],33:[function(require,module,exports){
 'use strict'
 //var ActionButton = require('./actionButton');
 //var HealthBar = require('./healthBar');
@@ -1723,7 +2149,7 @@ CreationHUD.prototype = Object.create(Phaser.Group.prototype);
 CreationHUD.prototype.constructor = CreationHUD;
 
 module.exports = CreationHUD;
-},{"../../assets/characters/characters.json":2,"./framedButton":33,"./reactiveRichText":41,"./richText":42,"./showCase":45,"./statMarker":48,"./textFunctions":49}],31:[function(require,module,exports){
+},{"../../assets/characters/characters.json":2,"./framedButton":36,"./reactiveRichText":44,"./richText":45,"./showCase":48,"./statMarker":51,"./textFunctions":52}],34:[function(require,module,exports){
 'use strict'
 
 var ActionBar = require('./actionBar');
@@ -1741,6 +2167,8 @@ var EnemyCombatHUD = function (game, parent, x, y, seeker, enemy) {
 
     this.healthBar = this.add(new HealthBar(game, 119, 121, enemy, 'emptyBar', 'healBar', 'damageBar', 'healthBar', 'frameBar', style, 1000, 100, this));
     this._actionBar = this.add(new ActionBar(game, this, 87,122,enemy,'actionsBarFrame'));
+    enemy.onDeath.add(this._actionBar.deactivate,this._actionBar);
+    seeker.onDeath.add(this._actionBar.deactivate,this._actionBar);
 
     this.name = this.add(new ReactiveRichText(game,3+123,-1,80,textFunctions.Fun(function() {
         return this.name;
@@ -1806,8 +2234,16 @@ var EnemyCombatHUD = function (game, parent, x, y, seeker, enemy) {
 EnemyCombatHUD.prototype = Object.create(Phaser.Group.prototype);
 EnemyCombatHUD.prototype.constructor = EnemyCombatHUD;
 
+EnemyCombatHUD.prototype.deactivate = function () {
+  this._actionBar.deactivate();
+}
+
+EnemyCombatHUD.prototype.activate = function () {
+  this._actionBar.activate();
+}
+
 module.exports = EnemyCombatHUD;
-},{"./actionBar":23,"./healthBar":34,"./reactiveRichText":41,"./textFunctions":49}],32:[function(require,module,exports){
+},{"./actionBar":26,"./healthBar":37,"./reactiveRichText":44,"./textFunctions":52}],35:[function(require,module,exports){
 'use strict'
 
 var ScrollText = require('./scrollText');
@@ -1837,47 +2273,47 @@ var EventHUD = function (game, parent, seeker, dayManager, text, options, image)
 
     this.name = this.add(new ReactiveRichText(game, 3, -1, 80, textFunctions.Fun(function () {
         return this.name;
-    }, seeker), style2, this, seeker.onNameChange));
+    }, seeker), style2, this, [seeker.onNameChange]));
 
     this.healthIcon = this.add(new Phaser.Image(game, 3, 15, 'healthIcon'));
     this.healthNumber = this.add(new ReactiveRichText(game, 15, 13, 12, textFunctions.Fun(function () {
         return this.stats.health.toString();
-    }, seeker), style2, this, seeker.stats.onHealthChange));
+    }, seeker), style2, this, [seeker.stats.onHealthChange]));
 
     this.damageIcon = this.add(new Phaser.Image(game, 27, 15, 'damageIcon'));
     this.damageNumber = this.add(new ReactiveRichText(game, 39, 13, 12, textFunctions.Fun(function () {
         return this.stats.damage.toString();
-    }, seeker), style2, this, seeker.stats.onDamageChange));
+    }, seeker), style2, this, [seeker.stats.onDamageChange]));
 
     this.defenseIcon = this.add(new Phaser.Sprite(game, 51, 15, 'defenseIcon'));
     this.defenseNumber = this.add(new ReactiveRichText(game, 63, 13, 12, textFunctions.Fun(function () {
         return this.stats.defense.toString();
-    }, seeker), style2, this, seeker.stats.onDefenseChange));
+    }, seeker), style2, this, [seeker.stats.onDefenseChange]));
 
     this.speedIcon = this.add(new Phaser.Image(game, 75, 15, 'speedIcon'));
     this.speedNumber = this.add(new ReactiveRichText(game, 87, 13, 12, textFunctions.Fun(function () {
         return this.stats.speed.toString();
-    }, seeker), style2, this, seeker.stats.onSpeedChange));
+    }, seeker), style2, this, [seeker.stats.onSpeedChange]));
 
     this.perceptionIcon = this.add(new Phaser.Image(game, 99, 15, 'perceptionIcon'));
     this.perceptionNumber = this.add(new ReactiveRichText(game, 111, 13, 12, textFunctions.Fun(function () {
         return this.stats.damage.toString();
-    }, seeker), style2, this, seeker.stats.onPerceptionChange));
+    }, seeker), style2, this, [seeker.stats.onPerceptionChange]));
 
     this.gemIcon = this.add(new Phaser.Image(game, 68, 1, 'gemIcon'));
     this.gemNumber = this.add(new ReactiveRichText(game, 50, -1, 18, textFunctions.Fun(function () {
         return this.gems.toString();
-    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
+    }, seeker), style2, this, [seeker.stats.onPerceptionChange]));//cambiar onPerceptionChange
 
     this.villageGemIcon = this.add(new Phaser.Image(game, 160 + 3, 18, 'villageGemIcon'));
     this.villageGemNumber = this.add(new ReactiveRichText(game, 142 + 3, 16, 18, textFunctions.Fun(function () {
-        return this.gems.toString();//hay que cambiarlo
-    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
+        return this.totalGems.toString();
+    }, seeker), style2, this, [seeker.stats.onPerceptionChange]));//cambiar onPerceptionChange
 
     this.populationIcon = this.add(new Phaser.Image(game, 160 + 28, 18, 'populationIcon'));
     this.populationNumber = this.add(new ReactiveRichText(game, 142 + 28, 16, 18, textFunctions.Fun(function () {
-        return this.gems.toString();//hay que cambiarlo
-    }, seeker), style2, this, seeker.stats.onPerceptionChange));//cambiar onPerceptionChange
+        return this.population.toString();
+    }, seeker), style2, this, [seeker.stats.onPerceptionChange]));//cambiar onPerceptionChange
 
     this.slider = this.add(new Slider(game, this, 194, 35, 'sliderBackground', 'slider', 80, 50, 3));
     this.slider.onChange.add(function (percentage) { this.text.move(percentage); }, this);
@@ -1891,7 +2327,7 @@ var EventHUD = function (game, parent, seeker, dayManager, text, options, image)
         this.options[i].button = this.add(new FramedButton(this, game, 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 'optionBack', 'optionFrame', [{
             callback: options[i].callback,
             context: options[i].context,
-            arguments: [seeker,this.game,dayManager]
+            arguments: options[i].arguments
         }], 0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
         this.options[i].text = this.add(new RichText(game, 2 + 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 100, options[i].text, style));
         this.options[i].button.deactivate();
@@ -1908,7 +2344,7 @@ var EventHUD = function (game, parent, seeker, dayManager, text, options, image)
         this.options[i].button = this.add(new FramedButton(this, game, 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 'optionBack', 'optionFrame', [{
             callback: options[i].callback,
             context: options[i].context,
-            arguments: [seeker,this.game,dayManager]
+            arguments: options[i].arguments
         }], 0x000000, 0xFFFFFF, 0x5C5C5C, 0x111111, 0xAAAAAA));
         this.options[i].text = this.add(new RichText(game, 2 + 101 * (i % 2), 122 + 15 * Math.floor(i / 2), 100, options[i].text, style));
         this.options[i].button.deactivate();
@@ -1919,7 +2355,7 @@ var EventHUD = function (game, parent, seeker, dayManager, text, options, image)
 
     this.day = this.add(new ReactiveRichText(game, 26, 27, 40, textFunctions.Fun(function () {
         return this.day.toString();
-    }, seeker), style4, this, seeker.stats.onPerceptionChange));
+    }, seeker), style4, this, [seeker.stats.onPerceptionChange]));
 
     this.pauseButton = this.add(new FramedButton(this, game, 190, 2, 'pauseButton', 'pauseButtonFrame',[{callback: EventHUD.prototype._pause, context:this, arguments:[]}],0xFFFFFF,0x000000,0x676767, 0x222222, 0x676767));
     this._pause = false;
@@ -1967,7 +2403,7 @@ EventHUD.prototype._pause = function(){
 module.exports = EventHUD;
 
 
-},{"../../assets/fonts/style.json":6,"./framedButton":33,"./healthBar":34,"./reactiveRichText":41,"./richText":42,"./scrollText":43,"./slider":46,"./textFunctions":49}],33:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9,"./framedButton":36,"./healthBar":37,"./reactiveRichText":44,"./richText":45,"./scrollText":46,"./slider":49,"./textFunctions":52}],36:[function(require,module,exports){
 
 
 
@@ -2106,7 +2542,7 @@ FramedButton.prototype.changeFrameFrame = function (frame) {
 }
 
 module.exports = FramedButton;
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 'use strict'
 
 var Bar = require('./bar.js');
@@ -2115,7 +2551,7 @@ var ReactiveRichText = require('./reactiveRichText.js');
 var textFunction = require('./textFunctions')
 
 var hpPercentage = function () {
-        return this.hp / this.stats.health * 100;
+        return this.hp / this.stats.maxHp * 100;
 }
 
 var HealthBar = function (game, x, y, character, voidKey, healKey, damageKey, healthKey, frameKey, style, delay, speed, voidFrame, healFrame, damageFrame, healthFrame, parent) {
@@ -2128,7 +2564,7 @@ var HealthBar = function (game, x, y, character, voidKey, healKey, damageKey, he
         this.healthBar = this.add(new ReactiveContinuousBar(game, this, 0, 0, healthKey, hpPercentage, character, character.onHpChange, 0, delay, speed, speed, healthFrame));
         this.hpText = this.add(new ReactiveRichText(game, 0, -2, this.voidBar.width, [textFunction.VariableNumber(function () { return this.hp; }, character, speed),
                 '/',
-        textFunction.VariableNumber(function () { return this.stats.health }, character, 1000)], style, this, [character.onHpChange, character.stats.onHealthChange]));
+        textFunction.VariableNumber(function () { return this.stats.maxHp; }, character, 1000)], style, this, [character.onHpChange, character.stats.onHealthChange]));
         this.frame = this.add(new Phaser.Sprite(game, -1, -1, frameKey));
         
 }
@@ -2138,7 +2574,7 @@ HealthBar.prototype.constructor = HealthBar;
 
 
 module.exports = HealthBar;
-},{"./bar.js":25,"./reactiveContinuousBar.js":40,"./reactiveRichText.js":41,"./textFunctions":49}],35:[function(require,module,exports){
+},{"./bar.js":28,"./reactiveContinuousBar.js":43,"./reactiveRichText.js":44,"./textFunctions":52}],38:[function(require,module,exports){
 'use strict'
 
 var WindowFrame = require('./windowFrame');
@@ -2159,7 +2595,7 @@ InfoWindow.prototype = Object.create(Phaser.Group.prototype);
 InfoWindow.prototype.constructor = InfoWindow;
 
 module.exports = InfoWindow;
-},{"./richText":42,"./scrollText":43,"./windowFrame":50}],36:[function(require,module,exports){
+},{"./richText":45,"./scrollText":46,"./windowFrame":53}],39:[function(require,module,exports){
 'use strict'
 //var ActionButton = require('./actionButton');
 //var HealthBar = require('./healthBar');
@@ -2179,7 +2615,7 @@ var FramedButton = require('./framedButton')
   this.deactivate()
 };*/
 
-var MainMenuHUD = function (game, parent, x, y, selector) {
+var MainMenuHUD = function (game, parent, x, y, selector, seeker, dayManager) {
   Phaser.Group.call(this, game, parent, selector);
   this.x = x;
   this.y = y;
@@ -2251,63 +2687,77 @@ var MainMenuHUD = function (game, parent, x, y, selector) {
   //textos de buttons
   this.game.add.richText(10, 70, 80, "OPCIONES", style);
   this.shopText = this.game.add.richText(28, 119, 80, "TIENDA", style);
-  this.game.add.richText(60, 39, 80, "NUEVA PARTIDA", style);
-  this.game.add.richText(120, 79, 80, "NUEVA BUSQUEDA", style);
-  this.game.add.richText(128, 20, 80, "CREDITOS", style);
+  this.crystalText = this.game.add.richText(60, 39, 80, "NUEVA PARTIDA", style);
+  this.doorText = this.game.add.richText(120, 79, 80, "NUEVA BUSQUEDA", style);
+  this.creditsText = this.game.add.richText(128, 20, 80, "CREDITOS", style);
 
-  //tienda cerrada por reformas. Disculpen las molestias! ^w^
-  if (true){
-    this.shopButton.deactivate();
+  this.shopButton.onInputDisable.add(function () {
     this.shopText.setAll('tint', 0x888888);
-  }
-  
-
+  }, this);
+  this.crystalButton.onInputDisable.add(function () {
+    this.crystalText.setAll('tint', 0x888888);
+  }, this);
+  this.doorButton.onInputDisable.add(function () {
+    this.doorText.setAll('tint', 0x888888);
+  }, this);
 
   this.shopButton.onInputOver.add(function () { selector.frame = 1; });
   this.shopButton.onInputOut.add(function () { selector.frame = 0; });
   this.shopButton.onInputDown.add(function () { selector.frame = 2; });
-  this.shopButton.onInputUp.add(function (over) { 
-    if(over)
+  this.shopButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
 
   this.settingsButton.onInputOver.add(function () { selector.frame = 1; });
   this.settingsButton.onInputOut.add(function () { selector.frame = 0; });
   this.settingsButton.onInputDown.add(function () { selector.frame = 2; });
-  this.settingsButton.onInputUp.add(function (over) { 
-    if(over)
+  this.settingsButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
 
   this.doorButton.onInputOver.add(function () { selector.frame = 1; });
   this.doorButton.onInputOut.add(function () { selector.frame = 0; });
   this.doorButton.onInputDown.add(function () { selector.frame = 2; });
-  this.doorButton.onInputUp.add(function (over) { 
-    if(over)
+  this.doorButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
 
   this.crystalButton.onInputOver.add(function () { selector.frame = 1; });
   this.crystalButton.onInputOut.add(function () { selector.frame = 0; });
   this.crystalButton.onInputDown.add(function () { selector.frame = 2; });
   this.crystalButton.onInputUp.add(function () { selector.frame = 1; });
-  this.crystalButton.onInputUp.add(function (over) { 
-    if(over)
+  this.crystalButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
 
   this.creditsButton.onInputOver.add(function () { selector.frame = 1; });
   this.creditsButton.onInputOut.add(function () { selector.frame = 0; });
   this.creditsButton.onInputDown.add(function () { selector.frame = 2; });
-  this.creditsButton.onInputUp.add(function (over) { 
-    if(over)
+  this.creditsButton.onInputUp.add(function (over) {
+    if (over)
       selector.frame = 1;
     else
-    selector.frame = 0;});
+      selector.frame = 0;
+  });
+
+  if (!seeker) {
+    this.doorButton.deactivate();
+    this.shopButton.deactivate();
+  } else {
+    this.crystalButton.deactivate();
+  }
 
   //var object1 = seeker.items[0];
   //var object2 = seeker.items[1];
@@ -2375,7 +2825,7 @@ MainMenuHUD.prototype = Object.create(Phaser.Group.prototype);
 MainMenuHUD.prototype.constructor = MainMenuHUD;
 
 module.exports = MainMenuHUD;
-},{"./framedButton":33,"./reactiveRichText":41,"./textFunctions":49}],37:[function(require,module,exports){
+},{"./framedButton":36,"./reactiveRichText":44,"./textFunctions":52}],40:[function(require,module,exports){
 'use strict';
 
 var ButtonMenu = require('./buttonMenu');
@@ -2461,7 +2911,7 @@ OptionMenu.prototype.enter = function() {
 }
 
 module.exports = OptionMenu;
-},{"./buttonMenu":26,"./windowFrame":50}],38:[function(require,module,exports){
+},{"./buttonMenu":29,"./windowFrame":53}],41:[function(require,module,exports){
 'use strict'
 
 var Bar = require('./bar.js');
@@ -2469,7 +2919,10 @@ var Bar = require('./bar.js');
 var ReactiveBar = function (game, parent, x, y, key, percentageFunction, functionContext, signal, frame = null) {
     Bar.call(this, game, parent, x, y, key, frame);
     this.percentageFunction = percentageFunction.bind(functionContext);
-    signal?signal.add(this.changePercentage, this, 0):null;
+    this._signal = signal?signal.add(this.changePercentage, this, 0):null;
+    if(this._signal){
+        this.onDestroy.add(this._signal.detach, this._signal);
+    }
     ReactiveBar.prototype.changePercentage.call(this);
 }
 
@@ -2483,7 +2936,7 @@ ReactiveBar.prototype.changePercentage = function () {
 }
 
 module.exports = ReactiveBar;
-},{"./bar.js":25}],39:[function(require,module,exports){
+},{"./bar.js":28}],42:[function(require,module,exports){
 'use strict'
 
 var CircleBar = require('./circleBar');
@@ -2491,7 +2944,10 @@ var CircleBar = require('./circleBar');
 var ReactiveCircleBar = function(game,parent, x, y, radius, angles, colors, alphas, antiClockWise, segments, initialAngle, percentageFunction, functionContext, signal){
     CircleBar.call(this, game,parent, x, y, radius, angles, colors, alphas, antiClockWise, segments, initialAngle);
     this.percentageFunction = percentageFunction.bind(functionContext);
-    signal?signal.add(this.changePercentage,this,0):null;
+    this._signal = signal?signal.add(this.changePercentage,this,0):null;
+    if(this._signal) {
+        this.onDestroy.add(this._signal.detach, this._signal);
+    }
     ReactiveCircleBar.prototype.changePercentage.call(this);
 }
 
@@ -2505,7 +2961,7 @@ ReactiveCircleBar.prototype.changePercentage = function () {
 }
 
 module.exports = ReactiveCircleBar;
-},{"./circleBar":27}],40:[function(require,module,exports){
+},{"./circleBar":30}],43:[function(require,module,exports){
 'use strict'
 
 var ReactiveBar = require('./reactiveBar.js');
@@ -2578,16 +3034,20 @@ ReactiveContinuousBar.prototype.reChangePercentage = function () {
 }
 
 module.exports = ReactiveContinuousBar;
-},{"./reactiveBar.js":38}],41:[function(require,module,exports){
+},{"./reactiveBar.js":41}],44:[function(require,module,exports){
 'use strict';
 
 var RichText = require('./richText.js');
 
 var ReactiveRichText = function (game, x, y, lineWidth, text, style, parent, signals) {
     RichText.call(this, game, x, y, lineWidth, text, style, parent);
+    this._signals = []
     for (let i = 0; i < signals.length; i++) {
-        signals[i]?signals[i].add(this.write, this, 0):null;
+        signals[i]?this._signals.push(signals[i].add(this.write, this, 0)):null;
     }
+    this._signals.forEach(element => {
+        this.onDestroy.add(element.detach, element);
+    },this);
     this.write();
 }
 
@@ -2595,7 +3055,7 @@ ReactiveRichText.prototype = Object.create(RichText.prototype);
 ReactiveRichText.prototype.constructor = ReactiveRichText;
 
 module.exports = ReactiveRichText;
-},{"./richText.js":42}],42:[function(require,module,exports){
+},{"./richText.js":45}],45:[function(require,module,exports){
 'use strict';
 
 
@@ -2787,7 +3247,7 @@ Object.defineProperty(RichText.prototype, 'text',{
 });
 
 module.exports = RichText;
-},{}],43:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict'
 
 var ReactiveRichText = require('./reactiveRichText');
@@ -2832,7 +3292,7 @@ Object.defineProperty(ScrollText.prototype, 'text',{
 });
 module.exports = ScrollText;
 
-},{"./reactiveRichText":41}],44:[function(require,module,exports){
+},{"./reactiveRichText":44}],47:[function(require,module,exports){
 'use strict'
 var ActionButton = require('./actionButton');
 var HealthBar = require('./healthBar');
@@ -2863,7 +3323,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy, selector) {
 
   this.blockButton = this.add(new ActionButton(this, game, 44, 132, 'blockIcon', 'actionFrame','blockIcon', [{callback: seeker.block, context: seeker, arguments: []}], 
     function () {
-      return (1 - this.block.timeToCoolDown() / this.block.coolDownTime) * 100;
+      return (1 - this.block.timeToCoolDown() / this.block.coolDownTime()) * 100;
     }, seeker, function () {
     let a = this.block.timeToCoolDown() / 1000;
     if (isNaN(a)) {
@@ -2879,7 +3339,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy, selector) {
 
   this.attackButton = this.add(new ActionButton(this, game, 25, 132, 'attackIcon', 'actionFrame','attackIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
    function () {
-      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
+      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime()) * 100;
     }, seeker, function () {
     let a = this.attack.timeToCoolDown() / 1000;
     if (isNaN(a)) {
@@ -2896,7 +3356,7 @@ var SeekerCombatHUD = function (game, parent, x, y, seeker, enemy, selector) {
 
   this.ultimateButton = this.add(new ActionButton(this, game, 64, 132, 'ultimateIcon', 'actionFrame','ultimateIcon', [{callback: seeker.attack, context: seeker, arguments:[enemy]}],
    function () {
-      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime) * 100;
+      return (1 - this.attack.timeToCoolDown() / this.attack.coolDownTime()) * 100;
     }, seeker, function () {
     let a = this.attack.timeToCoolDown() / 1000;
     if (isNaN(a)) {
@@ -3034,6 +3494,8 @@ if(object2!==undefined){
     this.populationNumber = this.add(new ReactiveRichText(game, 90-3, 26, 18, textFunctions.Fun(function () {
     return this.population.toString();//hay que cambiarlo
     }, seeker), style2, this, [seeker.stats.onPerceptionChange]));//cambiar onPerceptionChange
+
+    this.seeker= seeker;
 }
 
 SeekerCombatHUD.prototype = Object.create(Phaser.Group.prototype);
@@ -3055,8 +3517,26 @@ SeekerCombatHUD.prototype.unFreeze = function() {
   this.item2Button._button.inputEnabled = true;
 }
 
+SeekerCombatHUD.prototype.deactivate = function() {
+  this.ultimateButton.deactivate();
+  this.attackButton.deactivate();
+  this.blockButton.deactivate();
+  this.item1Button.deactivate();
+  this.item2Button.deactivate();
+}
+
+SeekerCombatHUD.prototype.activate = function () {
+  this.ultimateButton.activate();
+  this.attackButton.activate();
+  this.blockButton.activate();
+  if(this.seeker.items[0])
+    this.item1Button.activate();
+  if(this.seeker.items[1])
+    this.item2Button.activate();
+}
+
 module.exports = SeekerCombatHUD;
-},{"./actionButton":24,"./framedButton":33,"./healthBar":34,"./reactiveRichText":41,"./textFunctions":49}],45:[function(require,module,exports){
+},{"./actionButton":27,"./framedButton":36,"./healthBar":37,"./reactiveRichText":44,"./textFunctions":52}],48:[function(require,module,exports){
 'use strict'
 
 var StatMarker = require('./statMarker');
@@ -3159,7 +3639,7 @@ ShowCase.prototype.character = function() {
 }
 
 module.exports = ShowCase;
-},{"./richText":42,"./statMarker":48}],46:[function(require,module,exports){
+},{"./richText":45,"./statMarker":51}],49:[function(require,module,exports){
 'use strict'
 
 var SliderImage = require('./sliderImage');
@@ -3215,7 +3695,7 @@ Slider.prototype.move = function (movement) {
 }
 
 module.exports = Slider;
-},{"./sliderImage":47}],47:[function(require,module,exports){
+},{"./sliderImage":50}],50:[function(require,module,exports){
 'use strict'
 
 var SliderImage = function(game, parent, x, y, key, height) {
@@ -3234,7 +3714,7 @@ SliderImage.prototype = Object.create(Phaser.Group.prototype);
 SliderImage.prototype.constructor = SliderImage;
 
 module.exports = SliderImage;
-},{}],48:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict'
 
 var StatMarker = function(game, parent, x, y, xSpace, maxPoints, currentPoints, pointKey, emptyKey, color) {
@@ -3279,7 +3759,7 @@ Object.defineProperty(StatMarker.prototype, 'currentPoints', {
     }
 });
 module.exports = StatMarker;
-},{}],49:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 
 var functions = {
 Fun: function (func, context) {
@@ -3374,7 +3854,7 @@ VariableNumber: function (numberfunction, context, delay) {
 }
 }
 module.exports = functions;
-},{}],50:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict'
 
 
@@ -3478,7 +3958,7 @@ WindowFrame.prototype.resize = function(width, height) {
 }
 
 module.exports = WindowFrame;
-},{}],51:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict';
 
 //PREGUNTAS
@@ -3575,8 +4055,6 @@ var PreloaderScene = {
       //INTERFACE
         this.game.load.spritesheet('logo', 'assets/images/interface/logo.png', 61, 69);
         this.game.load.spritesheet('infoWindow', 'assets/images/interface/infoWindow.png', 5, 5);
-        this.game.load.image('eventImage','assets/images/interface/eventImage.png');
-        this.game.load.image('eventImageError','assets/images/interface/eventImageError.png');
         this.game.load.image('itemFrame','assets/images/interface/itemFrame.png');
         this.game.load.image('emptyItem','assets/images/interface/emptyItem.png');
         this.game.load.image('backIcon','assets/images/interface/backIcon.png');
@@ -3586,11 +4064,25 @@ var PreloaderScene = {
         this.game.load.image('emptyStatPoint','assets/images/interface/emptyStatPoint.png');
         this.game.load.image('blockedIcon','assets/images/interface/blockedIcon.png');
         this.game.load.image('textBox','assets/images/interface/textBox.png');
+        //Event Images
+        this.game.load.image('eventImageError','assets/images/interface/eventImageError.png');
+        this.game.load.image('undershineEventImage','assets/images/interface/undershine_eventimage.png');
+        this.game.load.image('spiderEventImage','assets/images/interface/spider_eventimage.png');
+        this.game.load.image('spiderAttackEventImage','assets/images/interface/spiderattack_eventimage.png');
+        this.game.load.image('fungiCaveEventImage','assets/images/interface/fungicave_eventimage.png');
+        this.game.load.image('fungiCavePotionEventImage','assets/images/interface/potionfound_eventimage.png');
+        this.game.load.image('fungiCaveAttackEventImage','assets/images/interface/fungiattack_eventimage.png');
+        this.game.load.image('ritualEventImage','assets/images/interface/ritual_eventimage.png');
+        this.game.load.image('ritualAcceptedEventImage','assets/images/interface/ritualaccepted_eventimage.png');
+        this.game.load.image('ritualDeniedEventImage','assets/images/interface/ritualdenied_eventimage.png');
+
+        
         //Actions Bar
         this.game.load.image('actionsBarFrame','assets/images/interface/actionsBarFrame.png');
         this.game.load.image('actionsBarBack','assets/images/interface/actionsBarBack.png');
         this.game.load.image('actionsBarShadow','assets/images/interface/actionsBarShadow.png');
-        this.game.load.image('blockBar','assets/images/interface/blockBar.png');
+        this.game.load.image('blockBar','assets/images/interface/blockBar.png'); 
+        this.game.load.image('thornsBlockBar','assets/images/interface/thornsBlockBar.png');
         this.game.load.image('attackBar','assets/images/interface/attackBar.png');
         this.game.load.image('unknownBar','assets/images/interface/unknownBar.png');
         this.game.load.image('idleBar','assets/images/interface/idleBar.png');
@@ -3613,10 +4105,10 @@ var PreloaderScene = {
         this.game.load.image('attackIcon','assets/images/interface/attackIcon.png');
         this.game.load.image('blockIcon','assets/images/interface/blockIcon.png');
         this.game.load.image('ultimateIcon','assets/images/interface/ultimateIcon.png');
-        //Items
+        //Items Bag
         this.game.load.image('itemIcon','assets/images/interface/itemIcon.png');
         this.game.load.image('itemIcon2','assets/images/interface/itemIcon2.png');
-
+        //Items Shop
         this.game.load.image('shopItemIcon','assets/images/interface/shopItemIcon.png');
         //Stats Icons
         this.game.load.image('damageIcon','assets/images/interface/damageIcon.png');
@@ -3661,6 +4153,7 @@ var PreloaderScene = {
       this.game.load.image('redBlood','assets/images/particles/redBlood.png');
       this.game.load.image('greenBlood','assets/images/particles/greenBlood.png');
       this.game.load.image('blueBlood','assets/images/particles/blueBlood.png');
+      this.game.load.image('cianBlood','assets/images/particles/cianBlood.png');
       this.game.load.spritesheet('crystalShines','assets/images/particles/crystalShines.png',3,3);
       this.game.load.spritesheet('smoke','assets/images/particles/smoke.png',4,4);
       this.game.load.spritesheet('creationParticles','assets/images/particles/creationParticles.png',8,8);
@@ -3673,8 +4166,9 @@ var PreloaderScene = {
         this.game.load.spritesheet('seekerHarpySiluette','assets/images/seeker/seekerHarpySiluette.png',80,120);
         this.game.load.spritesheet('seekerWarlockSiluette','assets/images/seeker/seekerWarlockSiluette.png',80,120);
         //Enemies
-        this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
+        this.game.load.spritesheet('lordRagnoAnimations', 'assets/images/enemies/lordRagnoAnimations.png',80,120);
         this.game.load.spritesheet('fungiAnimations', 'assets/images/enemies/fungiAnimations.png',80,120);
+        this.game.load.spritesheet('spiderAnimations', 'assets/images/enemies/spiderAnimations.png',80,120);
     //SOUNDS
       //Effects
       this.load.audio('attacking', ['assets/sounds/attacking.wav']);
@@ -3682,7 +4176,7 @@ var PreloaderScene = {
       this.load.audio('blocking', ['assets/sounds/blocking.wav']);
       this.load.audio('button', ['assets/sounds/buttonPressed.wav']);
       //Music
-      this.load.audio('boss', ['assets/music/bosstheme.mp3']);
+      this.load.audio('bosstheme', ['assets/music/bosstheme.mp3']);
       this.load.audio('firetheme', ['assets/music/firetheme.mp3']);
       this.load.audio('shoptheme', ['assets/music/shoptheme.mp3']);
       this.load.audio('watertheme', ['assets/music/watertheme.mp3']);
@@ -3709,18 +4203,24 @@ window.onload = function () {
   
 
 };
-},{"../assets/fonts/style.json":6,"./gameFactory":22,"./interface/textFunctions":49,"./scenes/combat_scene.js":54,"./scenes/creation_scene.js":55,"./scenes/credits_scene.js":56,"./scenes/event_scene.js":57,"./scenes/fullscreen_scene.js":58,"./scenes/intro_scene.js":59,"./scenes/mainmenu_scene.js":60,"./scenes/name_scene.js":61,"./scenes/settings_scene.js":62,"./scenes/shop_scene.js":63,"webfontloader":1}],52:[function(require,module,exports){
+},{"../assets/fonts/style.json":9,"./gameFactory":25,"./interface/textFunctions":52,"./scenes/combat_scene.js":57,"./scenes/creation_scene.js":58,"./scenes/credits_scene.js":59,"./scenes/event_scene.js":60,"./scenes/fullscreen_scene.js":61,"./scenes/intro_scene.js":62,"./scenes/mainmenu_scene.js":63,"./scenes/name_scene.js":64,"./scenes/settings_scene.js":65,"./scenes/shop_scene.js":66,"webfontloader":1}],55:[function(require,module,exports){
 'use strict'
 
 var DayFunctions = {
-    NextDay: function(seeker, game, dayManager) {
+    NextDay: function(seeker, dayManager) {
         seeker.day++;
         dayManager.newDay();
+    },
+    Combat: function(seeker, dayManager, enemy, background, music, end) {
+        dayManager._game.state.start('combat',true, false, seeker, dayManager, enemy, background, music, end);
+    },
+    Event: function(seeker, dayManager, evento){
+        dayManager._game.state.start('event', true, false, seeker, dayManager,...Object.values(evento(seeker, dayManager)));
     }
 }
 
 module.exports = DayFunctions;
-},{}],53:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict'
 var Days = require('../../assets/days/days');
 
@@ -3751,7 +4251,7 @@ DayManager.prototype.generateDay = function(seeker, day) {
 
 module.exports = DayManager;
 
-},{"../../assets/days/days":5}],54:[function(require,module,exports){
+},{"../../assets/days/days":7}],57:[function(require,module,exports){
 'use strict';
 
 var Stats = require('../characters/stats');
@@ -3773,62 +4273,35 @@ var CombatScene = {
   },
   seeker: null,
   enemy: null,
-  // Buttons functions
-  attackKey: function () {
-    this.combatHUD._enemyHUD._actionBar.reUpdate();
+  init: function(seeker, dayManager, enemy, background, music, end){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+    this._enemy = enemy;
+    this._background = background;
+    this._music = music;
+    this._end = end;
   },
-  blockKey: function () {
-    this.seeker.start();
-    this.enemy.start();
-  },
-  attackEnemy: function () {
-    if (true) {
-      this.enemy.attack(this.seeker);
-    }
-  },
-  blockEnemy: function () {
-    if (true) {
-      this.enemy.block();
-    }
-  },
-
-  // prototype buttons
-  hurtSeeker: function () {
-    this.seeker.hurt(1);
-  },
-  init: function(){
-  },
-
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
 
     //render background
-    var combatbackground = this.game.add.image(0, 0, 'combatbackground');
+    var combatbackground = this.game.add.image(0, 0, this._background);
     //render seeker //tope de nombre caracteres = 9
-    this.seeker = this.game.add.seeker(0, -8, 'Alo\'th', {damage: 99, defense: 3, speed: 1, health: 20, perception: 1}, 
-      ['healthPotion','speedEnemyPotion'], 'seekerBruteAnimations',
-      {
-        idle:[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
-        attack:[[24, 25, 26, 27, 28, 29, 30, 31], [32, 33, 34, 35, 36, 37, 38, 39, 40], 2000, 5000],
-        block:[[48, 49, 50, 51, 52], [53, 54], [57, 58, 59], 3000, 5000],
-        die:[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]],
-        useObjects:[]
-      });
-    this.seeker.addParticle.blood(39, 98, 10, 'blueBlood');
+    this.seeker = this.game.add.seeker( 0, -8, this._seeker.name, this._seeker.stats, this._seeker.items, this._seeker.spriteSheet, this._seeker.actions, this._seeker.particles);
+    this.seeker.hp = this._seeker.hp;
+    this.seeker.gems = this._seeker.gems;
+    this.seeker.population = this._seeker.population;
+    this.seeker.totalGems = this._seeker.totalGems;
+    this.seeker.day = this._seeker.day;
     //render enemy
-var a = require('../../assets/patterns/patterns');
-    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, 'Lord Ragno', {damage: 5, defense: 10, speed: 1, health: 27, perception: 3}, 'spiderAnimations', 
-    {
-      idle:[[0, 1, 2, 3, 4, 5]],
-      attack:[[24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], [35, 36, 37, 38, 39, 40, 41]],
-      block:[[48, 49, 50, 51, 52, 53, 54], [55, 56], [58, 59, 60]],
-      die:[[72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]]
-    },this.seeker, a.normal);
-    this.enemy.addParticle.blood(40, 93, 10, 'greenBlood');
+    var a = require('../../assets/patterns/patterns');
+    this.enemy = this.game.add.enemy(this.game.world.width - 80, -8, this._enemy.name, this._enemy.stats, this._enemy.spriteSheet, 
+    this._enemy.actions, this._enemy.particles, this.seeker, a[this._enemy.pattern]);
 
     //interface
     this.combatHUD = this.game.add.combatHUD(0, 0, this.seeker, this.enemy);
+    this.combatHUD.deactivate();
     //transicion de entrada a combate
 
     var filter = this.game.add.filter('Pixelate', 800, 600);
@@ -3841,17 +4314,7 @@ var a = require('../../assets/patterns/patterns');
       // Controls
       this.seeker.idle();
       this.enemy.act();
-      this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.attackKey, this);
-      this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(this.blockKey, this);
-      this.game.input.keyboard.addKey(Phaser.Keyboard.Z).onDown.add(this.attackEnemy, this);
-      this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.blockEnemy, this);
-      this.game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(this.hurtSeeker, this);
-      this.game.input.keyboard.addKey(Phaser.Keyboard.J).onDown.add(function () {
-        this.seeker.use('Heal Potion');
-      }, this);
-      this.game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(this.MainMenuScene, this);
-      this.combatHUD._enemyHUD._actionBar.reUpdate();
-      this.combatHUD._enemyHUD._actionBar._timer.start();
+      this.combatHUD.activate();
     }, this);
 
     var style = require('../../assets/fonts/style.json');
@@ -3864,7 +4327,7 @@ var a = require('../../assets/patterns/patterns');
         filter.sizeX = 1;
         filter.sizeY = 1;
         tween = this.game.add.tween(filter).to({ sizeX: 1000, sizeY: 1000 }, 2000, "Quart.easeIn").start()
-          .onComplete.add(function () {  this.MainMenuScene(); }, this);
+          .onComplete.add(function () {  this._end(this._seeker, this._dayManager); }, this);
       }, this);
       t.start();
     }, this);
@@ -3887,7 +4350,7 @@ var a = require('../../assets/patterns/patterns');
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.halt();
 
     //music
-    var music = this.game.add.audio('firetheme', 0.1, true);
+    var music = this.game.add.audio(this._music, 0.1, true);
     this.game.sound.stopAll();
     music.play();
 
@@ -3914,7 +4377,14 @@ var a = require('../../assets/patterns/patterns');
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
   },
-
+  shutdown: function() {
+    this._seeker.stats = this.seeker.stats;
+    this._seeker.hp = this.seeker.hp;
+    this._seeker.gems = this.seeker.gems;
+    this._seeker.population = this.seeker.population;
+    this._seeker.totalGems = this.seeker.totalGems;
+    this._seeker.items = this.seeker.items;
+  },
   goFullscreen: function () {
 
     if (this.game.scale.isFullScreen) {
@@ -3932,7 +4402,7 @@ var a = require('../../assets/patterns/patterns');
 
 module.exports = CombatScene;
 
-},{"../../assets/fonts/style.json":6,"../../assets/patterns/patterns":8,"../characters/item":16,"../characters/stats":19,"../interface/textFunctions":49}],55:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9,"../../assets/patterns/patterns":11,"../characters/item":19,"../characters/stats":22,"../interface/textFunctions":52}],58:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -3968,6 +4438,9 @@ var CreationScene = {
     this.selector.x = this.game.input.x;
     this.selector.y = this.game.input.y;
   },
+  shutdown: function() {
+    this.game.camera.onFadeComplete.removeAll();
+  },
   goFullscreen: function () {
     if (this.game.scale.isFullScreen) {
       this.game.scale.stopFullScreen();
@@ -3981,7 +4454,7 @@ var CreationScene = {
 
 module.exports = CreationScene;
 
-},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}],56:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}],59:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -3996,6 +4469,10 @@ var CreditsScene = {
     this.game.camera.onFadeComplete.add(function(){this.game.state.start('mainmenu');}, this);
   },
 
+  init: function(seeker, dayManager){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+  },
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
@@ -4047,7 +4524,7 @@ var CreditsScene = {
 
 module.exports = CreditsScene;
 
-},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}],57:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}],60:[function(require,module,exports){
 'use strict';
 
 var selector;
@@ -4070,15 +4547,23 @@ var EventScene = {
     //fadeIn
     this.camera.flash(0x000000);
 
-    var style = require('../../assets/fonts/style.json');
-    style.align = 'left';
+    var style = {
+                  "font": "Minecraft",
+                  "fill": "#fff",
+                  "fontSize": 10,
+                  "align":"center"
+                }
     
     //render background
     this.game.add.sprite(0, 0, 'eventbackground');
 
-    this.seeker = this.game.world.add(this._seeker);
-
-    this.HUD = this.game.add.eventHUD(this._seeker, this._dayManager, this._text, this._options, this._image);
+    this.seeker = this.game.add.seeker( 0, -8, this._seeker.name, this._seeker.stats, this._seeker.items, this._seeker.spriteSheet, this._seeker.actions);
+    this.seeker.hp = this._seeker.hp;
+    this.seeker.gems = this._seeker.gems;
+    this.seeker.population = this._seeker.population;
+    this.seeker.totalGems = this._seeker.totalGems;
+    this.seeker.day = this._seeker.day;
+    this.HUD = this.game.add.eventHUD(this.seeker, this._dayManager, this._text, this._options, this._image);
 
     //music
     var music = this.game.add.audio(this._music, 0.1, true);
@@ -4098,6 +4583,14 @@ var EventScene = {
     selector.x = this.game.input.x;
     selector.y = this.game.input.y;
   },
+  shutdown: function() {
+    this._seeker.stats = this.seeker.stats;
+    this._seeker.hp = this.seeker.hp;
+    this._seeker.gems = this.seeker.gems;
+    this._seeker.population = this.seeker.population;
+    this._seeker.totalGems = this.seeker.totalGems;
+    this._seeker.items = this.seeker.items;
+  },
 
   goFullscreen: function() {
 
@@ -4114,7 +4607,7 @@ var EventScene = {
 
 module.exports = EventScene;
 
-},{"../../assets/fonts/style.json":6,"../characters/stats":19}],58:[function(require,module,exports){
+},{"../characters/stats":22}],61:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4162,7 +4655,7 @@ var FullscreenScene = {
 
 module.exports = FullscreenScene;
 
-},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}],59:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}],62:[function(require,module,exports){
 'use strict';
 
 var selector;
@@ -4275,7 +4768,7 @@ var IntroScene = {
 
 module.exports = IntroScene;
 
-},{"../../assets/fonts/style.json":6}],60:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9}],63:[function(require,module,exports){
 'use strict';
 
 var textFunctions = require('../interface/textFunctions');
@@ -4283,6 +4776,10 @@ var FramedButton = require('../interface/framedButton')
 
 var MainMenuScene = {
 
+  init: function(seeker, dayManager){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+  },
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
@@ -4294,7 +4791,7 @@ var MainMenuScene = {
     this.selector = this.game.add.sprite(50, 50, 'cursor');
 
     //buttons
-    this.game.add.mainMenuHUD(0, 0, this.selector);
+    this.game.add.mainMenuHUD(0, 0, this.selector, this._seeker, this._dayManager);
     this.game.add.image(0, 0, 'shines').alpha = 0.2;
     //great crystal shine particles
     var emitterCrystal = this.game.add.emitter(100, 35, 100);
@@ -4348,7 +4845,7 @@ var MainMenuScene = {
 
 module.exports = MainMenuScene;
 
-},{"../../assets/fonts/style.json":6,"../interface/framedButton":33,"../interface/textFunctions":49}],61:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9,"../interface/framedButton":36,"../interface/textFunctions":52}],64:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4363,8 +4860,13 @@ var SettingsScene = {
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
   NewGame: function (seeker, name) {
-    var seeker = new Seeker(this.game, 0, -8, name, seeker.stats, seeker.items, seeker.spriteSheet, seeker.actions);
     var dayManager = new DayManager(seeker, this.game);
+    seeker.hp = seeker.stats.health*5;
+    seeker.gems = 0;
+    seeker.population = 50;
+    seeker.totalGems = 100;
+    seeker.day = 0;
+    seeker.name = name;
     dayManager.newDay();
   },
   init: function (seeker) {
@@ -4479,7 +4981,7 @@ var SettingsScene = {
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":6,"../characters/seeker":18,"../interface/framedButton":33,"../manager/dayManager":53}],62:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9,"../characters/seeker":21,"../interface/framedButton":36,"../manager/dayManager":56}],65:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4492,7 +4994,10 @@ var SettingsScene = {
     this.game.camera.fade('#000000');
     this.game.camera.onFadeComplete.add(function(){this.game.state.start('mainmenu');}, this);
   },
-
+  init: function(seeker, dayManager){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+  },
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
@@ -4536,7 +5041,7 @@ var SettingsScene = {
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}],63:[function(require,module,exports){
+},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}],66:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4549,7 +5054,10 @@ var ShopScene = {
     this.game.camera.fade('#000000');
     this.game.camera.onFadeComplete.add(function () { this.game.state.start('mainmenu'); }, this);
   },
-
+  init: function(seeker, dayManager){
+    this._seeker = seeker;
+    this._dayManager = dayManager;
+  },
   create: function () {
     //fadeIn
     this.camera.flash('#000000');
@@ -4593,4 +5101,4 @@ var ShopScene = {
 
 module.exports = ShopScene;
 
-},{"../../assets/fonts/style.json":6,"../interface/framedButton":33}]},{},[51]);
+},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}]},{},[54]);
