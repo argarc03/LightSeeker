@@ -10,7 +10,7 @@
 /* Basic */
 
 	body {
-		background: #fff;
+		background: #ffe4d7;
 	}
 
 		body.is-loading * {
@@ -40,7 +40,7 @@
 		-o-transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 		-ms-transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 		transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-		color: #e0555a;
+		color: #fff0e9;
 		text-decoration: none;
 		border-bottom: dotted 1px;
 	}
@@ -997,7 +997,7 @@
 	}
 
 		.wrapper.style1 {
-			background: #f2f2f2;
+			background: #fff0e9;
 		}
 
 			.wrapper.style1 .box {
