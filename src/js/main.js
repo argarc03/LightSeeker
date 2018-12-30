@@ -227,6 +227,10 @@ var PreloaderScene = {
       this.load.audio('logo', ['assets/music/logo.mp3']);
       this.load.audio('credits', ['assets/music/creditstheme.mp3']);
       this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.mp3']);
+      this.load.audio('textfire', ['assets/music/textfire.mp3']);
+      this.load.audio('textwater', ['assets/music/textwater.mp3']);
+      this.load.audio('textboss', ['assets/music/textboss.mp3']);
+
     //PLUGINS
       this.game.add.plugin(PhaserInput.Plugin);
   },

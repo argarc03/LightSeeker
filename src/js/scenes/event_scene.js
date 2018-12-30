@@ -39,9 +39,11 @@ var EventScene = {
     this.HUD = this.game.add.eventHUD(this.seeker, this._dayManager, this._text, this._options, this._image);
 
     //music
+    if(this._music!=''){
     var music = this.game.add.audio(this._music, 0.1, true);
     this.game.sound.stopAll();
     music.play();
+    }
 
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
