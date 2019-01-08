@@ -21,7 +21,7 @@ var Day2 = {
                 ]
             }
             ],
-            music: 'intro'
+            music: 'textwater'
         }
     },
 
@@ -37,7 +37,7 @@ var Day2 = {
                 dayManager,
                 Day2.CuevaFungimanticaVolver] }
             ],
-            music: 'intro'
+            music: ''
         }
     },
 
@@ -46,7 +46,7 @@ var Day2 = {
             text: ['Pasas de largo sin darle importancia a lo que pudiese encontrarse dentro.'],
             image: 'fungiCaveEventImage',
             options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }],
-            music: 'intro'
+            music: ''
         }
     },
 
@@ -65,7 +65,7 @@ var Day2 = {
                 ]
             }
             ],
-            music: 'intro'
+            music: ''
         }
     }
 }

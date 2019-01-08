@@ -22,7 +22,7 @@ var Day1 = {
                 ]
             }
             ],
-            music: 'intro'
+            music: 'textfire'
         }
     },
 
@@ -32,7 +32,7 @@ var Day1 = {
             image: 'spiderEventImage',
             options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }
             ],
-            music: 'intro'
+            music: ''
         }
     },
 
@@ -51,7 +51,7 @@ var Day1 = {
                 ]
             }
             ],
-            music: 'intro'
+            music: ''
         }
     }
 }

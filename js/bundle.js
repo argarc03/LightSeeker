@@ -67,7 +67,7 @@ var Day0 = {
                 image: 'ritualEventImage',
                     options: [{ text: '"Iré, es mi deber"', callback: DayFunctions.Event, arguments: [seeker, dayManager, Day0.RitualYes] },
                               { text: '"Me niego"', callback: DayFunctions.Event, arguments: [seeker, dayManager, Day0.RitualNo] }],
-                        music: 'intro'
+                        music: ''
         }
     },
     RitualYes: function (seeker, dayManager) {
@@ -75,7 +75,7 @@ var Day0 = {
             text: ['Agradecido, tu pueblo se arrodilla ante tí. Te das la vuelta y partes hacia el peligro, te detienes al cruzar el gran portón, éste se cierra provocando un gran estruendo. Inspiras y liberas el aire justo cuando retomas el paso.'],
                 image: 'ritualAcceptedEventImage',
                     options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }],
-                        music: 'intro'
+                        music: ''
         }
     },
     RitualNo: function (seeker, dayManager) {
@@ -84,13 +84,13 @@ var Day0 = {
                 image: 'ritualDeniedEventImage',
                     options: [{ text: '"Entiendo"', callback: DayFunctions.Event, arguments: [seeker, dayManager, Day0.RitualYes] },
                               { text: '"¡He dicho que no!"', callback: DayFunctions.Event, arguments: [seeker, dayManager, Day0.RitualNo] }],
-                        music: 'intro'
+                        music: ''
         }
     }
 }
 
 module.exports = Day0;
-},{"../../js/interface/textFunctions":52,"../../js/manager/dayFunctions":55}],4:[function(require,module,exports){
+},{"../../js/interface/textFunctions":53,"../../js/manager/dayFunctions":56}],4:[function(require,module,exports){
 var DayFunctions = require('../../js/manager/dayFunctions');
 var Enemies = require('../enemies/enemies.json');
 
@@ -115,7 +115,7 @@ var Day1 = {
                 ]
             }
             ],
-            music: 'intro'
+            music: 'textfire'
         }
     },
 
@@ -125,7 +125,7 @@ var Day1 = {
             image: 'spiderEventImage',
             options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }
             ],
-            music: 'intro'
+            music: ''
         }
     },
 
@@ -144,13 +144,13 @@ var Day1 = {
                 ]
             }
             ],
-            music: 'intro'
+            music: ''
         }
     }
 }
 
 module.exports = Day1;
-},{"../../js/manager/dayFunctions":55,"../enemies/enemies.json":8}],5:[function(require,module,exports){
+},{"../../js/manager/dayFunctions":56,"../enemies/enemies.json":9}],5:[function(require,module,exports){
 var DayFunctions = require('../../js/manager/dayFunctions');
 var Enemies = require('../enemies/enemies.json');
 
@@ -174,7 +174,7 @@ var Day2 = {
                 ]
             }
             ],
-            music: 'intro'
+            music: 'textwater'
         }
     },
 
@@ -190,7 +190,7 @@ var Day2 = {
                 dayManager,
                 Day2.CuevaFungimanticaVolver] }
             ],
-            music: 'intro'
+            music: ''
         }
     },
 
@@ -199,7 +199,7 @@ var Day2 = {
             text: ['Pasas de largo sin darle importancia a lo que pudiese encontrarse dentro.'],
             image: 'fungiCaveEventImage',
             options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }],
-            music: 'intro'
+            music: ''
         }
     },
 
@@ -218,13 +218,13 @@ var Day2 = {
                 ]
             }
             ],
-            music: 'intro'
+            music: ''
         }
     }
 }
 
 module.exports = Day2;
-},{"../../js/manager/dayFunctions":55,"../enemies/enemies.json":8}],6:[function(require,module,exports){
+},{"../../js/manager/dayFunctions":56,"../enemies/enemies.json":9}],6:[function(require,module,exports){
 var DayFunctions = require('../../js/manager/dayFunctions');
 var Enemies = require('../enemies/enemies.json');
 
@@ -234,12 +234,41 @@ var Day3 = {
     },
     EncuentroLordRagno: function (seeker, dayManager) {
         return {
-            text: ['FIN DE LA DEMO'],
-            image: 'eventImageError',
-            options: [],
-            music: 'intro'
+            text: ['Caminando por los largos y oscuros túneles llegas a una gran sala donde el eco hace que tus pisadas se repitan en la lejanía. Notas la humedad del aire en la piel. En el centro de la sala se encuentra una montaña solitaria, rodeada de lo que parecen ser huevos de alguna criatura. Sin pensarlo dos veces, decides subir la gran colina con afán de encontrar comida y refugio.'],
+            image: 'lordRagno1EventImage',
+            options: [{ text: 'Continuar', callback: DayFunctions.Event, arguments: [seeker,
+                dayManager,
+                Day3.EncuentroLordRagno2] }],
+            music: 'textboss'
         }
     },
+    EncuentroLordRagno2: function (seeker, dayManager) {
+        return {
+            text: ['Exhausto por la escalada, consigues por fin llegar a la cima. Te das cuenta de que la colina en realidad es un volcán. Decides asomarte por el cráter, el cual emite una columna de humo caliente y un hedor a sangre...'],
+            image: 'lordRagno2EventImage',
+            options: [{ text: 'Continuar', callback: DayFunctions.Event, arguments: [seeker,
+                dayManager,
+                Day3.EncuentroLordRagno3] }],
+            music: ''
+        }
+    },
+    EncuentroLordRagno3: function (seeker, dayManager) {
+        return {
+            text: ['Ves brillar en el fondo del agujero una luz roja que poco a poco se hace más y más grande... ¡Lord Ragno, Señor de las Arañas, te ataca!'],
+            image: 'lordRagno3EventImage',
+            options: [{
+                text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
+                    dayManager,
+                    Enemies.LordRagno,
+                    'firecombatbackground',
+                    'bosstheme',
+                    function () { DayFunctions.NextDay(seeker, dayManager) }
+                ]
+            }
+            ],
+            music: ''
+        }
+    }
 
     /*CuevaFungimanticaInvestigar: function (seeker, dayManager) {
         return {
@@ -287,22 +316,86 @@ var Day3 = {
 }
 
 module.exports = Day3;
-},{"../../js/manager/dayFunctions":55,"../enemies/enemies.json":8}],7:[function(require,module,exports){
+},{"../../js/manager/dayFunctions":56,"../enemies/enemies.json":9}],7:[function(require,module,exports){
+var DayFunctions = require('../../js/manager/dayFunctions');
+var Enemies = require('../enemies/enemies.json');
+
+var Day3 = {
+    DayGenerator: function (seeker, dayManager) {
+        return 'EncuentroLordRagno';
+    },
+    EncuentroLordRagno: function (seeker, dayManager) {
+        return {
+            text: ['¡Enhorabuena, has conseguido derrotar al gran Lord Ragno! Pero esto se acaba aquí, ¡gracias por jugar!'],
+            image: 'eventImageError',
+            options: [],
+            music: 'credits'
+        }
+    }
+
+    /*CuevaFungimanticaInvestigar: function (seeker, dayManager) {
+        return {
+            text: ['Alcanzado el final de la cavidad subterránea, observas una figura humanoide apoyada en la pared. Cuando te aproximas, te percatas de que es un cadáver.',
+        'De su cinturón, cuelga un vial con un icor verde.'],
+            image: 'eventImageError',
+            options: [{ text: 'Guardarlo', callback: DayFunctions.Event, arguments: [seeker,
+                dayManager,
+                Day3.CuevaFungimanticaVolver] },
+            { text: 'Salir', callback: DayFunctions.Event, arguments: [seeker,
+                dayManager,
+                Day3.CuevaFungimanticaVolver] }
+            ],
+            music: 'intro'
+        }
+    },
+
+    CuevaFungimanticaEvitar: function (seeker, dayManager) {
+        return {
+            text: ['Pasas de largo sin darle importancia a lo que pudiese encontrarse dentro.'],
+            image: 'eventImageError',
+            options: [{ text: 'Continuar', callback: DayFunctions.NextDay, arguments: [seeker, dayManager] }],
+            music: 'intro'
+        }
+    },
+
+    CuevaFungimanticaVolver: function (seeker, dayManager) {
+        return {
+            text: ['Cuando estás a punto de salir de la cueva, del suelo emerge un enorme hongo que obstaculiza la salida.',
+            'Cuando te acercas un poco más, unas espinas salen de su pileo. Parece que tendrás que acabar con él si quieres proseguir tu camino.'],
+            image: 'eventImageError',
+            options: [{
+                text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
+                    dayManager,
+                    Enemies.Fungi,
+                    'waterbackground',
+                    'watertheme',
+                    function () { DayFunctions.NextDay(seeker, dayManager) }
+                ]
+            }
+            ],
+            music: 'intro'
+        }
+    }*/
+}
+
+module.exports = Day3;
+},{"../../js/manager/dayFunctions":56,"../enemies/enemies.json":9}],8:[function(require,module,exports){
 'use strict'
 
 var Days={
     day0: require('./day0'),
     day1: require('./day1'),
     day2: require('./day2'),
-    day3: require('./day3')
+    day3: require('./day3'),
+    day4: require('./day4')
 }
 
 module.exports = Days;
-},{"./day0":3,"./day1":4,"./day2":5,"./day3":6}],8:[function(require,module,exports){
+},{"./day0":3,"./day1":4,"./day2":5,"./day3":6,"./day4":7}],9:[function(require,module,exports){
 module.exports={
     "LordRagno":{
         "name":"Lord Ragno",
-        "stats": {"damage": 5, "defense": 6, "speed": 1, "health": 10, "perception": 4}, 
+        "stats": {"damage": 3, "defense": 6, "speed": 1, "health": 10, "perception": 4}, 
         "spriteSheet":"lordRagnoAnimations", 
         "actions":{
             "idle":[[0, 1, 2, 3, 4, 5]],
@@ -345,14 +438,14 @@ module.exports={
         "pattern":"spider"
     }
 }
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports={
     "font": "Minecraft",
     "fill": "#fff",
     "fontSize": 10,
     "align":"center"
 }
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict'
 
 var Item = require('../../js/characters/item');
@@ -375,7 +468,7 @@ var Items = {
 module.exports = Items;
 
 
-},{"../../js/characters/item":19}],11:[function(require,module,exports){
+},{"../../js/characters/item":20}],12:[function(require,module,exports){
 'use strict'
 
 var bossPattern = function(character, seeker) { 
@@ -402,7 +495,7 @@ var patterns = {
 
 
 module.exports = patterns;
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict'
 /**
  * 
@@ -581,7 +674,7 @@ var Action = {
 }
 
 module.exports = Action;
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict'
 
 var Action = require('./action.js');
@@ -677,7 +770,7 @@ ActionFactory.prototype.die = function(framesDying) {
 }
 
 module.exports = ActionFactory;
-},{"./action.js":12,"./timeCalculations.js":23}],14:[function(require,module,exports){
+},{"./action.js":13,"./timeCalculations.js":24}],15:[function(require,module,exports){
 'use strict'
 
 var ActionPattern = function (pattern, seeker, character) {
@@ -725,7 +818,7 @@ Object.defineProperty(ActionPattern.prototype, 'nextAction', {
 });
 
 module.exports = ActionPattern;
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict'
 
 var CoolDown = require('./coolDown');
@@ -811,7 +904,7 @@ SeekerActionFactory.prototype.die = function (framesDying) {
 }
 
 module.exports = SeekerActionFactory;
-},{"./action":12,"./actionFactory":13,"./coolDown":17,"./timeCalculations":23}],16:[function(require,module,exports){
+},{"./action":13,"./actionFactory":14,"./coolDown":18,"./timeCalculations":24}],17:[function(require,module,exports){
 /**
 * @author       Carlos Durán Domínguez <carduran@ucm.es>
 * @copyright    2018 Turing's Songs Studios© 
@@ -936,7 +1029,7 @@ Object.defineProperty(Character.prototype, 'name',{
 });
 
 module.exports = Character;
-},{"./actionFactory":13,"./particleFactory.js":20,"./stats":22}],17:[function(require,module,exports){
+},{"./actionFactory":14,"./particleFactory.js":21,"./stats":23}],18:[function(require,module,exports){
 'use strict'
 
 var TimerAlterations = require('./timerAlterations');
@@ -990,7 +1083,7 @@ var CoolDown = {
 }
 
 module.exports = CoolDown;
-},{"./timerAlterations":24}],18:[function(require,module,exports){
+},{"./timerAlterations":25}],19:[function(require,module,exports){
 'use strict'
 
 var Character = require('./character');
@@ -1035,7 +1128,7 @@ Enemy.prototype.start = function(){
 }
 
 module.exports = Enemy;
-},{"./actionPattern":14,"./character":16}],19:[function(require,module,exports){
+},{"./actionPattern":15,"./character":17}],20:[function(require,module,exports){
 'use strict'
 
 var _use = function(use, that) {
@@ -1061,7 +1154,7 @@ Item.prototype.destroy = function() {
 }
 
 module.exports = Item;
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict'
 
 var ParticleFactory = function (character) {
@@ -1101,7 +1194,7 @@ ParticleFactory.prototype.blood = function (x = this.character.width / 2, y = th
 }
 
 module.exports = ParticleFactory;
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 var Character = require('./character.js');
@@ -1162,7 +1255,7 @@ Seeker.prototype.start = function(){
 }
 
 module.exports = Seeker;
-},{"../../assets/items/items":10,"./actionSeekerFactory.js":15,"./character.js":16,"./item":19}],22:[function(require,module,exports){
+},{"../../assets/items/items":11,"./actionSeekerFactory.js":16,"./character.js":17,"./item":20}],23:[function(require,module,exports){
 'use strict'
 
 var Stats = function (damage, defense, speed, health, perception, tempDamage = undefined, tempDefense = undefined, tempSpeed = undefined, tempHealth = undefined, tempPerception = undefined) {
@@ -1381,7 +1474,7 @@ Stats.prototype.update = function () {
 };
 
 module.exports = Stats;
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict'
 
 var TimeCalculations = {
@@ -1448,7 +1541,7 @@ var TimeCalculations = {
 }
 
 module.exports = TimeCalculations;
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict'
 
 var TimerAlterations = {
@@ -1459,7 +1552,7 @@ var TimerAlterations = {
 }
 
 module.exports = TimerAlterations;
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 // var Phaser = require('phaser');
 
 var Character = require('./characters/character');
@@ -1605,7 +1698,7 @@ fun = function (Phaser) {
 }
 
 module.exports = fun;
-},{"./characters/character":16,"./characters/enemy":18,"./characters/seeker":21,"./interface/actionButton":27,"./interface/bar":28,"./interface/buttonMenu":29,"./interface/circleWithSectors":31,"./interface/combatHUD":32,"./interface/creationHUD":33,"./interface/enemyCombatHUD":34,"./interface/eventHUD":35,"./interface/framedButton":36,"./interface/healthBar":37,"./interface/infoWindow":38,"./interface/mainMenuHUD":39,"./interface/optionMenu":40,"./interface/reactiveBar":41,"./interface/reactiveContinuousBar":43,"./interface/reactiveRichText":44,"./interface/richText":45,"./interface/scrollText":46,"./interface/seekerCombatHUD":47,"./interface/windowFrame":53}],26:[function(require,module,exports){
+},{"./characters/character":17,"./characters/enemy":19,"./characters/seeker":22,"./interface/actionButton":28,"./interface/bar":29,"./interface/buttonMenu":30,"./interface/circleWithSectors":32,"./interface/combatHUD":33,"./interface/creationHUD":34,"./interface/enemyCombatHUD":35,"./interface/eventHUD":36,"./interface/framedButton":37,"./interface/healthBar":38,"./interface/infoWindow":39,"./interface/mainMenuHUD":40,"./interface/optionMenu":41,"./interface/reactiveBar":42,"./interface/reactiveContinuousBar":44,"./interface/reactiveRichText":45,"./interface/richText":46,"./interface/scrollText":47,"./interface/seekerCombatHUD":48,"./interface/windowFrame":54}],27:[function(require,module,exports){
 'use strict'
 
 var ReactiveBar = require('./reactiveBar');
@@ -1715,7 +1808,7 @@ ActionBar.prototype.deactivate = function() {
 }
 
 module.exports = ActionBar;
-},{"./reactiveBar":41,"./reactiveCircleBar":42}],27:[function(require,module,exports){
+},{"./reactiveBar":42,"./reactiveCircleBar":43}],28:[function(require,module,exports){
 'use strict'
 var FramedButton = require('./framedButton');
 var ReactiveBar = require('./reactiveBar');
@@ -1757,7 +1850,7 @@ ActionButton.prototype.deactivate = function() {
 }
 
 module.exports = ActionButton;
-},{"./framedButton":36,"./reactiveBar":41,"./reactiveRichText":44,"./textFunctions":52}],28:[function(require,module,exports){
+},{"./framedButton":37,"./reactiveBar":42,"./reactiveRichText":45,"./textFunctions":53}],29:[function(require,module,exports){
 'use strict'
 
 var Bar = function (game, parent, x, y, key, frame = null) {
@@ -1837,7 +1930,7 @@ Object.defineProperty(Bar.prototype, 'height', {
 });
 
 module.exports = Bar;
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('./framedButton');
@@ -1872,7 +1965,7 @@ ButtonMenu.prototype.select = function() {
 
 module.exports = ButtonMenu;
 
-},{"./framedButton":36}],30:[function(require,module,exports){
+},{"./framedButton":37}],31:[function(require,module,exports){
 'use strict'
 
 var CircleWithSectors = require('./circleWithSectors');
@@ -1916,7 +2009,7 @@ Object.defineProperty(CircleBar.prototype, 'percentage', {
 });
 
 module.exports = CircleBar;
-},{"./circleWithSectors":31}],31:[function(require,module,exports){
+},{"./circleWithSectors":32}],32:[function(require,module,exports){
 'use strict'
 
 
@@ -1950,7 +2043,7 @@ CircleWithSector.prototype = Object.create(Phaser.Graphics.prototype);
 CircleWithSector.prototype.constructor = CircleWithSector;
 
 module.exports = CircleWithSector;
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict'
 
 var EnemyCombatHUD = require('./enemyCombatHUD');
@@ -2019,7 +2112,7 @@ CombatHUD.prototype.activate = function () {
 }
 
 module.exports = CombatHUD;
-},{"./enemyCombatHUD":34,"./framedButton":36,"./optionMenu":40,"./richText":45,"./seekerCombatHUD":47}],33:[function(require,module,exports){
+},{"./enemyCombatHUD":35,"./framedButton":37,"./optionMenu":41,"./richText":46,"./seekerCombatHUD":48}],34:[function(require,module,exports){
 'use strict'
 //var ActionButton = require('./actionButton');
 //var HealthBar = require('./healthBar');
@@ -2150,7 +2243,7 @@ CreationHUD.prototype = Object.create(Phaser.Group.prototype);
 CreationHUD.prototype.constructor = CreationHUD;
 
 module.exports = CreationHUD;
-},{"../../assets/characters/characters.json":2,"./framedButton":36,"./reactiveRichText":44,"./richText":45,"./showCase":48,"./statMarker":51,"./textFunctions":52}],34:[function(require,module,exports){
+},{"../../assets/characters/characters.json":2,"./framedButton":37,"./reactiveRichText":45,"./richText":46,"./showCase":49,"./statMarker":52,"./textFunctions":53}],35:[function(require,module,exports){
 'use strict'
 
 var ActionBar = require('./actionBar');
@@ -2244,7 +2337,7 @@ EnemyCombatHUD.prototype.activate = function () {
 }
 
 module.exports = EnemyCombatHUD;
-},{"./actionBar":26,"./healthBar":37,"./reactiveRichText":44,"./textFunctions":52}],35:[function(require,module,exports){
+},{"./actionBar":27,"./healthBar":38,"./reactiveRichText":45,"./textFunctions":53}],36:[function(require,module,exports){
 'use strict'
 
 var ScrollText = require('./scrollText');
@@ -2404,7 +2497,7 @@ EventHUD.prototype._pause = function(){
 module.exports = EventHUD;
 
 
-},{"../../assets/fonts/style.json":9,"./framedButton":36,"./healthBar":37,"./reactiveRichText":44,"./richText":45,"./scrollText":46,"./slider":49,"./textFunctions":52}],36:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10,"./framedButton":37,"./healthBar":38,"./reactiveRichText":45,"./richText":46,"./scrollText":47,"./slider":50,"./textFunctions":53}],37:[function(require,module,exports){
 
 
 
@@ -2543,7 +2636,7 @@ FramedButton.prototype.changeFrameFrame = function (frame) {
 }
 
 module.exports = FramedButton;
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict'
 
 var Bar = require('./bar.js');
@@ -2573,9 +2666,16 @@ var HealthBar = function (game, x, y, character, voidKey, healKey, damageKey, he
 HealthBar.prototype = Object.create(Phaser.Group.prototype);
 HealthBar.prototype.constructor = HealthBar;
 
+HealthBar.prototype.activate = function() {
+        this.damageBar.percentage = this.damageBar.percentageFunction();
+        this.healBar.percentage = this.healBar.percentageFunction();
+        this.healthBar.percentage = this.healthBar.percentageFunction();
+        this.hpText.write();
+}
+
 
 module.exports = HealthBar;
-},{"./bar.js":28,"./reactiveContinuousBar.js":43,"./reactiveRichText.js":44,"./textFunctions":52}],38:[function(require,module,exports){
+},{"./bar.js":29,"./reactiveContinuousBar.js":44,"./reactiveRichText.js":45,"./textFunctions":53}],39:[function(require,module,exports){
 'use strict'
 
 var WindowFrame = require('./windowFrame');
@@ -2596,7 +2696,7 @@ InfoWindow.prototype = Object.create(Phaser.Group.prototype);
 InfoWindow.prototype.constructor = InfoWindow;
 
 module.exports = InfoWindow;
-},{"./richText":45,"./scrollText":46,"./windowFrame":53}],39:[function(require,module,exports){
+},{"./richText":46,"./scrollText":47,"./windowFrame":54}],40:[function(require,module,exports){
 'use strict'
 //var ActionButton = require('./actionButton');
 //var HealthBar = require('./healthBar');
@@ -2826,7 +2926,7 @@ MainMenuHUD.prototype = Object.create(Phaser.Group.prototype);
 MainMenuHUD.prototype.constructor = MainMenuHUD;
 
 module.exports = MainMenuHUD;
-},{"./framedButton":36,"./reactiveRichText":44,"./textFunctions":52}],40:[function(require,module,exports){
+},{"./framedButton":37,"./reactiveRichText":45,"./textFunctions":53}],41:[function(require,module,exports){
 'use strict';
 
 var ButtonMenu = require('./buttonMenu');
@@ -2912,7 +3012,7 @@ OptionMenu.prototype.enter = function() {
 }
 
 module.exports = OptionMenu;
-},{"./buttonMenu":29,"./windowFrame":53}],41:[function(require,module,exports){
+},{"./buttonMenu":30,"./windowFrame":54}],42:[function(require,module,exports){
 'use strict'
 
 var Bar = require('./bar.js');
@@ -2937,7 +3037,7 @@ ReactiveBar.prototype.changePercentage = function () {
 }
 
 module.exports = ReactiveBar;
-},{"./bar.js":28}],42:[function(require,module,exports){
+},{"./bar.js":29}],43:[function(require,module,exports){
 'use strict'
 
 var CircleBar = require('./circleBar');
@@ -2962,7 +3062,7 @@ ReactiveCircleBar.prototype.changePercentage = function () {
 }
 
 module.exports = ReactiveCircleBar;
-},{"./circleBar":30}],43:[function(require,module,exports){
+},{"./circleBar":31}],44:[function(require,module,exports){
 'use strict'
 
 var ReactiveBar = require('./reactiveBar.js');
@@ -2976,6 +3076,7 @@ var ReactiveContinuousBar = function (game, parent, x, y, key, percentageFunctio
     this._increaseSpeed = this.bar.width / increaseSpeed;
     this._decreaseSpeed = this.bar.width / decreaseSpeed;
     this.timer = null;
+    ReactiveContinuousBar.prototype.changePercentage.call(this);
 }
 
 ReactiveContinuousBar.prototype = Object.create(ReactiveBar.prototype);
@@ -3035,7 +3136,7 @@ ReactiveContinuousBar.prototype.reChangePercentage = function () {
 }
 
 module.exports = ReactiveContinuousBar;
-},{"./reactiveBar.js":41}],44:[function(require,module,exports){
+},{"./reactiveBar.js":42}],45:[function(require,module,exports){
 'use strict';
 
 var RichText = require('./richText.js');
@@ -3056,7 +3157,7 @@ ReactiveRichText.prototype = Object.create(RichText.prototype);
 ReactiveRichText.prototype.constructor = ReactiveRichText;
 
 module.exports = ReactiveRichText;
-},{"./richText.js":45}],45:[function(require,module,exports){
+},{"./richText.js":46}],46:[function(require,module,exports){
 'use strict';
 
 
@@ -3248,7 +3349,7 @@ Object.defineProperty(RichText.prototype, 'text',{
 });
 
 module.exports = RichText;
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict'
 
 var ReactiveRichText = require('./reactiveRichText');
@@ -3293,7 +3394,7 @@ Object.defineProperty(ScrollText.prototype, 'text',{
 });
 module.exports = ScrollText;
 
-},{"./reactiveRichText":44}],47:[function(require,module,exports){
+},{"./reactiveRichText":45}],48:[function(require,module,exports){
 'use strict'
 var ActionButton = require('./actionButton');
 var HealthBar = require('./healthBar');
@@ -3524,12 +3625,14 @@ SeekerCombatHUD.prototype.deactivate = function() {
   this.blockButton.deactivate();
   this.item1Button.deactivate();
   this.item2Button.deactivate();
+
 }
 
 SeekerCombatHUD.prototype.activate = function () {
   this.ultimateButton.activate();
   this.attackButton.activate();
   this.blockButton.activate();
+  this.healthBar.activate();
   if(this.seeker.items[0])
     this.item1Button.activate();
   if(this.seeker.items[1])
@@ -3537,7 +3640,7 @@ SeekerCombatHUD.prototype.activate = function () {
 }
 
 module.exports = SeekerCombatHUD;
-},{"./actionButton":27,"./framedButton":36,"./healthBar":37,"./reactiveRichText":44,"./textFunctions":52}],48:[function(require,module,exports){
+},{"./actionButton":28,"./framedButton":37,"./healthBar":38,"./reactiveRichText":45,"./textFunctions":53}],49:[function(require,module,exports){
 'use strict'
 
 var StatMarker = require('./statMarker');
@@ -3640,7 +3743,7 @@ ShowCase.prototype.character = function() {
 }
 
 module.exports = ShowCase;
-},{"./richText":45,"./statMarker":51}],49:[function(require,module,exports){
+},{"./richText":46,"./statMarker":52}],50:[function(require,module,exports){
 'use strict'
 
 var SliderImage = require('./sliderImage');
@@ -3696,7 +3799,7 @@ Slider.prototype.move = function (movement) {
 }
 
 module.exports = Slider;
-},{"./sliderImage":50}],50:[function(require,module,exports){
+},{"./sliderImage":51}],51:[function(require,module,exports){
 'use strict'
 
 var SliderImage = function(game, parent, x, y, key, height) {
@@ -3715,7 +3818,7 @@ SliderImage.prototype = Object.create(Phaser.Group.prototype);
 SliderImage.prototype.constructor = SliderImage;
 
 module.exports = SliderImage;
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict'
 
 var StatMarker = function(game, parent, x, y, xSpace, maxPoints, currentPoints, pointKey, emptyKey, color) {
@@ -3760,7 +3863,7 @@ Object.defineProperty(StatMarker.prototype, 'currentPoints', {
     }
 });
 module.exports = StatMarker;
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 
 var functions = {
 Fun: function (func, context) {
@@ -3855,7 +3958,7 @@ VariableNumber: function (numberfunction, context, delay) {
 }
 }
 module.exports = functions;
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict'
 
 
@@ -3959,7 +4062,7 @@ WindowFrame.prototype.resize = function(width, height) {
 }
 
 module.exports = WindowFrame;
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 //PREGUNTAS
@@ -4076,8 +4179,9 @@ var PreloaderScene = {
         this.game.load.image('spiderAttackEventImage','assets/images/interface/spiderattack_eventimage.png');
         this.game.load.image('fungiCaveEventImage','assets/images/interface/fungicave_eventimage.png');
         this.game.load.image('fungiCavePotionEventImage','assets/images/interface/potionfound_eventimage.png');
-        
-
+        this.game.load.image('lordRagno1EventImage','assets/images/interface/lordragno_eventimage.png');
+        this.game.load.image('lordRagno2EventImage','assets/images/interface/lordragno2_eventimage.png');
+        this.game.load.image('lordRagno3EventImage','assets/images/interface/lordragno3_eventimage.png');
         
         
         //Actions Bar
@@ -4148,6 +4252,7 @@ var PreloaderScene = {
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
+      this.game.load.image('firecombatbackground', 'assets/images/backgrounds/firecombatbackground.png');
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
       this.game.load.image('shines', 'assets/images/backgrounds/shines.png');
       this.game.load.image('creationbackground', 'assets/images/backgrounds/creationbackground.png');
@@ -4189,6 +4294,10 @@ var PreloaderScene = {
       this.load.audio('logo', ['assets/music/logo.mp3']);
       this.load.audio('credits', ['assets/music/creditstheme.mp3']);
       this.load.audio('mainmenutheme', ['assets/music/mainmenutheme.mp3']);
+      this.load.audio('textfire', ['assets/music/textfire.mp3']);
+      this.load.audio('textwater', ['assets/music/textwater.mp3']);
+      this.load.audio('textboss', ['assets/music/textboss.mp3']);
+
     //PLUGINS
       this.game.add.plugin(PhaserInput.Plugin);
   },
@@ -4206,7 +4315,7 @@ window.onload = function () {
   
 
 };
-},{"../assets/fonts/style.json":9,"./gameFactory":25,"./interface/textFunctions":52,"./scenes/combat_scene.js":57,"./scenes/creation_scene.js":58,"./scenes/credits_scene.js":59,"./scenes/event_scene.js":60,"./scenes/fullscreen_scene.js":61,"./scenes/intro_scene.js":62,"./scenes/mainmenu_scene.js":63,"./scenes/name_scene.js":64,"./scenes/settings_scene.js":65,"./scenes/shop_scene.js":66,"webfontloader":1}],55:[function(require,module,exports){
+},{"../assets/fonts/style.json":10,"./gameFactory":26,"./interface/textFunctions":53,"./scenes/combat_scene.js":58,"./scenes/creation_scene.js":59,"./scenes/credits_scene.js":60,"./scenes/event_scene.js":61,"./scenes/fullscreen_scene.js":62,"./scenes/intro_scene.js":63,"./scenes/mainmenu_scene.js":64,"./scenes/name_scene.js":65,"./scenes/settings_scene.js":66,"./scenes/shop_scene.js":67,"webfontloader":1}],56:[function(require,module,exports){
 'use strict'
 
 var DayFunctions = {
@@ -4223,7 +4332,7 @@ var DayFunctions = {
 }
 
 module.exports = DayFunctions;
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 'use strict'
 var Days = require('../../assets/days/days');
 
@@ -4254,7 +4363,7 @@ DayManager.prototype.generateDay = function(seeker, day) {
 
 module.exports = DayManager;
 
-},{"../../assets/days/days":7}],57:[function(require,module,exports){
+},{"../../assets/days/days":8}],58:[function(require,module,exports){
 'use strict';
 
 var Stats = require('../characters/stats');
@@ -4405,7 +4514,7 @@ var CombatScene = {
 
 module.exports = CombatScene;
 
-},{"../../assets/fonts/style.json":9,"../../assets/patterns/patterns":11,"../characters/item":19,"../characters/stats":22,"../interface/textFunctions":52}],58:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10,"../../assets/patterns/patterns":12,"../characters/item":20,"../characters/stats":23,"../interface/textFunctions":53}],59:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4457,7 +4566,7 @@ var CreationScene = {
 
 module.exports = CreationScene;
 
-},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}],59:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10,"../interface/framedButton":37}],60:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4527,7 +4636,7 @@ var CreditsScene = {
 
 module.exports = CreditsScene;
 
-},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}],60:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10,"../interface/framedButton":37}],61:[function(require,module,exports){
 'use strict';
 
 var selector;
@@ -4569,9 +4678,11 @@ var EventScene = {
     this.HUD = this.game.add.eventHUD(this.seeker, this._dayManager, this._text, this._options, this._image);
 
     //music
+    if(this._music!=''){
     var music = this.game.add.audio(this._music, 0.1, true);
     this.game.sound.stopAll();
     music.play();
+    }
 
     //para ir a fullscreen pulsar F11
     this.game.input.keyboard.addKey(Phaser.Keyboard.F11).onDown.add(this.goFullscreen, this);
@@ -4610,7 +4721,7 @@ var EventScene = {
 
 module.exports = EventScene;
 
-},{"../characters/stats":22}],61:[function(require,module,exports){
+},{"../characters/stats":23}],62:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4658,7 +4769,7 @@ var FullscreenScene = {
 
 module.exports = FullscreenScene;
 
-},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}],62:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10,"../interface/framedButton":37}],63:[function(require,module,exports){
 'use strict';
 
 var selector;
@@ -4771,7 +4882,7 @@ var IntroScene = {
 
 module.exports = IntroScene;
 
-},{"../../assets/fonts/style.json":9}],63:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10}],64:[function(require,module,exports){
 'use strict';
 
 var textFunctions = require('../interface/textFunctions');
@@ -4848,7 +4959,7 @@ var MainMenuScene = {
 
 module.exports = MainMenuScene;
 
-},{"../../assets/fonts/style.json":9,"../interface/framedButton":36,"../interface/textFunctions":52}],64:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10,"../interface/framedButton":37,"../interface/textFunctions":53}],65:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -4984,7 +5095,7 @@ var SettingsScene = {
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":9,"../characters/seeker":21,"../interface/framedButton":36,"../manager/dayManager":56}],65:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10,"../characters/seeker":22,"../interface/framedButton":37,"../manager/dayManager":57}],66:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -5044,7 +5155,7 @@ var SettingsScene = {
 
 module.exports = SettingsScene;
 
-},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}],66:[function(require,module,exports){
+},{"../../assets/fonts/style.json":10,"../interface/framedButton":37}],67:[function(require,module,exports){
 'use strict';
 
 var FramedButton = require('../interface/framedButton')
@@ -5104,4 +5215,4 @@ var ShopScene = {
 
 module.exports = ShopScene;
 
-},{"../../assets/fonts/style.json":9,"../interface/framedButton":36}]},{},[54]);
+},{"../../assets/fonts/style.json":10,"../interface/framedButton":37}]},{},[55]);
