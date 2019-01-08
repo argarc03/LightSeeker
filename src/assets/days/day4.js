@@ -7,39 +7,10 @@ var Day3 = {
     },
     EncuentroLordRagno: function (seeker, dayManager) {
         return {
-            text: ['Caminando por los largos y oscuros túneles llegas a una gran sala donde el eco hace que tus pisadas se repitan en la lejanía. Notas la humedad del aire en la piel. En el centro de la sala se encuentra una montaña solitaria, rodeada de lo que parecen ser huevos de alguna criatura. Sin pensarlo dos veces, decides subir la gran colina con afán de encontrar comida y refugio.'],
-            image: 'lordRagno1EventImage',
-            options: [{ text: 'Continuar', callback: DayFunctions.Event, arguments: [seeker,
-                dayManager,
-                Day3.EncuentroLordRagno2] }],
-            music: 'textboss'
-        }
-    },
-    EncuentroLordRagno2: function (seeker, dayManager) {
-        return {
-            text: ['Exhausto por la escalada, consigues por fin llegar a la cima. Te das cuenta de que la colina en realidad es un volcán. Decides asomarte por el cráter, el cual emite una columna de humo caliente y un hedor a sangre...'],
-            image: 'lordRagno2EventImage',
-            options: [{ text: 'Continuar', callback: DayFunctions.Event, arguments: [seeker,
-                dayManager,
-                Day3.EncuentroLordRagno3] }],
-            music: ''
-        }
-    },
-    EncuentroLordRagno3: function (seeker, dayManager) {
-        return {
-            text: ['Ves brillar en el fondo del agujero una luz roja que poco a poco se hace más y más grande... ¡Lord Ragno, Señor de las Arañas, te ataca!'],
-            image: 'lordRagno3EventImage',
-            options: [{
-                text: 'Combatir', callback: DayFunctions.Combat, arguments: [seeker,
-                    dayManager,
-                    Enemies.LordRagno,
-                    'firecombatbackground',
-                    'bosstheme',
-                    function () { DayFunctions.NextDay(seeker, dayManager) }
-                ]
-            }
-            ],
-            music: ''
+            text: ['¡Enhorabuena, has conseguido derrotar al gran Lord Ragno! Pero esto se acaba aquí, ¡gracias por jugar!'],
+            image: 'eventImageError',
+            options: [],
+            music: 'credits'
         }
     }
 

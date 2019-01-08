@@ -114,8 +114,9 @@ var PreloaderScene = {
         this.game.load.image('spiderAttackEventImage','assets/images/interface/spiderattack_eventimage.png');
         this.game.load.image('fungiCaveEventImage','assets/images/interface/fungicave_eventimage.png');
         this.game.load.image('fungiCavePotionEventImage','assets/images/interface/potionfound_eventimage.png');
-        
-
+        this.game.load.image('lordRagno1EventImage','assets/images/interface/lordragno_eventimage.png');
+        this.game.load.image('lordRagno2EventImage','assets/images/interface/lordragno2_eventimage.png');
+        this.game.load.image('lordRagno3EventImage','assets/images/interface/lordragno3_eventimage.png');
         
         
         //Actions Bar
@@ -186,6 +187,7 @@ var PreloaderScene = {
       this.game.load.image('mainmenubackground', 'assets/images/backgrounds/mainmenubackground.png');
       this.game.load.image('watercombatbackground', 'assets/images/backgrounds/watercombatbackground.png');
       this.game.load.image('combatbackground', 'assets/images/backgrounds/combatbackground.png');
+      this.game.load.image('firecombatbackground', 'assets/images/backgrounds/firecombatbackground.png');
       this.game.load.image('eventbackground', 'assets/images/backgrounds/eventbackground.png');
       this.game.load.image('shines', 'assets/images/backgrounds/shines.png');
       this.game.load.image('creationbackground', 'assets/images/backgrounds/creationbackground.png');
